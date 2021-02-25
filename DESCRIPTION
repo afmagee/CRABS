@@ -1,0 +1,14 @@
+Package: XXX
+Type: Package
+Title: Estimation and exploring of full congruence class of diversification rate models.
+Version: 1.0.0
+Date: 2021-02-24
+Author: Sebastian Hoehna, Andrew F. Magee and Bjoern T. Kopperud
+Maintainer: Sebastian Hoehna <Sebastian.Hoehna@gmail.com>, Adrew F. Mageea <andyfmagee@gmail.com>
+Depends: ape, TESS
+Description:
+License: GPL-3
+Imports: Rcpp (>= 0.11.0)
+LinkingTo: Rcpp
+Suggests: knitr
+VignetteBuilder: knitr

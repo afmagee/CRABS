@@ -1,0 +1,9 @@
+export()
+
+import(ape,TESS)
+
+importFrom(Rcpp, evalCpp)
+importFrom("grDevices", "rgb")
+importFrom("graphics", "abline", "axis", "barplot", "box", "par", "plot", "polygon")
+importFrom("stats", "approxfun", "dbeta", "dexp", "dgamma", "dlnorm", "dnorm", "dpois", "dunif", "integrate", "ks.test", "na.omit", "optimize", "pnorm", "qbeta", "qnorm", "quantile", "rbeta", "reorder", "rgamma", "rgeom", "rlnorm", "rnorm", "runif", "var")
+importFrom("utils", "read.table", "setTxtProgressBar", "txtProgressBar", "write.table")
