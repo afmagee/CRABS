@@ -1,4 +1,4 @@
-sample.congruence.class <- function(func_spec0=NULL, func_ext0=NULL, func_p_div=NULL, max.t, max.rate, num.epochs, num.samples) {
+sample.congruence.class <- function(func_spec0=NULL, func_ext0=NULL, func_p_div=NULL, max.t, num.epochs, num.samples, rate.type="both", sample.speciation.rates=NULL, sample.extinction.rates=NULL) {
 
     ## Here we define some global options
     NUM_TIME_DISCRETIZATIONS = 1000
@@ -9,7 +9,6 @@ sample.congruence.class <- function(func_spec0=NULL, func_ext0=NULL, func_p_div=
     times               = (0:NUM_TIME_DISCRETIZATIONS) / NUM_TIME_DISCRETIZATIONS * max.t
     epoch_times         = (0:num.epochs) / num.epochs * max.t
     delta_t             = max.t / NUM_TIME_DISCRETIZATIONS
-    rates               = (0:NUM_RATE_DISCR) / NUM_RATE_DISCR * max.rate
 
 
     if ( is.null( func_spec0 ) == FALSE && is.null( func_ext0 ) == FALSE ) {
@@ -21,7 +20,7 @@ sample.congruence.class <- function(func_spec0=NULL, func_ext0=NULL, func_p_div=
         v_ext0      <- func_ext0(times)
 
         ###  create the pulled diversification rate
-        v_p_div <- compute.pulled.diversification( v_spec0, v_ext0, times, delta_t )
+        v_p_div <- compute.pulled.diversification( v_spec0, v_ext0, delta_t )
     } else {
         v_p_div <- func_p_div( times )
         lambda0 = 1.0
@@ -38,26 +37,62 @@ sample.congruence.class <- function(func_spec0=NULL, func_ext0=NULL, func_p_div=
 
 
 
-    pb                = txtProgressBar(min = 1, max = num.samples, style = 3)
+    pb                = txtProgressBar(min = 0, max = num.samples, style = 3)
+    setTxtProgressBar(pb, 0)
     for (i in 1:num.samples) {
 
-        mu1         <- sample(x=rates, size=num.epochs+1,replace=T)
-        func_ext1   <- approxfun(epoch_times,mu1)
+        if ( rate.type == "extinction" || (rate.type == "both" && (i %% 2) == 1) ) {
 
-        ## create vectors of the speciation and extinction rates at the epoch
-        v_ext1      <- func_ext1(times)
+            found.valid.sample = FALSE
+            while ( found.valid.sample == FALSE ) {
+                this_mu     <- sample.extinction.rates()
 
-        ### compute the new lambda
-        v_lambda1    <- compute.speciation( lambda0, v_p_div, v_ext1, delta_t )
+                if ( sum( is.finite( this_mu ) == FALSE ) == 0 ) {
+                    found.valid.sample = sum( this_mu < 0 ) == 0
+                }
+            }
+            func_ext1   <- approxfun(epoch_times,this_mu)
 
-        func_spec1   <- approxfun(times,v_lambda1)
-        this_lambda  <- func_spec1(epoch_times)
-        this_lambda  <- v_lambda1[(0:num.epochs)/(num.epochs)*NUM_TIME_DISCRETIZATIONS+1]
+            ## create vectors of the speciation and extinction rates at the epoch
+            v_ext1      <- func_ext1(times)
 
-        this_mu                 = mu1
-        this_net_div            = this_lambda - mu1
-        this_rel_ext            = mu1 / this_lambda
-        grid.mu[i,]             = mu1
+            ### compute the new lambda
+            v_spec1    <- compute.speciation( lambda0, v_p_div, v_ext1, delta_t )
+        } else {
+
+            found.valid.sample = FALSE
+
+            while ( found.valid.sample == FALSE ) {
+
+                this_lambda <- sample.speciation.rates()
+                func_spec1  <- approxfun(epoch_times,this_lambda)
+
+                ## create vectors of the speciation and extinction rates at the epoch
+                v_spec1     <- func_spec1(times)
+
+                ### compute the new mu
+                v_ext1      <- compute.extinction( v_p_div, v_spec1, delta_t )
+
+
+                if ( sum( is.finite( v_ext1 ) == FALSE ) == 0 ) {
+                    found.valid.sample = sum( v_ext1 < 0 ) == 0
+                }
+
+#                cat("valid = ",length(found.valid.sample),"\n",sep="")
+#                cat("valid = ",ifelse(found.valid.sample,"TRUE","FALSE"),"\n",sep="")
+#                cat("mu(",i,") = ",v_ext1,"\n",sep=" ")
+
+            }
+
+#            cat("mu(",i,") = ",v_ext1,"\n",sep="")
+        }
+
+        this_lambda            = v_spec1[(0:num.epochs)/(num.epochs)*NUM_TIME_DISCRETIZATIONS+1]
+        this_mu                = v_ext1[(0:num.epochs)/(num.epochs)*NUM_TIME_DISCRETIZATIONS+1]
+
+        this_net_div            = this_lambda - this_mu
+        this_rel_ext            = this_mu / this_lambda
+        grid.mu[i,]             = this_mu
         grid.lambda[i,]         = this_lambda
         grid.net_div[i,]        = this_net_div
         grid.rel_ext[i,]        = this_rel_ext

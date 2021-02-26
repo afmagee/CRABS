@@ -2,15 +2,13 @@ plot.congruence.class <- function(func_spec0, func_ext0, max.t, sample.grid ) {
 
     ## Here we define some global options
     NUM_TIME_DISCRETIZATIONS = 1000
-#    NUM_RATE_DISCR           = 100
     NUM_RATE_PLOT_DISCR      = 100
     num.epochs               = length(sample.grid$grid.mu[1,])-1
     num.samples              = length(sample.grid$grid.mu[,1])
 
     ## Given the global settings, we can compute some general parameters
-    times               = (0:NUM_TIME_DISCRETIZATIONS) / NUM_TIME_DISCRETIZATIONS * max.t
-    epoch_times         = (0:num.epochs) / num.epochs * max.t
-#    rates               = (0:NUM_RATE_DISCR) / NUM_RATE_DISCR * max.rate
+    times                    = (0:NUM_TIME_DISCRETIZATIONS) / NUM_TIME_DISCRETIZATIONS * max.t
+    epoch_times              = (0:num.epochs) / num.epochs * max.t
 
 
 
@@ -67,6 +65,7 @@ plot.congruence.class <- function(func_spec0, func_ext0, max.t, sample.grid ) {
     max_delta_rel_ext = ifelse(max(grid.delta_rel_ext) < 0, max(grid.delta_rel_ext) * 0.95, max(grid.delta_rel_ext) * 1.05)
     min_delta_rel_ext = ifelse(min(grid.delta_rel_ext) < 0, min(grid.delta_rel_ext) * 1.05, min(grid.delta_rel_ext) * 0.95)
 
+cat("Max mu = ",max_mu,"\n")
 
     ## now set up a raster of plot values for each rate type
     PLOT_RATES_LAMBDA         = (0:NUM_RATE_PLOT_DISCR) / NUM_RATE_PLOT_DISCR * max_lambda

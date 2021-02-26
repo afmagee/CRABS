@@ -35,9 +35,28 @@ pdf( paste0(DATASET,"_HSMRF_Spec_Ext.pdf") )
     legend("topright",legend=c("speciation","extinction"),col=c("blue","red"), lty=c(1,1), cex=1.2)
 dev.off()
 
-samples <- sample.congruence.class(func_spec0=lambda, func_ext0=mu, max.t=max_t, max.rate=1, num.epochs=1000, num.samples=10000)
+est_lambda0 = est_speciation[1]
+est_mu0     = est_extinction[1]
+
+rsample_speciation = function(n) runif(n,est_lambda0*1.5,est_lambda0*1.2)
+speciation_rate_samples <- function() { sample.rates( num.epochs=100, lambda0=est_lambda0, rsample=rsample_speciation, rsample0=NULL, autocorrelated=FALSE) }
+
+rsample_speciation = function( prev ) rlnorm(n=1,log(prev),0.58/100)
+speciation_rate_samples <- function() { sample.rates( num.epochs=100, lambda0=est_lambda0, rsample=rsample_speciation, rsample0=NULL, autocorrelated=TRUE) }
+
+rsample_extinction = function(n) rlnorm(n,log(est_mu0),2*0.58)
+extinction_rate_samples <- function() { sample.rates( num.epochs=100, rsample=rsample_extinction, rsample0=NULL, autocorrelated=FALSE) }
+
+rsample_extinction = function( prev ) rlnorm(n=1,log(prev-0.01),0.58/10)
+rsample_extinction0 = function() rlnorm(n=1,log(est_mu0),1*0.58)+2
+
+extinction_rate_samples <- function() { sample.rates( num.epochs=100, rsample=rsample_extinction, rsample0=rsample_extinction0, autocorrelated=TRUE) }
+
+samples <- sample.congruence.class(func_spec0=lambda, func_ext0=mu, max.t=max_t, num.epochs=100, num.samples=1000, rate.type="extinction", sample.speciation.rates=speciation_rate_samples, sample.extinction.rates=extinction_rate_samples)
 p      = plot.congruence.class(func_spec0=lambda, func_ext0=mu, max.t=max_t, sample.grid=samples )
 ggsave(p,file=paste0(DATASET,"_HSMRF_ACDC.pdf"))
+
+
 
 
 ## TreePar example
