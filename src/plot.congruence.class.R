@@ -13,12 +13,19 @@ plot.congruence.class <- function(func_spec0, func_ext0, max.t, sample.grid ) {
 #    rates               = (0:NUM_RATE_DISCR) / NUM_RATE_DISCR * max.rate
 
 
-    ## construct the net-diversification and relative extinction rate functions
-    func_net_div0   <- function(t) {
-        func_spec0(t) - func_ext0(t)
-    }
-    func_rel_ext0   <- function(t) {
-        func_ext0(t) / func_spec0(t)
+
+    if ( is.null( func_spec0 ) == FALSE && is.null( func_ext0 ) == FALSE ) {
+        ## construct the net-diversification and relative extinction rate functions
+        func_net_div0   <- function(t) {
+            func_spec0(t) - func_ext0(t)
+        }
+        func_rel_ext0   <- function(t) {
+            func_ext0(t) / func_spec0(t)
+        }
+
+    } else {
+        func_net_div0   <- NULL
+        func_rel_ext0   <- NULL
     }
 
 
@@ -135,8 +142,10 @@ plot.congruence.class <- function(func_spec0, func_ext0, max.t, sample.grid ) {
           theme_classic() +
           ggtitle("Speciation") +
           theme(legend.position = "none", plot.title = element_text(hjust = 0.5)) +
-          scale_x_continuous(name ="time before present", breaks=breaks, labels=rev(breaks)) +
-          stat_function(fun=function(t) func_spec0(max.t-t), size=2)
+          scale_x_continuous(name ="time before present", breaks=breaks, labels=rev(breaks))
+    if ( is.null( func_spec0 ) == FALSE ) {
+        p1 <- p1 + stat_function(fun=function(t) func_spec0(max.t-t), size=2)
+    }
 
     tmp <- expand.grid(PLOT_RATES_DELTA_LAMBDA, epoch_times)
     res <- as.data.frame(list( rate=tmp[,1], time=tmp[,2], freq=as.numeric( (delta_lambda_freqs) ) ) )
@@ -147,7 +156,6 @@ plot.congruence.class <- function(func_spec0, func_ext0, max.t, sample.grid ) {
           ggtitle("Delta-speciation") +
           theme(legend.position = "none", plot.title = element_text(hjust = 0.5)) +
           scale_x_continuous(name ="time before present", breaks=breaks, labels=rev(breaks))
-#          stat_function(fun=func_spec0, size=2)
 
     tmp <- expand.grid(PLOT_RATES_MU, epoch_times)
     res <- as.data.frame(list( rate=tmp[,1], time=tmp[,2], freq=as.numeric( (mu_freqs) ) ) )
@@ -157,8 +165,10 @@ plot.congruence.class <- function(func_spec0, func_ext0, max.t, sample.grid ) {
                  theme_classic() +
                  ggtitle("Extinction") +
                  theme(legend.position = "none", plot.title = element_text(hjust = 0.5)) +
-                 scale_x_continuous(name ="time before present", breaks=breaks, labels=rev(breaks)) +
-                 stat_function(fun=function(t) func_ext0(max.t-t), size=2)
+                 scale_x_continuous(name ="time before present", breaks=breaks, labels=rev(breaks))
+    if ( is.null( func_ext0 ) == FALSE ) {
+        p3 <- p3 + stat_function(fun=function(t) func_ext0(max.t-t), size=2)
+    }
 
     tmp <- expand.grid(PLOT_RATES_DELTA_MU, epoch_times)
     res <- as.data.frame(list( rate=tmp[,1], time=tmp[,2], freq=as.numeric( (delta_mu_freqs) ) ) )
@@ -168,8 +178,7 @@ plot.congruence.class <- function(func_spec0, func_ext0, max.t, sample.grid ) {
                  theme_classic() +
                  ggtitle("Delta-extinction") +
                  theme(legend.position = "none", plot.title = element_text(hjust = 0.5)) +
-                 scale_x_continuous(name ="time before present", breaks=breaks, labels=rev(breaks)) #+
-#                 stat_function(fun=func_ext0, size=2)
+                 scale_x_continuous(name ="time before present", breaks=breaks, labels=rev(breaks))
 
     tmp <- expand.grid(PLOT_RATES_NET_DIV, epoch_times)
     res <- as.data.frame(list( rate=tmp[,1], time=tmp[,2], freq=as.numeric( (net_div_freqs) ) ) )
@@ -179,8 +188,10 @@ plot.congruence.class <- function(func_spec0, func_ext0, max.t, sample.grid ) {
                  theme_classic() +
                  ggtitle("Net-diversification") +
                  theme(legend.position = "none", plot.title = element_text(hjust = 0.5)) +
-                 scale_x_continuous(name ="time before present", breaks=breaks, labels=rev(breaks)) +
-                 stat_function(fun=function(t) func_net_div0(max.t-t), size=2)
+                 scale_x_continuous(name ="time before present", breaks=breaks, labels=rev(breaks))
+    if ( is.null( func_net_div0 ) == FALSE ) {
+        p5 <- p5 + stat_function(fun=function(t) func_net_div0(max.t-t), size=2)
+    }
 
     tmp <- expand.grid(PLOT_RATES_DELTA_NET_DIV, epoch_times)
     res <- as.data.frame(list( rate=tmp[,1], time=tmp[,2], freq=as.numeric( (delta_net_div_freqs) ) ) )
@@ -190,8 +201,7 @@ plot.congruence.class <- function(func_spec0, func_ext0, max.t, sample.grid ) {
                  theme_classic() +
                  ggtitle("Delta-net-diversification") +
                  theme(legend.position = "none", plot.title = element_text(hjust = 0.5)) +
-                 scale_x_continuous(name ="time before present", breaks=breaks, labels=rev(breaks)) #+
-#                     stat_function(fun=func_net_div0, size=2)
+                 scale_x_continuous(name ="time before present", breaks=breaks, labels=rev(breaks))
 
 
     tmp <- expand.grid(PLOT_RATES_REL_EXT, epoch_times)
@@ -202,8 +212,10 @@ plot.congruence.class <- function(func_spec0, func_ext0, max.t, sample.grid ) {
                  theme_classic() +
                  ggtitle("Relative extinction") +
                  theme(legend.position = "none", plot.title = element_text(hjust = 0.5)) +
-                 scale_x_continuous(name ="time before present", breaks=breaks, labels=rev(breaks)) +
-                 stat_function(fun=function(t) func_rel_ext0(max.t-t), size=2)
+                 scale_x_continuous(name ="time before present", breaks=breaks, labels=rev(breaks))
+    if ( is.null( func_rel_ext0 ) == FALSE ) {
+        p7 <- p7 + stat_function(fun=function(t) func_rel_ext0(max.t-t), size=2)
+    }
 
     tmp <- expand.grid(PLOT_RATES_DELTA_REL_EXT, epoch_times)
     res <- as.data.frame(list( rate=tmp[,1], time=tmp[,2], freq=as.numeric( (delta_rel_ext_freqs) ) ) )
@@ -213,8 +225,7 @@ plot.congruence.class <- function(func_spec0, func_ext0, max.t, sample.grid ) {
                  theme_classic() +
                  ggtitle("Delta-relative extinction") +
                  theme(legend.position = "none", plot.title = element_text(hjust = 0.5)) +
-                 scale_x_continuous(name ="time before present", breaks=breaks, labels=rev(breaks)) #+
-#                     stat_function(fun=func_rel_ext0, size=2)
+                 scale_x_continuous(name ="time before present", breaks=breaks, labels=rev(breaks))
 
     p <- grid.arrange(p1, p2, p3, p4, p5, p6, p7, p8, ncol = 2)
 

@@ -1,4 +1,4 @@
-sample.congruence.class <- function(func_spec0, func_ext0, max.t, max.rate, num.epochs, num.samples) {
+sample.congruence.class <- function(func_spec0=NULL, func_ext0=NULL, func_p_div=NULL, max.t, max.rate, num.epochs, num.samples) {
 
     ## Here we define some global options
     NUM_TIME_DISCRETIZATIONS = 1000
@@ -12,12 +12,20 @@ sample.congruence.class <- function(func_spec0, func_ext0, max.t, max.rate, num.
     rates               = (0:NUM_RATE_DISCR) / NUM_RATE_DISCR * max.rate
 
 
-    ## compute the speciation rate at the present
-    lambda0     <- func_spec0( 0 )
+    if ( is.null( func_spec0 ) == FALSE && is.null( func_ext0 ) == FALSE ) {
+        ## compute the speciation rate at the present
+        lambda0     <- func_spec0( 0 )
 
-    ## create vectors of the speciation and extinction rates at the epoch
-    v_spec0     <- func_spec0(times)
-    v_ext0      <- func_ext0(times)
+        ## create vectors of the speciation and extinction rates at the epoch
+        v_spec0     <- func_spec0(times)
+        v_ext0      <- func_ext0(times)
+
+        ###  create the pulled diversification rate
+        v_p_div <- compute.pulled.diversification( v_spec0, v_ext0, times, delta_t )
+    } else {
+        v_p_div <- func_p_div( times )
+        lambda0 = 1.0
+    }
 
     grid.mu             = array(0,dim = c(num.samples,num.epochs+1))
     grid.lambda         = array(0,dim = c(num.samples,num.epochs+1))
@@ -28,8 +36,6 @@ sample.congruence.class <- function(func_spec0, func_ext0, max.t, max.rate, num.
     grid.delta_net_div  = array(0,dim = c(num.samples,num.epochs+1))
     grid.delta_rel_ext  = array(0,dim = c(num.samples,num.epochs+1))
 
-    ###  create the pulled diversification rate
-    v_p_div <- compute.pulled.diversification( v_spec0, v_ext0, times, delta_t )
 
 
     pb                = txtProgressBar(min = 1, max = num.samples, style = 3)
