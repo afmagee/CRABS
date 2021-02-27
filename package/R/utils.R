@@ -48,7 +48,7 @@ compute.speciation <- function( lambda0, v_p_div, v_ext1, delta_t ) {
 
 #' Create the piecewise-constant extinction rate
 #'
-#' @param lambda0 The rate at present (speciation rate times )
+#' @param lambda0 The rate at present
 #' @param v_p_div The pulled diversification rate at all changepioints
 #' @param v_ext1 The extinction rate at all changepoints
 #' @param delta_t The width of each grid cell
@@ -68,38 +68,13 @@ compute.extinction <- function( v_p_div, v_spec1, delta_t ) {
   return (v_mu1)
 }
 
-
-#' Sample functions through time.
+#' One draw from a dirichlet distribution with concentration parameter alpha.
 #'
-#' @param num.epochs The number of 
-#' @param lambda0 The rate at present (speciation rate times )
-#' @param v_p_div The pulled diversification rate at all changepioints
-#' @param v_ext1 The extinction rate at all changepoints
-#' @param delta_t The width of each grid cell
-#' @return Extinction rate at all changepoints
-#' @export
-#' @example 
-#' #TODO
-sample.rates <- function(num.epochs, lambda0=NULL, rsample=NULL, rsample0=NULL, autocorrelated=FALSE) {
-
-  N_SAMPLES = ifelse( is.null(lambda0), num.epochs+1, num.epochs )
-  if ( autocorrelated == FALSE ) {
-      # we draw a bunch of iid samples
-      new_rates = rsample(N_SAMPLES)
-	  if( is.null(lambda0) == FALSE ) {
-	      new_rates = c(lambda0, new_rates)
-	  }
-  } else {
-      # we draw autocorrelated rates
-	  if ( is.null(lambda0) == FALSE ) {
-	      new_rates = c( lambda0 )
-	  } else if ( is.null(rsample0) == FALSE ) {
-	      new_rates = c( rsample0() )
-	  }
-	  for ( i in 1:num.epochs ) {
-	      new_rates[i+1] = rsample(new_rates[i])
-	  }
-  }
-
-  return (new_rates)
+#' @param dim The dimension
+#' @param alpha Concentration parameter
+#' @return Vector
+#' @keywords internal
+rdirichlet <- function(dim,alpha) {
+  x <- rgamma(dim,alpha,1)
+  return(x/sum(x))
 }

@@ -15,7 +15,8 @@
 #' #TODO
 
 sample.congruence.class <- function(func_spec0=NULL, func_ext0=NULL, func_p_div=NULL, max.t, num.epochs, num.samples, rate.type="both", sample.speciation.rates=NULL, sample.extinction.rates=NULL) {
-
+    # recover()
+  
     ## Here we define some global options
     NUM_TIME_DISCRETIZATIONS = 1000
     NUM_RATE_DISCR           = 100
@@ -61,7 +62,7 @@ sample.congruence.class <- function(func_spec0=NULL, func_ext0=NULL, func_p_div=
 
             found.valid.sample = FALSE
             while ( found.valid.sample == FALSE ) {
-                this_mu     <- sample.rates()
+                this_mu     <- sample.extinction.rates()
 
                 if ( sum( is.finite( this_mu ) == FALSE ) == 0 ) {
                     found.valid.sample = sum( this_mu < 0 ) == 0

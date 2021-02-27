@@ -11,7 +11,7 @@ compute.extinction(v_p_div, v_spec1, delta_t)
 
 \item{delta_t}{The width of each grid cell}
 
-\item{lambda0}{The rate at present (speciation rate times )}
+\item{lambda0}{The rate at present}
 
 \item{v_ext1}{The extinction rate at all changepoints}
 }

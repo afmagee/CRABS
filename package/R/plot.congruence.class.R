@@ -1,14 +1,14 @@
-#' Plots congruent birth-death models.
+#' Plots for congruent birth-death models.
 #'
 #' @param func_spec0 The speciation rate function (measured in time before present).
 #' @param func_ext0 The extinction rate function (measured in time before present).
 #' @param max.t The maximum time (before present) to consider rates.
 #' @param sample.grid Sampled congruent models to plot. Output of sample.congruence.class.
-#' @return Does not return a value.
+#' @return A ggplot2 object.
 #' @export
 #' @examples
 #' #TODO
-plot.congruence.class <- function(func_spec0, func_ext0, max.t, sample.grid ) {
+make.congruence.class.plot <- function(func_spec0, func_ext0, max.t, sample.grid ) {
     ## TODO:
     # Separating exploration from plotting would minimize code recycling and allow re-use of sampled rates
   
