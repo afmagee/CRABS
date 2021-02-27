@@ -1,5 +1,17 @@
+#' Plots congruent birth-death models.
+#'
+#' @param func_spec0 The speciation rate function (measured in time before present).
+#' @param func_ext0 The extinction rate function (measured in time before present).
+#' @param max.t The maximum time (before present) to consider rates.
+#' @param sample.grid Sampled congruent models to plot. Output of sample.congruence.class.
+#' @return Does not return a value.
+#' @export
+#' @examples
+#' #TODO
 plot.congruence.class <- function(func_spec0, func_ext0, max.t, sample.grid ) {
-
+    ## TODO:
+    # Separating exploration from plotting would minimize code recycling and allow re-use of sampled rates
+  
     ## Here we define some global options
     NUM_TIME_DISCRETIZATIONS = 1000
     NUM_RATE_PLOT_DISCR      = 100
@@ -65,7 +77,7 @@ plot.congruence.class <- function(func_spec0, func_ext0, max.t, sample.grid ) {
     max_delta_rel_ext = ifelse(max(grid.delta_rel_ext) < 0, max(grid.delta_rel_ext) * 0.95, max(grid.delta_rel_ext) * 1.05)
     min_delta_rel_ext = ifelse(min(grid.delta_rel_ext) < 0, min(grid.delta_rel_ext) * 1.05, min(grid.delta_rel_ext) * 0.95)
 
-cat("Max mu = ",max_mu,"\n")
+    cat("Max mu = ",max_mu,"\n")
 
     ## now set up a raster of plot values for each rate type
     PLOT_RATES_LAMBDA         = (0:NUM_RATE_PLOT_DISCR) / NUM_RATE_PLOT_DISCR * max_lambda

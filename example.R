@@ -2,9 +2,12 @@ library(ggplot2)
 library(gridExtra)
 library(TreePar)
 
-source("src/utils.R")
-source("src/sample.congruence.class.R")
-source("src/plot.congruence.class.R")
+# I wasn't feeling authoritative enough to name it myself.
+library(PACKAGENAME)
+
+# source("src/utils.R")
+# source("src/sample.congruence.class.R")
+# source("src/plot.congruence.class.R")
 #source("src/nonparametric.pulled.diversification.R")
 
 DATASET = "primates"

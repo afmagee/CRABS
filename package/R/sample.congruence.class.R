@@ -1,3 +1,19 @@
+#' Stochastic exploration of congruent models.
+#'
+#' @param func_spec0 The speciation rate function (measured in time before present).
+#' @param func_ext0 The extinction rate function (measured in time before present).
+#' @param func_p_div The pulled diversification rate function (measured in time before present).
+#' @param max.t The maximum time (before present) to consider rates.
+#' @param num.epochs DESCRIPTION NEEDED
+#' @param num.samples DESCRIPTION NEEDED
+#' @param rate.type DESCRIPTION NEEDED
+#' @param sample.speciation.rates DESCRIPTION NEEDED
+#' @param sample.extinction.rates DESCRIPTION NEEDED
+#' @return A named list with congruent rates.
+#' @export
+#' @examples
+#' #TODO
+
 sample.congruence.class <- function(func_spec0=NULL, func_ext0=NULL, func_p_div=NULL, max.t, num.epochs, num.samples, rate.type="both", sample.speciation.rates=NULL, sample.extinction.rates=NULL) {
 
     ## Here we define some global options
@@ -45,7 +61,7 @@ sample.congruence.class <- function(func_spec0=NULL, func_ext0=NULL, func_p_div=
 
             found.valid.sample = FALSE
             while ( found.valid.sample == FALSE ) {
-                this_mu     <- sample.extinction.rates()
+                this_mu     <- sample.rates()
 
                 if ( sum( is.finite( this_mu ) == FALSE ) == 0 ) {
                     found.valid.sample = sum( this_mu < 0 ) == 0

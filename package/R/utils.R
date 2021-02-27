@@ -1,4 +1,10 @@
-###  create the pulled diversification rate
+#' Create the piecewise-constant pulled diversification rate
+#'
+#' @param v_spec0 The speciation rate at all changepioints
+#' @param v_ext0 The extinction rate at all changepoints
+#' @param delta_t The width of each grid cell
+#' @return Pulled diversification rate at all changepoints
+#' @keywords internal
 compute.pulled.diversification <- function( v_spec0, v_ext0, delta_t ) {
 
   # compute the derivatives
@@ -14,7 +20,14 @@ compute.pulled.diversification <- function( v_spec0, v_ext0, delta_t ) {
 }
 
 
-
+#' Create the piecewise-constant speciation rate
+#'
+#' @param lambda0 The rate at present
+#' @param v_p_div The pulled diversification rate at all changepioints
+#' @param v_ext1 The extinction rate at all changepoints
+#' @param delta_t The width of each grid cell
+#' @return Speciation rate at all changepoints
+#' @keywords internal
 compute.speciation <- function( lambda0, v_p_div, v_ext1, delta_t ) {
 
   NUM_TIME_DISCRETIZATIONS = length(v_p_div)
@@ -33,7 +46,14 @@ compute.speciation <- function( lambda0, v_p_div, v_ext1, delta_t ) {
   return (v_lambda1)
 }
 
-
+#' Create the piecewise-constant extinction rate
+#'
+#' @param lambda0 The rate at present (speciation rate times )
+#' @param v_p_div The pulled diversification rate at all changepioints
+#' @param v_ext1 The extinction rate at all changepoints
+#' @param delta_t The width of each grid cell
+#' @return Extinction rate at all changepoints
+#' @keywords internal
 compute.extinction <- function( v_p_div, v_spec1, delta_t ) {
 
   # compute the derivatives
@@ -49,6 +69,17 @@ compute.extinction <- function( v_p_div, v_spec1, delta_t ) {
 }
 
 
+#' Sample functions through time.
+#'
+#' @param num.epochs The number of 
+#' @param lambda0 The rate at present (speciation rate times )
+#' @param v_p_div The pulled diversification rate at all changepioints
+#' @param v_ext1 The extinction rate at all changepoints
+#' @param delta_t The width of each grid cell
+#' @return Extinction rate at all changepoints
+#' @export
+#' @example 
+#' #TODO
 sample.rates <- function(num.epochs, lambda0=NULL, rsample=NULL, rsample0=NULL, autocorrelated=FALSE) {
 
   N_SAMPLES = ifelse( is.null(lambda0), num.epochs+1, num.epochs )
