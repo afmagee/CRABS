@@ -79,32 +79,32 @@ sample.basic.models <- function(num.epochs, rate0=NULL, model="exponential", MRF
   # cat(fc,"\n")
   
   # Deterministic component
-  delta_deterministic <- rep(0,num.epochs-1)
-  x <- numeric(num.epochs)
+  delta_deterministic <- rep(0,num.epochs)
+  x <- numeric(num.epochs+1)
   x[1] <- x0
   if ( model == "exponential" ) {
-    delta_deterministic <- rep(s*log(fc)/(num.epochs-1),num.epochs-1)
-    x[2:num.epochs] <- x[1] * exp(cumsum(delta_deterministic))
+    delta_deterministic <- rep(s*log(fc)/(num.epochs),num.epochs)
+    x[2:(num.epochs+1)] <- x[1] * exp(cumsum(delta_deterministic))
   } else if ( model == "linear" ) {
     if (s == 1) {
-      delta_deterministic <- rep(((x0*fc)-x0)/(num.epochs-1),num.epochs-1)
+      delta_deterministic <- rep(((x0*fc)-x0)/(num.epochs),num.epochs)
     } else {
-      delta_deterministic <- rep(((x0/fc)-x0)/(num.epochs-1),num.epochs-1)
+      delta_deterministic <- rep(((x0/fc)-x0)/(num.epochs),num.epochs)
     }
-    x[2:num.epochs] <- x[1] + cumsum(delta_deterministic)
+    x[2:(num.epochs+1)] <- x[1] + cumsum(delta_deterministic)
   } else if ( grepl("episodic",model) ) {
     njumps <- as.numeric(gsub("episodic","",model)) - 1
     if (njumps < 1) {
       stop("Too few episodes in episodic model")
     }
     if ( njumps == 1 ) {
-      delta_deterministic[sample.int(num.epochs-1,1)] <- fc
+      delta_deterministic[sample.int(num.epochs,1)] <- fc
     } else {
-      delta_deterministic[sample.int(num.epochs-1,njumps)] <- fc * rdirichlet(njumps,1)
+      delta_deterministic[sample.int(num.epochs,njumps)] <- fc * rdirichlet(njumps,1)
     }
-    x[2:num.epochs] <- x[1] + cumsum(delta_deterministic)
+    x[2:(num.epochs+1)] <- x[1] + cumsum(delta_deterministic)
   } else if ( grepl("MRF",model) ) {
-    x <- rep(x0,num.epochs)
+    x <- rep(x0,num.epochs+1)
   } else {
     stop("Invalid \"model\"")
   }
@@ -113,21 +113,21 @@ sample.basic.models <- function(num.epochs, rate0=NULL, model="exponential", MRF
   if ( noisy ) {
     # Get random component of rate changes
     zeta <- 0
-    delta_stochastic <- rep(Inf,num.epochs-1)
+    delta_stochastic <- rep(Inf,num.epochs)
     noise <- rep(Inf,num.epochs)
     # Avoid infinities
     while ( any(!is.finite(noise)) ) {
       if ( MRF.type == "HSMRF"  || MRF.type == "HSRF") {
-        zeta <- get.hsmrf.global.scale(num.epochs)
+        zeta <- get.hsmrf.global.scale(num.epochs+1)
         gamma <- abs(rcauchy(1,0,1))
         gamma <- min(gamma,1000) # avoid numerical instability
-        sigma <- abs(rcauchy(num.epochs-1,0,1))
-        delta_stochastic <- rnorm(num.epochs-1,0,sigma*gamma*zeta)
+        sigma <- abs(rcauchy(num.epochs,0,1))
+        delta_stochastic <- rnorm(num.epochs,0,sigma*gamma*zeta)
       } else if ( MRF.type == "GMRF" ) {
-        zeta <- get.gmrf.global.scale(num.epochs)
+        zeta <- get.gmrf.global.scale(num.epochs+1)
         gamma <- min(gamma,1000) # avoid numerical instability
         gamma <- abs(rcauchy(1,0,1))
-        delta_stochastic <- rnorm(num.epochs-1,0,gamma*zeta)
+        delta_stochastic <- rnorm(num.epochs,0,gamma*zeta)
       } else {
         stop("Invalid \"MRF.type\"")
       }

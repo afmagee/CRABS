@@ -12,14 +12,14 @@ sample.rates(num.epochs, lambda0 = NULL, rsample = NULL,
 
 \item{lambda0}{The rate at present}
 
-\item{v_p_div}{The pulled diversification rate at all changepioints}
+\item{rsample}{Function to sample next rate}
 
-\item{v_ext1}{The extinction rate at all changepoints}
+\item{rsample0}{Function to sample rate at present}
 
-\item{delta_t}{The width of each grid cell}
+\item{autocorrelated}{Should rates be autocorrelated?}
 }
 \value{
-Extinction rate at all changepoints
+Sampled rate vector
 }
 \description{
 Sample custom functions through time.
