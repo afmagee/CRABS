@@ -9,9 +9,7 @@
 #' @examples
 #' #TODO
 make.congruence.class.plot <- function(func_spec0, func_ext0, max.t, sample.grid ) {
-    ## TODO:
-    # Separating exploration from plotting would minimize code recycling and allow re-use of sampled rates
-  
+
     ## Here we define some global options
     NUM_TIME_DISCRETIZATIONS = 1000
     NUM_RATE_PLOT_DISCR      = 100
@@ -21,8 +19,6 @@ make.congruence.class.plot <- function(func_spec0, func_ext0, max.t, sample.grid
     ## Given the global settings, we can compute some general parameters
     times                    = (0:NUM_TIME_DISCRETIZATIONS) / NUM_TIME_DISCRETIZATIONS * max.t
     epoch_times              = (0:num.epochs) / num.epochs * max.t
-
-
 
     if ( is.null( func_spec0 ) == FALSE && is.null( func_ext0 ) == FALSE ) {
         ## construct the net-diversification and relative extinction rate functions
