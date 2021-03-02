@@ -112,6 +112,48 @@ Now you are ready to use \ACDC to explore congruence classes in macroevolutionar
 
 
 
+\section{Overview of function in \ACDC}
+
+Before we are going to provide some example on how to explore the congruence class, we give you here an overview of the function available in \ACDC.
+
+\begin{table*}[!htbp]
+  \caption{Functions available in \ACDC.}
+  \begin{center}
+      \begin{tabular}{lp{6cm}l}
+        \hline\noalign{\smallskip}
+        \textbf{Function} & \textbf{Description} & \textbf{Section} \\
+        \noalign{\smallskip}
+        \hline
+        \noalign{\smallskip}
+        \code{make.congruence.class.plot} & This function creates a heatmap of the most frequent rates within the congruence class, given a sample of rate functions from the congruent class (see sample.congruence.class) & Section~\ref{sec:extinction_uniform} \\
+        \code{sample.basic.models} & & \\
+        \code{sample.congruence.class} & This function samples rate functions from the congruence class given a reference speciation and extinction rate function (the true/empirically estimated rate functions). You also need to provide some boundaries/restrictions to the congruence class. The obtained samples can then be inspected visually using make.congruence.class.plot & Section~\ref{sec:extinction_uniform} \\
+        \code{sample.rates} & This function helps you to randomly sample either a new speciation or extinction rate function given some constraints and/or expected behavior (e.g., autocorrelated vs independent rates) & Section~\ref{sec:extinction_uniform} \\
+        \hline
+      \end{tabular}
+  \end{center}
+  \label{tab:Models}
+\end{table*}
+
+Below we explain these major functions of \ACDC in detail.
+You may want to skip over these discussion if you want to see the examples first.
+Nevertheless, we recommend to make yourself familiar with these available functions to get a better idea of how we explore the congruence class.
+
+
+\subsection{\code{make.congruence.class.plot}}
+
+
+\subsection{\code{sample.basic.models}}
+
+
+\subsection{\code{sample.congruence.class}}
+
+
+\subsection{\code{sample.rates}}
+
+
+
+
 
 \section{Obtaining speciation and extinction rate functions from empirical phylogenies}
 
@@ -124,11 +166,11 @@ You can jump to the relevant software example and then jump over to the congruen
 
 \subsection{Reading in an empirical phylogenetic tree}
 
-First, we assume that you have a phylenetic tree which you can load into \R.
+First, we assume that you have a phylogenetic tree which you can load into \R.
 There are several tutorials on how to do so (e.g., \href{https://cran.r-project.org/web/packages/TESS/vignettes/Bayesian_Diversification_Rate_Analysis.pdf}{\TESS} or \href{https://cran.r-project.org/web/packages/ape/ape.pdf}{\APE}), and we simply refer to these tutorials here.
 As an example, we used the \textit{Primates} phylogeny from \cite{Springer2012}.
 You can download the data from our \RevBayes \href{https://revbayes.github.io/tutorials/divrate/ebd.html}{tutorial}.
-First we need to load the \APE package.
+First we need to load the \APE package \citep{Paradis2019}.
 <<load-ape>>=
 library(ape)
 @
@@ -141,7 +183,7 @@ Next, read the software examples to convert the estimated diversification rates 
 
 \subsection{\TreePar}\label{sec:TreePar_data}
 
-Let us walk here through a very simply \TreePar analysis.
+Let us walk here through a very simple \TreePar analysis \citep{Stadler2011}.
 For a real publication worthy analysis, you may want to do a more thorough analysis by allowing more possible shifts and a finer grid for the search space.
 Here we have simply
 
@@ -237,7 +279,8 @@ You can now estimate the entire congruence class for these estimated speciation 
 
 \subsection{The HSMRF model in \RevBayes}
 
-We used the \href{https://revbayes.github.io/tutorials/divrate/ebd.html}{\RevBayes tutorial} using the episodic-birth-death model with a Horseshoe-Markov-Random-Field (HSMRF) prior distribution to estimate diversification rates.
+\RevBayes \citep{Hoehna2016b} provides several methods to estimate diversification rates through time.
+Here we used the \href{https://revbayes.github.io/tutorials/divrate/ebd.html}{\RevBayes tutorial} using the episodic-birth-death model with a Horseshoe-Markov-Random-Field (HSMRF) prior distribution to estimate diversification rates \citep{Magee2020}.
 We assume here that you followed the \RevBayes tutorial and have the output stored as a log-file in the \textit{output} folder.
 
 For some of our plotting, we need the speciation times.
@@ -337,6 +380,8 @@ est_lambda0 = lambda(0)
 est_mu0     = mu(0)
 @
 
+
+
 \subsection{General discussion about assumptions on rates}
 
 There are several plausible assumptions that can be made about diversification rates and how these rates vary.
@@ -364,7 +409,7 @@ We explore a few different options of rate variation over time in the next secti
 
 
 
-\subsection{A uniform grid of extinction rates}
+\subsection{A uniform grid of extinction rates}\label{sec:extinction_uniform}
 
 We assume that the extinction rates could have had any value between 0 and 2 (you could easily pick different numbers here).
 Our motivation for these values was, that (i) having a maximal expected extinction time per lineage of 0.5 million years seems reasonable from the fossil record, and (ii) we estimated a maximal speciation rate of 0.4, which is clearly smaller than 2.0.
