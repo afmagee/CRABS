@@ -53,6 +53,7 @@ sample.congruence.class <- function(func_spec0=NULL, func_ext0=NULL, func_p_div=
     grid.delta_rel_ext  = array(0,dim = c(num.samples,num.epochs+1))
 
 
+    n_rates_drawn <- 0
 
     pb                = txtProgressBar(min = 0, max = num.samples, style = 3)
     setTxtProgressBar(pb, 0)
@@ -62,6 +63,8 @@ sample.congruence.class <- function(func_spec0=NULL, func_ext0=NULL, func_p_div=
 
             found.valid.sample = FALSE
             while ( found.valid.sample == FALSE ) {
+                n_rates_drawn <- n_rates_drawn + 1
+                
                 this_mu     <- sample.extinction.rates()
 
                 if ( sum( is.finite( this_mu ) == FALSE ) == 0 ) {
@@ -80,7 +83,8 @@ sample.congruence.class <- function(func_spec0=NULL, func_ext0=NULL, func_p_div=
             found.valid.sample = FALSE
 
             while ( found.valid.sample == FALSE ) {
-
+                n_rates_drawn <- n_rates_drawn + 1  
+              
                 this_lambda <- sample.speciation.rates()
                 func_spec1  <- approxfun(epoch_times,this_lambda)
 
@@ -130,6 +134,8 @@ sample.congruence.class <- function(func_spec0=NULL, func_ext0=NULL, func_p_div=
                  grid.delta_lambda   = grid.delta_lambda,
                  grid.delta_net_div  = grid.delta_net_div,
                  grid.delta_rel_ext  = grid.delta_rel_ext )
+    
+    cat("Sampled ",n_rates_drawn," rate trajectories to get ",num.samples," valid extinction rates (",round(100*num.samples/n_rates_drawn,2),"%)\n",sep="")
 
     return (res)
 }

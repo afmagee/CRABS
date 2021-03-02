@@ -153,3 +153,81 @@ sample.basic.models <- function(num.epochs, rate0=NULL, model="exponential", MRF
   
   return (x)
 }
+
+#' Samples curves like the given curve by bootstrapping.
+#'
+#' @param num.epochs The discretization fineness
+#' @param func_rate Function for getting rates at time t.
+#' @param max.t The maximum time (before present) to consider rates. 
+#' @param keep.rate0 If TRUE, rate at present is fixed, otherwise chosen as func_rate at a random time.
+#' @param reverse.time If TRUE, resampled curve is "backwards" from real curve, such that increases become decreases and vice-versa. Incompatible with keep.rate0=TRUE
+#' @param invert If TRUE, returns a value proportional to 1/rates, allowing increases to become decreases while preserving rate at present.
+#' @param replace If FALSE, only permutations of the curve are considered, if TRUE curves will be more variable.
+#' @param block.size If replace=TRUE, larger values allow resampling to preserve larger-scale features of the rate trajectory.
+#' @return Rate at all changepoints
+#' @export
+#' @example 
+#' #TODO
+bootstrap.rates <- function(num.epochs, func_rate, max.t, keep.rate0=TRUE, reverse.time=FALSE, invert=FALSE, replace=TRUE, block.size=1) {
+  # recover()
+  
+  rates <- func_rate(seq(0,max.t,length.out=num.epochs+1))
+  deltas <- rates[-1] - rates[-(num.epochs+1)]
+  
+  x0 <- ifelse(keep.rate0,rates[1],rates[sample.int(num.epochs+1,1)])
+  
+  resampled_deltas <- rep(0,num.epochs)
+  
+  if ( block.size != 1 ) {
+    if ( block.size < 1 || block.size > num.epochs) {
+      stop("Invalid block.size, need 1 <= block.size <= num.epochs")
+    }
+    n_blocks <- ceiling(num.epochs/block.size)
+    n_full_blocks <- floor(num.epochs/block.size)
+    blocks <- list()
+    if ( replace ) {
+      block_sizes <- c()
+      if ( n_blocks * block.size == num.epochs ) {
+        block_sizes <- rep(block.size,n_blocks)
+      } else {
+        leftover <- num.epochs - ((n_full_blocks)*block.size) + 1
+        block_sizes <- c(rep(block.size,n_full_blocks),leftover)
+      }
+      blocks <- lapply(1:n_blocks,function(i){
+        start <- sample.int(num.epochs-block_sizes[i]+1,1)
+        return((start):(start+block_sizes[i]-1))
+      })
+    } else {
+      starts <- (0:(n_full_blocks-1))*block.size
+      blocks <- lapply(starts,function(i){
+        (i+1):(i+block.size)
+      })
+      if ( n_blocks != n_full_blocks ) {
+        blocks <- c(blocks,list((n_full_blocks*block.size+1):num.epochs))
+      }
+      # randomize block order
+      blocks <- blocks[sample.int(n_blocks)]
+    }
+    resampled_deltas <- unlist(lapply(blocks, function(indices){
+      deltas[indices]
+    }))
+  } else {
+    resampled_deltas <- sample(deltas,replace=replace)
+  }
+  
+  x <- x0 + c(0,cumsum(resampled_deltas))
+  
+  if ( reverse.time ) {
+    if ( keep.rate0 ) {
+      warning("Cannot reverse time and keep first rate, setting reverse.time=FALSE")
+    } else {
+      x <- rev(x)
+    }
+  }
+  
+  if ( invert ) {
+    x <- (x[1]^2) * 1/x
+  }
+  
+  return (x)
+}
