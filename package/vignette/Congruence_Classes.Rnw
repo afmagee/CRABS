@@ -1,0 +1,540 @@
+%\VignetteIndexEntry{Congruence Classes}
+%\VignettePackage{ACDC}
+%\VignetteKeyword{Documentation}
+%\VignetteEngine{knitr::knitr}
+
+
+\documentclass[12pt]{article}
+
+\usepackage[usenames, dvipsnames]{xcolor}
+\usepackage{times}
+\usepackage{hyperref}
+\hypersetup{pdfpagemode=UseNone} % don't show bookmarks on initial view
+\hypersetup{colorlinks, urlcolor={RoyalBlue}, linkcolor={RoyalBlue}, citecolor={SpringGreen}}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{natbib}
+\usepackage{xspace}
+
+\newcommand{\R}{\textsf{R}\xspace}
+\newcommand{\code}{\texttt}
+\newcommand{\pkg}{\textsf}
+\newcommand{\ACDC}{\pkg{ACDC}\xspace}
+\newcommand{\TESS}{\pkg{TESS}\xspace}
+\newcommand{\APE}{\pkg{ape}\xspace}
+\newcommand{\CODA}{\pkg{coda}\xspace}
+\newcommand{\CoMET}{\code{CoMET}\xspace}
+\newcommand{\Diversitree}{\pkg{Diversitree}\xspace}
+\newcommand{\RevBayes}{\pkg{RevBayes}\xspace}
+\newcommand{\RPANDA}{\pkg{RPANDA}\xspace}
+\newcommand{\TreePar}{\pkg{TreePar}\xspace}
+\newcommand{\TreeSim}{\pkg{TreeSim}\xspace}
+
+% revise margins
+\setlength{\headheight}{0.0in}
+\setlength{\topmargin}{0.0in}
+\setlength{\headsep}{0.0in}
+\setlength{\textheight}{8.65in}
+\setlength{\footskip}{0.35in}
+\setlength{\oddsidemargin}{0.0in}
+\setlength{\evensidemargin}{0.0in}
+\setlength{\textwidth}{6.5in}
+
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+
+\author{Sebastian H{\"o}hna, Bj{\o}rn T. Kopperud and Andrew F. Magee}
+\title{Exploration of birth-death congruence classes}
+
+\begin{document}
+
+\maketitle
+
+This is a brief tutorial about how to explore congruence class.
+Specifically, this tutorial has two main aims/applications:
+(1) for some given speciation and extinction rates, which might have been estimated from a phylogenetic tree or provided simply for exploration purposes, you can explore the entire congruence class given some rate limitations (e.g., type of change or min and max rates; see more below); and (2) for a given speciation and extinction rate, you can compute the alternative speciation and extinction rates via the pulled net-diversification rates.
+
+<<knitr-options, include=FALSE>>=
+knitr::opts_chunk$set(fig.width=12, fig.height=4, fig.path='RnwFigs/',
+                      warning=FALSE, message=FALSE, tidy=FALSE)
+options(width=60)
+set.seed(53079239)
+# install R/ACDC package if necessary:
+if(!require("ACDC")) install.packages("ACDC", repos="https://cran.us.r-project.org")
+@
+
+
+\newpage
+{
+\hypersetup{linkcolor=black}
+\tableofcontents
+}
+\newpage
+
+
+\section{Getting Started}
+
+To install \ACDC:
+
+First, make sure that you have a recent version of R installed. Then, install the devtools R-package:
+<<inst-devtools, eval=FALSE>>=
+install.packages("devtools")
+@
+
+Load the devtools package:
+<<load-devtools, eval=FALSE>>=
+library(devtools)
+@
+
+Now you can install \ACDC directly from GitHub:
+<<inst-ACDC, eval=FALSE>>=
+install_github("afmagee/ACDC")
+@
+
+Note about dependency:
+<<load-dependencies, eval=TRUE>>=
+library(ape)
+library(ggplot2)
+library(gridExtra)
+@
+
+You then load the \ACDC package using the {\tt library} function:
+
+<<local-install-ACDC, echo=FALSE>>=
+install.packages("../../package/",type="source",repos=NULL)
+@
+
+<<load-ACDC>>=
+library(ACDC)
+@
+Now you are ready to use \ACDC to explore congruence classes in macroevolutionary diversification rates.
+
+
+
+
+\section{Obtaining speciation and extinction rate functions from empirical phylogenies}
+
+One of the main features and aims of \ACDC is to explore the congruence class for the diversification rates that you estimated using another software.
+Here we provide you some examples using standard software for estimating diversification rates through time, but if your preferred software is not included then you can either specify the diversification rate functions manually, or try to follow our examples in loading the output.
+
+You can jump to the relevant software example and then jump over to the congruence class exploration.
+
+
+
+\subsection{Reading in an empirical phylogenetic tree}
+
+First, we assume that you have a phylenetic tree which you can load into \R.
+There are several tutorials on how to do so (e.g., \href{https://cran.r-project.org/web/packages/TESS/vignettes/Bayesian_Diversification_Rate_Analysis.pdf}{\TESS} or \href{https://cran.r-project.org/web/packages/ape/ape.pdf}{\APE}), and we simply refer to these tutorials here.
+As an example, we used the \textit{Primates} phylogeny from \cite{Springer2012}.
+You can download the data from our \RevBayes \href{https://revbayes.github.io/tutorials/divrate/ebd.html}{tutorial}.
+First we need to load the \APE package.
+<<load-ape>>=
+library(ape)
+@
+Now
+<<load-primates>>=
+tree <- read.tree(file=paste0("data/primates.tre"))
+@
+Next, read the software examples to convert the estimated diversification rates into rate functions.
+
+
+\subsection{\TreePar}\label{sec:TreePar_data}
+
+Let us walk here through a very simply \TreePar analysis.
+For a real publication worthy analysis, you may want to do a more thorough analysis by allowing more possible shifts and a finer grid for the search space.
+Here we have simply
+
+<<load-TreePar>>=
+library(TreePar)
+@
+
+\TreePar needs the ages of the phylogeny to perform it's likelihood computation.
+We use the \TreePar builtin funcitonality for this.
+
+<<extract-ages>>=
+x     <- sort(getx(tree),decreasing=TRUE)
+max_t <- max(x)
+@
+For our toy analysis, we setup some simpler than normal search values.
+We specify that there are at most three rate shifts, and that there are ten possible shift points.
+For your own analysis, you should most likely increase these values.
+We also specify an interval offset of 0.05, which means that in the most recent 5% of the tree age there was no rate shift event.
+This is simply for improving the parameter estimation.
+<<TreePar-settings>>=
+MAX.NUM.SHIFTS  = 4
+NUM.INTERVALS   = 20
+INTERVAL.OFFSET = 0.05
+@
+Now we run the full \TreePar maximum likelihood search.
+<<TreePar-ML, echo=TRUE, cache=TRUE, results='hide'>>=
+res   <- bd.shifts.optim(x,
+                         sampling=rep(1,MAX.NUM.SHIFTS+1),
+                         grid=max_t/NUM.INTERVALS,
+                         start=INTERVAL.OFFSET*max_t,
+                         end=max_t,
+                         survival=1,
+                         posdiv=TRUE)[[2]]
+@
+Now we have the maximum likelihood estimates for the different number of shifts.
+We want to test if $i$ shifts explain the tree significantly better than $i-1$ shifts.
+<<TreePar-MLE>>=
+best <- 0
+for (i in 1:(length(res)-1)) {
+    test <- pchisq(2*(res[[i]][1]-res[[i+1]][1]),3)
+    #if test>0.95 then i shifts is significantly
+    # better than i-1 shifts at a 5% error
+    if ( test > 0.95 ) {
+        best <- i
+    } else {
+        break
+    }
+}
+@
+
+<<TreePar-rate-functions>>=
+best_result <- res[[best+1]]
+speciation <- c()
+extinction <- c()
+for (i in 1:(best+1)) {
+    speciation[i] <- best_result[1+i+(best+1)] /
+                     (1-best_result[1+i])
+    extinction[i] <- best_result[1+i+(best+1)] /
+                     (1/best_result[1+i]-1)
+}
+
+if ( best > 0 ) {
+    shift_times <- best_result[ (length(best_result)-best+1) :
+                                length(best_result)]
+    tmp_lambda <- function(x) {
+       index <- findInterval(x, shift_times);
+       return ( speciation[index+1] )
+    }
+    tmp_mu     <- function(x) {
+       index <- findInterval(x, shift_times);
+       return ( extinction[index+1] )
+    }
+    lambda <- Vectorize(tmp_lambda)
+    mu     <- Vectorize(tmp_mu)
+} else {
+    lambda <- function(x) { return ( rep(speciation[1],length(x)) ) }
+    mu     <- function(x) { return ( rep(extinction[1],length(x)) ) }
+}
+@
+Finally, let us have a look at the estimated rate function:
+<<TreePar-plot-rate-functions, fig.height=4, fig.width=4, fig.align="center", fig.cap="Estimated speciation and extinction rates using TreePar on the primates phylogeny of Springer et al. (2012).">>=
+ylim <- c(min(0,speciation,extinction),max(speciation,extinction))
+
+curve( lambda, xlim=c(0, max_t), lwd=2, lty=1, col="blue", ylim=ylim, main="primates", xlab="time", ylab="rate", cex.main=1.5, cex.lab=1.5 )
+    curve( mu, add=TRUE, lwd=2, lty=1, col="red" )
+    legend("topright",legend=c("speciation","extinction"),col=c("blue","red"), lty=c(1,1), cex=1.2)
+@
+You can now estimate the entire congruence class for these estimated speciation and extinction rates.
+
+
+
+
+
+\subsection{The HSMRF model in \RevBayes}
+
+We used the \href{https://revbayes.github.io/tutorials/divrate/ebd.html}{\RevBayes tutorial} using the episodic-birth-death model with a Horseshoe-Markov-Random-Field (HSMRF) prior distribution to estimate diversification rates.
+We assume here that you followed the \RevBayes tutorial and have the output stored as a log-file in the \textit{output} folder.
+
+For some of our plotting, we need the speciation times.
+So we extract these from the tree.
+<<read-times>>=
+times <- sort( as.numeric( branching.times( tree ) ) )
+max_t <- max(times)
+@
+
+Then we read in the \RevBayes log-file as a simple tab-delimited file.
+<<read-RevBayes-output, cache=TRUE>>=
+samples <- read.table(file="output/HSMRFBDP_primates.log",
+                      stringsAsFactors=FALSE,
+                      header=TRUE)
+@
+Then, from this log-file we want to automatically extract the speciation and extinction rates.
+Be careful that you used the same names as we did.
+Otherwise you need to modify this code-snippet accordingly.
+<<RevBayes-extract-output, cache=TRUE>>=
+par_speciation <- samples[,grepl(paste0("^","speciation"),names(samples))]
+par_speciation <- par_speciation[,grepl("[0-9]",names(par_speciation))]
+par_extinction <- samples[,grepl(paste0("^","extinction"),names(samples))]
+par_extinction <- par_extinction[,grepl("[0-9]",names(par_extinction))]
+@
+In principle we can use now the full posterior estimates.
+However, in this example we are only interested in the posterior median.
+We strongly encourage to use the medians and not the means because the posterior median is a more robust estimate for rates, see \cite{Magee2020}.
+<<RevBayes-compute-median, cache=TRUE>>=
+est_speciation <- apply(par_speciation,2,quantile,prob=0.5)
+est_extinction <- apply(par_extinction,2,quantile,prob=0.5)
+@
+Since we assumed in the tutorial epochs of equal size, we can simply use the \code{approxfun} to create the speciation and extinction rate functions.
+<<RevBayes-functions, cache=TRUE>>=
+lambda <- approxfun( (0:(length(est_speciation)-1)) /
+                     (length(est_speciation)-1) * max_t,
+                     est_speciation )
+mu <- approxfun(     (0:(length(est_extinction)-1)) /
+                     (length(est_extinction)-1) * max_t,
+                     est_extinction )
+@
+Finally, let's have a look at the estimated rate functions.
+<<RevBayes-plot-functions, fig.height=4, fig.width=4, fig.align="center", fig.cap="Estimated speciation and extinction rates using RevBayes on the primates phylogeny of Springer et al. (2012).">>=
+ylim <- c( min(0,est_speciation,est_extinction),
+           max(est_speciation,est_extinction))
+
+curve( lambda, xlim=c(0, max_t), lwd=2, lty=1, col="blue",
+       ylim=ylim, main="Primates", xlab="time", ylab="rate",
+       cex.main=1.5, cex.lab=1.5 )
+curve( mu, add=TRUE, lwd=2, lty=1, col="red" )
+legend("topright",legend=c("speciation","extinction"),
+       col=c("blue","red"), lty=c(1,1), cex=1.2)
+@
+
+
+
+
+
+\section{Exploring a congruence class}
+
+In theory there are infinitely many speciation and extinction rate functions that are within a congruence class, i.e., all rate functions that have exactly the same likelihood.
+It is clearly impossible to enumerate all rate functions.
+Instead of trying to explore literally all rate functions, we will sample from these rate functions instead.
+This idea is very similar to all sampling based methods.
+For example, a posterior distribution with a 95% credible interval between 0.01 and 0.02 contains infinitely many values, but we are we comfortable today with simply sampling values proportional to their posterior probability and looking/plotting the distribution.
+
+Another important aspect of the congruence class is that if we know the pulled rates, e.g., the pulled speciation or net-diversification rates, then we only need to know additionally either the new speciation or extinction rate to solve for the missing rate function.
+The pulled diversification rate is defined as
+\begin{equation}
+	r_p(t) = \lambda(t) - \mu(t) - \frac{1}{\lambda(t)} \frac{\text{d}\lambda(t)}{\text{d}t}
+\end{equation}
+
+Computationally, it is difficult if not impossible to work with arbitrary continuous rate functions.
+Here we follow a common approach to use piecewise-linear rates instead.
+You could create as many intervals as you want, and in our examples we use 100.
+For example, a standard MacBook screen has a resolution 2560 x 1600 pixels.
+That means, if you would use your entire screen width and 2560 intervals, than you couldn't even see a difference to a continuous function.
+(Note also that all plotting programs actually transform continuous functions into discretized function to compute the values at predefined coordinates.)
+
+Since we are using piecewise linear rates, we get (at the interval times),
+\begin{equation}
+	r_p(t_i) = \lambda_i - \mu_i - \frac{1}{\lambda_i} \frac{\lambda_i - \lambda_{i-1}}{\Delta t} \label{eq:pulled_diversification_linear}
+\end{equation}
+Next, if we know the pulled diversification rate and extinction rate, then we can compute the speciation rate as
+\begin{equation}
+	\lambda_i = \frac{\sqrt{4\times \lambda_{i-1}\times \Delta t + (r_p(t_i) \times \Delta t+\mu_i \times \Delta t - 1)^2} + r_p(t_i)\times \Delta t + \mu_i \times \Delta t - 1}{2\times \Delta t}
+\end{equation}
+
+Conversely, if we know the speciation rate and the pulled diversification rates, then we can solve Equation~\ref{eq:pulled_diversification_linear} for $\mu$ and get
+\begin{equation}
+	\mu_i = \lambda_i - r_p(t_i) - \frac{1}{\lambda_i} \frac{\lambda_i - \lambda_{i-1}}{\Delta t}
+\end{equation}
+
+In \ACDC we provide several helper functions to sample speciation and extinction rates.
+
+<<rates-at-present>>=
+est_lambda0 = lambda(0)
+est_mu0     = mu(0)
+@
+
+\subsection{General discussion about assumptions on rates}
+
+There are several plausible assumptions that can be made about diversification rates and how these rates vary.
+First, you could make assumptions about the magnitude of rate variation, and specifically what are plausible minimum and maximum rates.
+Clearly, speciation and extinction rates should not have been smaller than 0, so that could be a safe assumption.
+
+Depending on your study system, you could also assume that rates were never larger than, say, 10 events per lineage per million years.
+For example, if you would have a speciation rate of 10 per lineage per million years, then you would expect every lineage to speciate on average every 0.1 million years.
+If there would be no extinction, then this would leave the group with just above 22,000 species after only one million years.
+So perhaps a rate of 10 could really be seen as an upper bound in systems such as vertebrates and plants.
+However, you could argue that there is extinction, and we should better restrict the net-diversification rates to be at most 10.
+We get into some more of these restrictions in another section.
+
+The second assumption is about how rates vary over time.
+One could argue that if diversification rates were low, say 42 million years ago, then you would assume that the diversification rates were also low 43 million years ago.
+This would mean that diversification rates are autocorrelated and do not vary completely arbitrarily over time.
+We explore a few different options of rate variation over time in the next sections, which include:
+\begin{enumerate}
+  \item uncorrelated/independent rates
+  \item (geometric) autorocorrelated rates
+  \item (geometric) autorocorrelated rates with a trend
+\end{enumerate}
+
+
+
+
+
+\subsection{A uniform grid of extinction rates}
+
+We assume that the extinction rates could have had any value between 0 and 2 (you could easily pick different numbers here).
+Our motivation for these values was, that (i) having a maximal expected extinction time per lineage of 0.5 million years seems reasonable from the fossil record, and (ii) we estimated a maximal speciation rate of 0.4, which is clearly smaller than 2.0.
+
+
+We furthermore assume that each extinction rate is independent of the previous time interval.
+That means that we can model any rate function, even completely crazy zig-zagging functions.
+
+<<sample-function-extinction-uniform>>=
+rsample_extinction = function(n) runif(n,0,2)
+extinction_rate_samples <- function() { sample.rates( num.epochs=100, rsample=rsample_extinction, rsample0=NULL, autocorrelated=FALSE) }
+@
+
+<<sample-extinction-uniform, cache=TRUE, results='hide'>>=
+samples <- sample.congruence.class(func_spec0=lambda,
+                                   func_ext0=mu,
+                                   max.t=max_t,
+                                   num.epochs=100,
+                                   num.samples=1000,
+                                   rate.type="extinction",
+                                   sample.extinction.rates=extinction_rate_samples)
+@
+
+<<congruence-class-extinction-uniform, chache=TRUE, results='hide', include=FALSE>>=
+p      = make.congruence.class.plot(func_spec0=lambda,
+                               func_ext0=mu,
+                               max.t=max_t,
+                               sample.grid=samples )
+@
+
+<<include=FALSE>>=
+ggsave(p,file="RnwFigs/Primates_HSMRF_ACDC_extinction_uniform.pdf", width=5,height=10)
+@
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_uniform.pdf}
+\caption{Congruence class assuming independent and uniformly distributed extinction rates.}
+\label{fig:extinction_uniform}
+\end{figure}
+
+
+
+
+
+\subsection{Lognormal extinction rates.}
+
+<<sample-function-extinction-lognormal, cache=TRUE>>=
+rsample_extinction = function(n) rlnorm(n,log(est_mu0),2*0.58)
+extinction_rate_samples <- function() { sample.rates( num.epochs=100, rsample=rsample_extinction, rsample0=NULL, autocorrelated=FALSE) }
+@
+
+<<sample-extinction-lognormal, cache=TRUE, results='hide'>>=
+samples <- sample.congruence.class(func_spec0=lambda,
+                                   func_ext0=mu,
+                                   max.t=max_t,
+                                   num.epochs=100,
+                                   num.samples=1000,
+                                   rate.type="extinction",
+                                   sample.extinction.rates=extinction_rate_samples)
+@
+
+<<congruence-class-extinction-lognormal, chache=TRUE, results='hide', include=FALSE>>=
+p      = make.congruence.class.plot(func_spec0=lambda,
+                               func_ext0=mu,
+                               max.t=max_t,
+                               sample.grid=samples )
+@
+
+<<include=FALSE>>=
+ggsave(p,file="RnwFigs/Primates_HSMRF_ACDC_extinction_lognormal.pdf", width=5,height=10)
+@
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_lognormal.pdf}
+\caption{Congruence class assuming independent and lognormal distributed extinction rates.}
+\label{fig:extinction_lognormal}
+\end{figure}
+
+
+
+
+
+\subsection{Autocorrelated extinction rates.}
+
+<<sample-function-extinction-GMRF, cache=TRUE>>=
+rsample_extinction = function( prev ) rlnorm(n=1,log(prev),0.58/10)
+rsample_extinction0 = function() rlnorm(n=1,log(est_mu0),1*0.58)
+
+extinction_rate_samples <- function() { sample.rates( num.epochs=100, rsample=rsample_extinction, rsample0=rsample_extinction0, autocorrelated=TRUE) }
+@
+
+<<sample-extinction-GMRF, cache=TRUE, results='hide'>>=
+samples <- sample.congruence.class(func_spec0=lambda,
+                                   func_ext0=mu,
+                                   max.t=max_t,
+                                   num.epochs=100,
+                                   num.samples=1000,
+                                   rate.type="extinction",
+                                   sample.extinction.rates=extinction_rate_samples)
+@
+
+<<congruence-class-extinction-GMRF, chache=TRUE, results='hide', include=FALSE>>=
+p      = make.congruence.class.plot(func_spec0=lambda,
+                               func_ext0=mu,
+                               max.t=max_t,
+                               sample.grid=samples )
+@
+
+<<include=FALSE>>=
+ggsave(p,file="RnwFigs/Primates_HSMRF_ACDC_extinction_GMRF.pdf", width=5,height=10)
+@
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_GMRF.pdf}
+\caption{Congruence class assuming autocorrelated (GRMF) extinction rates.}
+\label{fig:extinction_GMRF}
+\end{figure}
+
+
+
+
+\subsection{Autocorrelated extinction rates with trend}
+
+<<sample-function-extinction-GMRF-trend, cache=TRUE>>=
+rsample_extinction = function( prev ) rlnorm(n=1,log(prev)+0.02,0.58/10)
+rsample_extinction0 = function() rlnorm(n=1,log(est_mu0),1*0.58)
+
+extinction_rate_samples <- function() { sample.rates( num.epochs=100, rsample=rsample_extinction, rsample0=rsample_extinction0, autocorrelated=TRUE) }
+@
+
+<<sample-extinction-GMRF-trend, cache=TRUE, results='hide'>>=
+samples <- sample.congruence.class(func_spec0=lambda,
+                                   func_ext0=mu,
+                                   max.t=max_t,
+                                   num.epochs=100,
+                                   num.samples=1000,
+                                   rate.type="extinction",
+                                   sample.extinction.rates=extinction_rate_samples)
+@
+
+<<congruence-class-extinction-GMRF-trend, chache=TRUE, results='hide', include=FALSE>>=
+p      = make.congruence.class.plot(func_spec0=lambda,
+                               func_ext0=mu,
+                               max.t=max_t,
+                               sample.grid=samples )
+@
+
+<<include=FALSE>>=
+ggsave(p,file="RnwFigs/Primates_HSMRF_ACDC_extinction_GMRF_trend.pdf", width=5,height=10)
+@
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_GMRF_trend.pdf}
+\caption{Congruence class assuming autocorrelated (GRMF) extinction rates with a trend.}
+\label{fig:extinction_GMRF}
+\end{figure}
+
+
+
+
+
+%\section{R and package versions used}
+%
+%<<sessionInfo, include=TRUE, echo=TRUE, results='markup'>>=
+%sessionInfo()
+%@
+
+
+\clearpage
+\bibliographystyle{apalike}
+\bibliography{literature}
+
+\end{document}
