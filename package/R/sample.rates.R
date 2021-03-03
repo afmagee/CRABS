@@ -135,14 +135,12 @@ sample.basic.models <- function(num.epochs, rate0=NULL, model="exponential", MRF
       while ( any(!is.finite(noise)) ) {
         if ( MRF.type == "HSMRF"  || MRF.type == "HSRF") {
           zeta <- get.hsmrf.global.scale(num.epochs+1)
-          gamma <- abs(rcauchy(1,0,1))
-          gamma <- min(gamma,1000) # avoid numerical instability
+          gamma <- min(abs(rcauchy(1,0,1)),1000) # avoid numerical instability
           sigma <- abs(rcauchy(num.epochs,0,1))
           delta_stochastic <- rnorm(num.epochs,0,sigma*gamma*zeta)
         } else if ( MRF.type == "GMRF" ) {
           zeta <- get.gmrf.global.scale(num.epochs+1)
-          gamma <- min(gamma,1000) # avoid numerical instability
-          gamma <- abs(rcauchy(1,0,1))
+          gamma <- min(abs(rcauchy(1,0,1)),1000) # avoid numerical instability
           delta_stochastic <- rnorm(num.epochs,0,gamma*zeta)
         } else {
           stop("Invalid \"MRF.type\"")
