@@ -267,9 +267,10 @@ Finally, let us have a look at the estimated rate function:
 <<TreePar-plot-rate-functions, fig.height=4, fig.width=4, fig.align="center", fig.cap="Estimated speciation and extinction rates using TreePar on the primates phylogeny of Springer et al. (2012).">>=
 ylim <- c(min(0,speciation,extinction),max(speciation,extinction))
 
-curve( lambda, xlim=c(0, max_t), lwd=2, lty=1, col="blue", ylim=ylim, main="primates", xlab="time", ylab="rate", cex.main=1.5, cex.lab=1.5 )
-    curve( mu, add=TRUE, lwd=2, lty=1, col="red" )
-    legend("topright",legend=c("speciation","extinction"),col=c("blue","red"), lty=c(1,1), cex=1.2)
+curve( lambda, xlim=c(max_t, 0), lwd=2, lty=1, col="blue", ylim=ylim, main="primates", xlab="time", ylab="rate", cex.main=1.5, cex.lab=1.5 )
+curve( mu, add=TRUE, lwd=2, lty=1, col="red" )
+legend("bottomleft",legend=c("speciation","extinction"),
+       col=c("blue","red"), lty=c(1,1), cex=1.2)
 @
 You can now estimate the entire congruence class for these estimated speciation and extinction rates.
 
@@ -326,11 +327,11 @@ Finally, let's have a look at the estimated rate functions.
 ylim <- c( min(0,est_speciation,est_extinction),
            max(est_speciation,est_extinction))
 
-curve( lambda, xlim=c(0, max_t), lwd=2, lty=1, col="blue",
+curve( lambda, xlim=c(max_t, 0), lwd=2, lty=1, col="blue",
        ylim=ylim, main="Primates", xlab="time", ylab="rate",
        cex.main=1.5, cex.lab=1.5 )
 curve( mu, add=TRUE, lwd=2, lty=1, col="red" )
-legend("topright",legend=c("speciation","extinction"),
+legend("topleft",legend=c("speciation","extinction"),
        col=c("blue","red"), lty=c(1,1), cex=1.2)
 @
 
@@ -387,7 +388,7 @@ dev.off()
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_ACDC_Congruence_Class.pdf}
-\caption{Congruence class .}
+\caption{Diversification rate function describing the congruence class.}
 \label{fig:congruence_class}
 \end{figure}
 
