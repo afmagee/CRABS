@@ -51,7 +51,7 @@
 
 \maketitle
 
-This is a brief tutorial about how to explore congruence class.
+This is a brief tutorial about how to explore congruence classes of macroevolutionary diversification rates.
 Specifically, this tutorial has two main aims/applications:
 (1) for some given speciation and extinction rates, which might have been estimated from a phylogenetic tree or provided simply for exploration purposes, you can explore the entire congruence class given some rate limitations (e.g., type of change or min and max rates; see more below); and (2) for a given speciation and extinction rate, you can compute the alternative speciation and extinction rates via the pulled net-diversification rates.
 
@@ -397,14 +397,271 @@ dev.off()
 
 \subsection{Testing alternative extinction rates}
 
-Let us assume that the extinction rate was still constant, but at a higher value.
+\subsubsection{Constant extinction rates}
+
+Let us assume that the extinction rate was still constant, but at a range of different values.
+Specifically, let's assume that the true extinction rate was $\mu(t)=\{0.0,0.025,0.05,0.075,0.1\}$.
+For our models we need to create extinction rate functions with these values.
 <<>>=
-mu1 <- function(t) rep(1.0,length(t))
+mu_vals <- seq(0,0.1,0.025)
+mu1 <- list()
+for (i in 1:length(mu_vals)) {
+  mu1[[i]] = local({
+    mu = mu_vals[i]
+    function(t) { rep(mu,length(t)) }
+  })
+}
 @
-Now we compute the new speciation rate.
+Now we compute the new speciation rate given the extinction rates.
+<<eval=TRUE>>=
+alt_models <- ACDC.compute.speciation( my_model, list.funcs.mu=mu1 )
+@
+Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
-lambda <- ...
+ACDC.plot.congruent.models( alt_models )
 @
+<<include=FALSE>>=
+pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_constant.pdf", width=8,height=8)
+ACDC.plot.congruent.models( alt_models )
+dev.off()
+@
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_ACDC_Congruent_Models_constant.pdf}
+\caption{Diversification rate function describing the congruence class.}
+\label{fig:congruent_models_constant}
+\end{figure}
+
+
+\subsubsection{Linear increasing extinction rates}
+
+Let us assume that the extinction rate was still constant, but at a range of different values.
+Specifically, let's assume that the true extinction rate was $\mu(t)=\{0.0,0.025,0.05,0.075,0.1\}$.
+For our models we need to create extinction rate functions with these values.
+<<>>=
+mu_min = 0.01
+mu_vals <- seq(0,0.002,0.0005)
+mu1 <- list()
+for (i in 1:length(mu_vals)) {
+  mu1[[i]] = local({
+    mu_slope = mu_vals[i]
+    function(t) { mu_min + mu_slope * (max_t-t) }
+  })
+}
+@
+Now we compute the new speciation rate given the extinction rates.
+<<eval=TRUE>>=
+alt_models <- ACDC.compute.speciation( my_model, list.funcs.mu=mu1 )
+@
+Let's have a look at these \textit{alternative models}.
+<<eval=FALSE>>=
+ACDC.plot.congruent.models( alt_models )
+@
+<<include=FALSE>>=
+pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_linear_inc.pdf", width=8,height=8)
+ACDC.plot.congruent.models( alt_models )
+dev.off()
+@
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_ACDC_Congruent_Models_linear_inc.pdf}
+\caption{Diversification rate function describing the congruence class.}
+\label{fig:congruent_models_constant}
+\end{figure}
+
+
+
+\subsubsection{Linear decreasing extinction rates}
+
+Let us assume that the extinction rate was still constant, but at a range of different values.
+Specifically, let's assume that the true extinction rate was $\mu(t)=\{0.0,0.025,0.05,0.075,0.1\}$.
+For our models we need to create extinction rate functions with these values.
+<<>>=
+mu_max = 0.1
+mu_vals <- seq(0,0.001,0.00025)
+mu1 <- list()
+for (i in 1:length(mu_vals)) {
+  mu1[[i]] = local({
+    mu_slope = mu_vals[i]
+    function(t) { mu_max - mu_slope * (max_t-t) }
+  })
+}
+@
+Now we compute the new speciation rate given the extinction rates.
+<<eval=TRUE>>=
+alt_models <- ACDC.compute.speciation( my_model, list.funcs.mu=mu1 )
+@
+Let's have a look at these \textit{alternative models}.
+<<eval=FALSE>>=
+ACDC.plot.congruent.models( alt_models )
+@
+<<include=FALSE>>=
+pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_linear_dec.pdf", width=8,height=8)
+ACDC.plot.congruent.models( alt_models )
+dev.off()
+@
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_ACDC_Congruent_Models_linear_dec.pdf}
+\caption{Diversification rate function describing the congruence class.}
+\label{fig:congruent_models_constant}
+\end{figure}
+
+
+
+\subsubsection{Exponential increasing extinction rates}
+
+Let us assume that the extinction rate was still constant, but at a range of different values.
+Specifically, let's assume that the true extinction rate was $\mu(t)=\{0.0,0.025,0.05,0.075,0.1\}$.
+For our models we need to create extinction rate functions with these values.
+<<>>=
+mu_max = 0.015
+mu_vals <- seq(0,0.02,0.005)
+mu1 <- list()
+for (i in 1:length(mu_vals)) {
+  mu1[[i]] = local({
+    mu_factor = mu_vals[i]
+    function(t) { mu_max * exp(mu_factor*(max_t-t)) }
+  })
+}
+@
+Now we compute the new speciation rate given the extinction rates.
+<<eval=TRUE>>=
+alt_models <- ACDC.compute.speciation( my_model, list.funcs.mu=mu1 )
+@
+Let's have a look at these \textit{alternative models}.
+<<eval=FALSE>>=
+ACDC.plot.congruent.models( alt_models )
+@
+<<include=FALSE>>=
+pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_exp_inc.pdf", width=8,height=8)
+ACDC.plot.congruent.models( alt_models )
+dev.off()
+@
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_ACDC_Congruent_Models_exp_inc.pdf}
+\caption{Diversification rate function describing the congruence class.}
+\label{fig:congruent_models_constant}
+\end{figure}
+
+
+\subsubsection{Exponential decreasing extinction rates}
+
+Let us assume that the extinction rate was still constant, but at a range of different values.
+Specifically, let's assume that the true extinction rate was $\mu(t)=\{0.0,0.025,0.05,0.075,0.1\}$.
+For our models we need to create extinction rate functions with these values.
+<<>>=
+mu_max = 0.04
+mu_vals <- seq(0,0.02,0.005)
+mu1 <- list()
+for (i in 1:length(mu_vals)) {
+  mu1[[i]] = local({
+    mu_factor = mu_vals[i]
+    function(t) { mu_max * exp(-mu_factor*(max_t-t)) }
+  })
+}
+@
+Now we compute the new speciation rate given the extinction rates.
+<<eval=TRUE>>=
+alt_models <- ACDC.compute.speciation( my_model, list.funcs.mu=mu1 )
+@
+Let's have a look at these \textit{alternative models}.
+<<eval=FALSE>>=
+ACDC.plot.congruent.models( alt_models )
+@
+<<include=FALSE>>=
+pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_exp_dec.pdf", width=8,height=8)
+ACDC.plot.congruent.models( alt_models )
+dev.off()
+@
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_ACDC_Congruent_Models_exp_dec.pdf}
+\caption{Diversification rate function describing the congruence class.}
+\label{fig:congruent_models_constant}
+\end{figure}
+
+
+\subsection{Testing alternative speciation rates}
+
+\subsubsection{Constant speciation rates}
+
+Let us assume that the speciation rate was constant, but at a range of different values.
+Specifically, let's assume that the true extinction rate was $\mu(t)=\{0.1,0.2,0.3,0.4\}$.
+For our models we need to create extinction rate functions with these values.
+<<>>=
+lambda_vals <- seq(0.1,0.4,0.1)
+lambda1 <- list()
+for (i in 1:length(lambda_vals)) {
+  lambda1[[i]] = local({
+    lambda = lambda_vals[i]
+    function(t) { rep(lambda,length(t)) }
+  })
+}
+@
+Now we compute the new extinction rate given the speciation rates.
+<<eval=TRUE>>=
+alt_models <- ACDC.compute.extinction( my_model, list.funcs.lambda=lambda1 )
+@
+Let's have a look at these \textit{alternative models}.
+<<eval=FALSE>>=
+ACDC.plot.congruent.models( alt_models )
+@
+<<include=FALSE>>=
+pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_lambda_constant.pdf", width=8,height=8)
+ACDC.plot.congruent.models( alt_models )
+dev.off()
+@
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_ACDC_Congruent_Models_lambda_constant.pdf}
+\caption{Diversification rate function describing the congruence class.}
+\label{fig:congruent_models_lambda_constant}
+\end{figure}
+
+
+\subsubsection{Exponential increasing speciation rates}
+
+Let us assume that the speciation rate was exponentially increasing.
+Furthermore, let us try a range of different factors of increase.
+Specifically, let's assume that the true extinction rate was $\alpha=\{0.0,0.025,0.05,0.075,0.1\}$.
+For our models we need to create extinction rate functions with these values.
+<<>>=
+lambda_min = 0.06
+alpha_vals <- seq(0,0.03,0.005)
+lambda1 <- list()
+for (i in 1:length(alpha_vals)) {
+  lambda1[[i]] = local({
+    alpha = alpha_vals[i]
+    function(t) { lambda_min * exp(alpha*(max_t-t)) }
+  })
+}
+@
+Now we compute the new extinction rate given the speciation rates.
+<<eval=TRUE>>=
+alt_models <- ACDC.compute.extinction( my_model, list.funcs.lambda=lambda1 )
+@
+Let's have a look at these \textit{alternative models}.
+<<eval=FALSE>>=
+ACDC.plot.congruent.models( alt_models )
+@
+<<include=FALSE>>=
+pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_lambda_exp_inc.pdf", width=8,height=8)
+ACDC.plot.congruent.models( alt_models )
+dev.off()
+@
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_ACDC_Congruent_Models_lambda_exp_inc.pdf}
+\caption{Diversification rate function describing the congruence class.}
+\label{fig:congruent_models_lambda_exp_inc}
+\end{figure}
+
+
+
+
+
 
 \section{Exploring a congruence class}
 
@@ -553,7 +810,12 @@ samples <- sample.congruence.class(func_spec0=lambda,
                                    rate.type="extinction",
                                    sample.extinction.rates=extinction_rate_samples)
 @
-
+<<eval=FALSE>>=
+p = make.congruence.class.plot(func_spec0=lambda,
+                               func_ext0=mu,
+                               max.t=max_t,
+                               sample.grid=samples )
+@
 <<congruence-class-extinction-GMRF, chache=TRUE, results='hide', include=FALSE>>=
 p      = make.congruence.class.plot(func_spec0=lambda,
                                func_ext0=mu,
@@ -591,6 +853,12 @@ samples <- sample.congruence.class(func_spec0=lambda,
                                    num.samples=1000,
                                    rate.type="extinction",
                                    sample.extinction.rates=extinction_rate_samples)
+@
+<<eval=FALSE>>=
+p = make.congruence.class.plot(func_spec0=lambda,
+                               func_ext0=mu,
+                               max.t=max_t,
+                               sample.grid=samples )
 @
 
 <<congruence-class-extinction-GMRF-trend, chache=TRUE, results='hide', include=FALSE>>=
