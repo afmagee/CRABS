@@ -112,6 +112,48 @@ Now you are ready to use \ACDC to explore congruence classes in macroevolutionar
 
 
 
+\section{Overview of function in \ACDC}
+
+Before we are going to provide some example on how to explore the congruence class, we give you here an overview of the function available in \ACDC.
+
+\begin{table*}[!htbp]
+  \caption{Functions available in \ACDC.}
+  \begin{center}
+      \begin{tabular}{lp{6cm}l}
+        \hline\noalign{\smallskip}
+        \textbf{Function} & \textbf{Description} & \textbf{Section} \\
+        \noalign{\smallskip}
+        \hline
+        \noalign{\smallskip}
+        \code{make.congruence.class.plot} & This function creates a heatmap of the most frequent rates within the congruence class, given a sample of rate functions from the congruent class (see sample.congruence.class) & Section~\ref{sec:extinction_uniform} \\
+        \code{sample.basic.models} & & \\
+        \code{sample.congruence.class} & This function samples rate functions from the congruence class given a reference speciation and extinction rate function (the true/empirically estimated rate functions). You also need to provide some boundaries/restrictions to the congruence class. The obtained samples can then be inspected visually using make.congruence.class.plot & Section~\ref{sec:extinction_uniform} \\
+        \code{sample.rates} & This function helps you to randomly sample either a new speciation or extinction rate function given some constraints and/or expected behavior (e.g., autocorrelated vs independent rates) & Section~\ref{sec:extinction_uniform} \\
+        \hline
+      \end{tabular}
+  \end{center}
+  \label{tab:Models}
+\end{table*}
+
+Below we explain these major functions of \ACDC in detail.
+You may want to skip over these discussion if you want to see the examples first.
+Nevertheless, we recommend to make yourself familiar with these available functions to get a better idea of how we explore the congruence class.
+
+
+\subsection{\code{make.congruence.class.plot}}
+
+
+\subsection{\code{sample.basic.models}}
+
+
+\subsection{\code{sample.congruence.class}}
+
+
+\subsection{\code{sample.rates}}
+
+
+
+
 
 \section{Obtaining speciation and extinction rate functions from empirical phylogenies}
 
@@ -124,11 +166,11 @@ You can jump to the relevant software example and then jump over to the congruen
 
 \subsection{Reading in an empirical phylogenetic tree}
 
-First, we assume that you have a phylenetic tree which you can load into \R.
+First, we assume that you have a phylogenetic tree which you can load into \R.
 There are several tutorials on how to do so (e.g., \href{https://cran.r-project.org/web/packages/TESS/vignettes/Bayesian_Diversification_Rate_Analysis.pdf}{\TESS} or \href{https://cran.r-project.org/web/packages/ape/ape.pdf}{\APE}), and we simply refer to these tutorials here.
 As an example, we used the \textit{Primates} phylogeny from \cite{Springer2012}.
 You can download the data from our \RevBayes \href{https://revbayes.github.io/tutorials/divrate/ebd.html}{tutorial}.
-First we need to load the \APE package.
+First we need to load the \APE package \citep{Paradis2019}.
 <<load-ape>>=
 library(ape)
 @
@@ -141,7 +183,7 @@ Next, read the software examples to convert the estimated diversification rates 
 
 \subsection{\TreePar}\label{sec:TreePar_data}
 
-Let us walk here through a very simply \TreePar analysis.
+Let us walk here through a very simple \TreePar analysis \citep{Stadler2011}.
 For a real publication worthy analysis, you may want to do a more thorough analysis by allowing more possible shifts and a finer grid for the search space.
 Here we have simply
 
@@ -237,7 +279,8 @@ You can now estimate the entire congruence class for these estimated speciation 
 
 \subsection{The HSMRF model in \RevBayes}
 
-We used the \href{https://revbayes.github.io/tutorials/divrate/ebd.html}{\RevBayes tutorial} using the episodic-birth-death model with a Horseshoe-Markov-Random-Field (HSMRF) prior distribution to estimate diversification rates.
+\RevBayes \citep{Hoehna2016b} provides several methods to estimate diversification rates through time.
+Here we used the \href{https://revbayes.github.io/tutorials/divrate/ebd.html}{\RevBayes tutorial} using the episodic-birth-death model with a Horseshoe-Markov-Random-Field (HSMRF) prior distribution to estimate diversification rates \citep{Magee2020}.
 We assume here that you followed the \RevBayes tutorial and have the output stored as a log-file in the \textit{output} folder.
 
 For some of our plotting, we need the speciation times.
@@ -293,26 +336,18 @@ legend("topright",legend=c("speciation","extinction"),
 
 
 
+\section{General background on congruent classes in \ACDC}
 
-
-\section{Exploring a congruence class}
-
-In theory there are infinitely many speciation and extinction rate functions that are within a congruence class, i.e., all rate functions that have exactly the same likelihood.
-It is clearly impossible to enumerate all rate functions.
-Instead of trying to explore literally all rate functions, we will sample from these rate functions instead.
-This idea is very similar to all sampling based methods.
-For example, a posterior distribution with a 95% credible interval between 0.01 and 0.02 contains infinitely many values, but we are we comfortable today with simply sampling values proportional to their posterior probability and looking/plotting the distribution.
-
-Another important aspect of the congruence class is that if we know the pulled rates, e.g., the pulled speciation or net-diversification rates, then we only need to know additionally either the new speciation or extinction rate to solve for the missing rate function.
+One important aspect of the congruence class is that if we know the pulled rates, e.g., the pulled speciation or net-diversification rates, then we only need to know additionally either the new speciation or extinction rate to solve for the missing rate function.
 The pulled diversification rate is defined as
 \begin{equation}
 	r_p(t) = \lambda(t) - \mu(t) - \frac{1}{\lambda(t)} \frac{\text{d}\lambda(t)}{\text{d}t}
 \end{equation}
 
 Computationally, it is difficult if not impossible to work with arbitrary continuous rate functions.
-Here we follow a common approach to use piecewise-linear rates instead.
+Here we follow a common approach to use piecewise-linear rates as an approximation for the continuous rate functions.
 You could create as many intervals as you want, and in our examples we use 100.
-For example, a standard MacBook screen has a resolution 2560 x 1600 pixels.
+To give you an intuition if 100 intervals is enough, consider a standard MacBook screen which has a resolution 2560 x 1600 pixels.
 That means, if you would use your entire screen width and 2560 intervals, than you couldn't even see a difference to a continuous function.
 (Note also that all plotting programs actually transform continuous functions into discretized function to compute the values at predefined coordinates.)
 
@@ -330,12 +365,64 @@ Conversely, if we know the speciation rate and the pulled diversification rates,
 	\mu_i = \lambda_i - r_p(t_i) - \frac{1}{\lambda_i} \frac{\lambda_i - \lambda_{i-1}}{\Delta t}
 \end{equation}
 
+
+
+
+
+\section{Exploring alternative rate functions}
+
+We first create a congruence class object which contains all the transformed rate functions (i.e., the net-diversification rate and relative extinction rate) as well as the pulled rates.
+<<>>=
+my_model = congruence.class( lambda, mu, max_t )
+@
+Then we can plot the rates.
+<<eval=FALSE>>=
+ACDC.plot.rates( my_model )
+@
+<<include=FALSE>>=
+pdf(file="RnwFigs/Primates_ACDC_Congruence_Class.pdf", width=8,height=8)
+ACDC.plot.rates( my_model )
+dev.off()
+@
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_ACDC_Congruence_Class.pdf}
+\caption{Congruence class .}
+\label{fig:congruence_class}
+\end{figure}
+
+
+
+
+\subsection{Testing alternative extinction rates}
+
+Let us assume that the extinction rate was still constant, but at a higher value.
+<<>>=
+mu1 <- function(t) rep(1.0,length(t))
+@
+Now we compute the new speciation rate.
+<<eval=FALSE>>=
+lambda <- ...
+@
+
+\section{Exploring a congruence class}
+
+In theory there are infinitely many speciation and extinction rate functions that are within a congruence class, i.e., all rate functions that have exactly the same likelihood.
+It is clearly impossible to enumerate all rate functions.
+Instead of trying to explore literally all rate functions, we will sample from these rate functions instead.
+This idea is very similar to all sampling based methods.
+For example, a posterior distribution with a 95% credible interval between 0.01 and 0.02 contains infinitely many values, but we are we comfortable today with simply sampling values proportional to their posterior probability and looking/plotting the distribution.
+
+
+
 In \ACDC we provide several helper functions to sample speciation and extinction rates.
 
 <<rates-at-present>>=
 est_lambda0 = lambda(0)
 est_mu0     = mu(0)
 @
+
+
 
 \subsection{General discussion about assumptions on rates}
 
@@ -364,7 +451,7 @@ We explore a few different options of rate variation over time in the next secti
 
 
 
-\subsection{A uniform grid of extinction rates}
+\subsection{A uniform grid of extinction rates}\label{sec:extinction_uniform}
 
 We assume that the extinction rates could have had any value between 0 and 2 (you could easily pick different numbers here).
 Our motivation for these values was, that (i) having a maximal expected extinction time per lineage of 0.5 million years seems reasonable from the fossil record, and (ii) we estimated a maximal speciation rate of 0.4, which is clearly smaller than 2.0.
