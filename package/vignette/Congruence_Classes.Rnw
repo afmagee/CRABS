@@ -53,15 +53,16 @@
 
 This is a brief tutorial about how to explore congruence classes of macroevolutionary diversification rates.
 Specifically, this tutorial has two main aims/applications:
-(1) for some given speciation and extinction rates, which might have been estimated from a phylogenetic tree or provided simply for exploration purposes, you can explore the entire congruence class given some rate limitations (e.g., type of change or min and max rates; see more below); and (2) for a given speciation and extinction rate, you can compute the alternative speciation and extinction rates via the pulled net-diversification rates.
+(1) for a given speciation and extinction rate, you can compute the alternative speciation and extinction rates via the pulled net-diversification rates;
+and (2) for some given speciation and extinction rates, which might have been estimated from a phylogenetic tree or provided simply for exploration purposes, you can explore the entire congruence class given some rate limitations (e.g., type of change or min and max rates; see more below).
 
 <<knitr-options, include=FALSE>>=
-knitr::opts_chunk$set(fig.width=12, fig.height=4, fig.path='RnwFigs/',
+knitr::opts_chunk$set(fig.width=4, fig.height=4, fig.path='RnwFigs/',
                       warning=FALSE, message=FALSE, tidy=FALSE)
 options(width=60)
 set.seed(53079239)
 # install R/ACDC package if necessary:
-if(!require("ACDC")) install.packages("ACDC", repos="https://cran.us.r-project.org")
+#if(!require("ACDC")) install.packages("ACDC", repos="https://cran.us.r-project.org")
 @
 
 
@@ -75,14 +76,15 @@ if(!require("ACDC")) install.packages("ACDC", repos="https://cran.us.r-project.o
 
 \section{Getting Started}
 
-To install \ACDC:
+To get started with exploring congruence classes, you need to have our package \ACDC installed.
+Currently, we host the package on GitHub and you need to install it directly from there.
 
-First, make sure that you have a recent version of R installed. Then, install the devtools R-package:
+First, make sure that you have a recent version of R installed.
+Then, install the \pkg{devtools} R-package, if you don't already have it:
 <<inst-devtools, eval=FALSE>>=
 install.packages("devtools")
 @
-
-Load the devtools package:
+Then, make sure that you load the \pkg{devtools} package:
 <<load-devtools, eval=FALSE>>=
 library(devtools)
 @
@@ -91,24 +93,26 @@ Now you can install \ACDC directly from GitHub:
 <<inst-ACDC, eval=FALSE>>=
 install_github("afmagee/ACDC")
 @
+% Sebastian: This is only for now until we have the package properly on GitHub.
+<<local-install-ACDC, echo=FALSE>>=
+install.packages("../../package/",type="source",repos=NULL)
+@
 
 Note about dependency:
 <<load-dependencies, eval=TRUE>>=
 library(ape)
 library(ggplot2)
 library(gridExtra)
+library(RColorBrewer)
 @
+
 
 You then load the \ACDC package using the {\tt library} function:
-
-<<local-install-ACDC, echo=FALSE>>=
-install.packages("../../package/",type="source",repos=NULL)
-@
-
 <<load-ACDC>>=
 library(ACDC)
 @
 Now you are ready to use \ACDC to explore congruence classes in macroevolutionary diversification rates.
+
 
 
 
@@ -125,10 +129,10 @@ Before we are going to provide some example on how to explore the congruence cla
         \noalign{\smallskip}
         \hline
         \noalign{\smallskip}
-        \code{make.congruence.class.plot} & This function creates a heatmap of the most frequent rates within the congruence class, given a sample of rate functions from the congruent class (see sample.congruence.class) & Section~\ref{sec:extinction_uniform} \\
+        \code{ACDC.plot.congruence.class.heatmap} & Creates a heatmap of the most frequent rates within the congruence class, given a sample of rate functions from the congruent class (see sample.congruence.class) & Section~\ref{sec:extinction_uniform} \\
         \code{sample.basic.models} & & \\
-        \code{sample.congruence.class} & This function samples rate functions from the congruence class given a reference speciation and extinction rate function (the true/empirically estimated rate functions). You also need to provide some boundaries/restrictions to the congruence class. The obtained samples can then be inspected visually using make.congruence.class.plot & Section~\ref{sec:extinction_uniform} \\
-        \code{sample.rates} & This function helps you to randomly sample either a new speciation or extinction rate function given some constraints and/or expected behavior (e.g., autocorrelated vs independent rates) & Section~\ref{sec:extinction_uniform} \\
+        \code{sample.congruence.class} & Ssamples rate functions from the congruence class given a reference speciation and extinction rate function (the true/empirically estimated rate functions). You also need to provide some boundaries/restrictions to the congruence class. The obtained samples can then be inspected visually using \code{ACDC.plot.congruence.class.heatmap} and \code{ACDC.plot.congruence.class.spaghetti} & Section~\ref{sec:extinction_uniform} \\
+        \code{sample.rates} & Helps you to randomly sample either a new speciation or extinction rate function given some constraints and/or expected behavior (e.g., autocorrelated vs independent rates) & Section~\ref{sec:extinction_uniform} \\
         \hline
       \end{tabular}
   \end{center}
@@ -140,7 +144,7 @@ You may want to skip over these discussion if you want to see the examples first
 Nevertheless, we recommend to make yourself familiar with these available functions to get a better idea of how we explore the congruence class.
 
 
-\subsection{\code{make.congruence.class.plot}}
+\subsection{\code{ACDC.plot.congruence.class.heatmap}}
 
 
 \subsection{\code{sample.basic.models}}
@@ -155,9 +159,10 @@ Nevertheless, we recommend to make yourself familiar with these available functi
 
 
 
+
 \section{Obtaining speciation and extinction rate functions from empirical phylogenies}
 
-One of the main features and aims of \ACDC is to explore the congruence class for the diversification rates that you estimated using another software.
+One of the main features and aims of \ACDC is to explore the congruence class for the diversification rates that you estimated using another software or \R package.
 Here we provide you some examples using standard software for estimating diversification rates through time, but if your preferred software is not included then you can either specify the diversification rate functions manually, or try to follow our examples in loading the output.
 
 You can jump to the relevant software example and then jump over to the congruence class exploration.
@@ -181,20 +186,24 @@ tree <- read.tree(file=paste0("data/primates.tre"))
 Next, read the software examples to convert the estimated diversification rates into rate functions.
 
 
+\subsection{Reading \TESS output}\label{sec:TESS_data}
+
+Needs to be written ...
+
+
 \subsection{\TreePar}\label{sec:TreePar_data}
 
 Let us walk here through a very simple \TreePar analysis \citep{Stadler2011}.
 For a real publication worthy analysis, you may want to do a more thorough analysis by allowing more possible shifts and a finer grid for the search space.
-Here we have simply
 
+First, load the \TreePar package.
 <<load-TreePar>>=
 library(TreePar)
 @
 
 \TreePar needs the ages of the phylogeny to perform it's likelihood computation.
-We use the \TreePar builtin funcitonality for this.
-
-<<extract-ages>>=
+We use the \TreePar builtin functionality for this.
+<<extract-ages, cache=TRUE>>=
 x     <- sort(getx(tree),decreasing=TRUE)
 max_t <- max(x)
 @
@@ -337,46 +346,66 @@ legend("topleft",legend=c("speciation","extinction"),
 
 
 
+
+
 \section{General background on congruent classes in \ACDC}
 
 One important aspect of the congruence class is that if we know the pulled rates, e.g., the pulled speciation or net-diversification rates, then we only need to know additionally either the new speciation or extinction rate to solve for the missing rate function.
+That means, we can compute the pulled diversification rate for our reference model, i.e., using your empirically estimated speciation and extinction rates from the previous sections, and the specify whichever alternative speciation or extinction rate function.
+Then we solve the pulled diversification rate equation for this new rate function.
+
 The pulled diversification rate is defined as
 \begin{equation}
 	r_p(t) = \lambda(t) - \mu(t) - \frac{1}{\lambda(t)} \frac{\text{d}\lambda(t)}{\text{d}t}
 \end{equation}
+As you may notice, the latter part of this equation entails the derivative of the speciation rate function.
+This derivative is only known for simple rate models, for example the constant rate process, linear rates or exponential rates.
+(One may solve the derivative for more complex models, but this is usually impossible in general.)
 
 Computationally, it is difficult if not impossible to work with arbitrary continuous rate functions.
-Here we follow a common approach to use piecewise-linear rates as an approximation for the continuous rate functions.
-You could create as many intervals as you want, and in our examples we use 100.
-To give you an intuition if 100 intervals is enough, consider a standard MacBook screen which has a resolution 2560 x 1600 pixels.
-That means, if you would use your entire screen width and 2560 intervals, than you couldn't even see a difference to a continuous function.
+Here we follow a common approach to use piecewise-linear rates as an approximation for an arbitrary continuous rate function.
+You could create as many intervals as you want, and in our examples we use 1000.
+To give you an intuition if 1000 intervals is enough, consider a standard MacBook screen which has a resolution 2560 x 1600 pixels.
+That means, if you would use your entire screen width and 2560 intervals, than you couldn't even see a difference to a continuous function because each interval spans exactly one pixel.
 (Note also that all plotting programs actually transform continuous functions into discretized function to compute the values at predefined coordinates.)
 
-Since we are using piecewise linear rates, we get (at the interval times),
+Since we are using piecewise linear rates, we get (at the interval times) the pulled diversification rate function as
 \begin{equation}
 	r_p(t_i) = \lambda_i - \mu_i - \frac{1}{\lambda_i} \frac{\lambda_i - \lambda_{i-1}}{\Delta t} \label{eq:pulled_diversification_linear}
 \end{equation}
-Next, if we know the pulled diversification rate and extinction rate, then we can compute the speciation rate as
+This function is much simpler to compute and is used in our package.
+
+Next, if we know the pulled diversification rate and the new extinction rate, then we can compute the speciation rate as
 \begin{equation}
 	\lambda_i = \frac{\sqrt{4\times \lambda_{i-1}\times \Delta t + (r_p(t_i) \times \Delta t+\mu_i \times \Delta t - 1)^2} + r_p(t_i)\times \Delta t + \mu_i \times \Delta t - 1}{2\times \Delta t}
 \end{equation}
+(This equation was obtained by solving the pulled diversification rate for $\lambda_i$.)
 
 Conversely, if we know the speciation rate and the pulled diversification rates, then we can solve Equation~\ref{eq:pulled_diversification_linear} for $\mu$ and get
 \begin{equation}
 	\mu_i = \lambda_i - r_p(t_i) - \frac{1}{\lambda_i} \frac{\lambda_i - \lambda_{i-1}}{\Delta t}
 \end{equation}
 
+These are our fundamental pieces about the congruence classes.
+We have the reference model, from which we compute the pulled diversification rate.
+Then you can either specify alternative speciation or extinction rate functions, for which we then compute the matching extinction or speciation rate function respectively, or you can explore a space of speciation or extinction rate functions.
+We will walk through example of these below.
 
 
 
 
 \section{Exploring alternative rate functions}
 
-We first create a congruence class object which contains all the transformed rate functions (i.e., the net-diversification rate and relative extinction rate) as well as the pulled rates.
+The first part of our congruence class exploration focuses on specific alternative models.
+That is, we first start by providing a set of alternative extinction rate functions and compute the matching speciation rate functions.
+Then, we turn the approach around and specify some alternative speciation rate functions for which we compute the matching extinction rate functions.
+
+We first create a congruence class object which contains all the transformed rate functions (i.e., the net-diversification rate and relative extinction rate) as well as the pulled rates (i.e., the pulled net-diversification and the pulled speciation rate).
 <<>>=
 my_model = congruence.class( lambda, mu, max_t )
 @
-Then we can plot the rates.
+The \code{my\_model} includes all the rate functions.
+You could plot these yourself, or you can use our simple plotting function.
 <<eval=FALSE>>=
 ACDC.plot.rates( my_model )
 @
@@ -388,18 +417,22 @@ dev.off()
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_ACDC_Congruence_Class.pdf}
-\caption{Diversification rate function describing the congruence class.}
+\caption{Diversification rate function describing the congruence class. The solid lines show the traditional rates and the dashed lines show the pulled versions of the same rates. We observe that the pulled net-diversification rate has a very steep dip exactly at the time of the increase in the estimated speciation rate. This dip originates from the derivate of the speciation, so it is not surprising that at the time of a steep speciation rate increase, we obtain a steep drop in pulled diversification rate.}
 \label{fig:congruence_class}
 \end{figure}
 
 
+Now that we have our reference model and congruence class functions, we can explore alternative rate functions within the congruence class.
 
 
 \subsection{Testing alternative extinction rates}
 
+In this subsection we focus entirely on alternative hypotheses of extinction rates for which we compute the resulting speciation rates.
+
+
 \subsubsection{Constant extinction rates}
 
-Let us assume that the extinction rate was still constant, but at a range of different values.
+Let us assume that the extinction rate was constant, but at a range of different values.
 Specifically, let's assume that the true extinction rate was $\mu(t)=\{0.0,0.025,0.05,0.075,0.1\}$.
 For our models we need to create extinction rate functions with these values.
 <<>>=
@@ -421,23 +454,28 @@ Let's have a look at these \textit{alternative models}.
 ACDC.plot.congruent.models( alt_models )
 @
 <<include=FALSE>>=
-pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_constant.pdf", width=8,height=8)
+pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_mu_constant.pdf", width=8,height=8)
 ACDC.plot.congruent.models( alt_models )
 dev.off()
 @
 \begin{figure}[h!]
 \centering
-\includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_ACDC_Congruent_Models_constant.pdf}
-\caption{Diversification rate function describing the congruence class.}
-\label{fig:congruent_models_constant}
+\includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_ACDC_Congruent_Models_mu_constant.pdf}
+\caption{Diversification rate functions within the congruence class assuming different constant extinction rate functions. The dashed lines show the different alternatives that we explored here, and the solid lines represent our reference model. Here we notice that the overall pattern of speciation rates as well as net-diversification rates is fairly robust to alternative constant extinction rates within the congruence class. Only the relative extinction rate changes is value, which is not surprising since we explored different extinction rates.}
+\label{fig:congruent_models_mu_constant}
 \end{figure}
+
 
 
 \subsubsection{Linear increasing extinction rates}
 
-Let us assume that the extinction rate was still constant, but at a range of different values.
-Specifically, let's assume that the true extinction rate was $\mu(t)=\{0.0,0.025,0.05,0.075,0.1\}$.
-For our models we need to create extinction rate functions with these values.
+Next, we will explore different linear rate functions for the extinction rate.
+Let us assume that the extinction rate was linear with a range of different slopes.
+Specifically, let's assume that the slope was $\alpha=\{0.0,0.0005, \ldots, 0.0002\}$.
+We played around with these $\alpha$ values to get reasonable rate functions.
+You will need to modify these for your dataset.
+
+We create extinction rate functions with these $\alpha$ values.
 <<>>=
 mu_min = 0.01
 mu_vals <- seq(0,0.002,0.0005)
@@ -458,24 +496,24 @@ Let's have a look at these \textit{alternative models}.
 ACDC.plot.congruent.models( alt_models )
 @
 <<include=FALSE>>=
-pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_linear_inc.pdf", width=8,height=8)
+pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_mu_linear_inc.pdf", width=8,height=8)
 ACDC.plot.congruent.models( alt_models )
 dev.off()
 @
 \begin{figure}[h!]
 \centering
-\includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_ACDC_Congruent_Models_linear_inc.pdf}
-\caption{Diversification rate function describing the congruence class.}
-\label{fig:congruent_models_constant}
+\includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_ACDC_Congruent_Models_mu_linear_inc.pdf}
+\caption{Diversification rate function for different linear extinction rates within the same congruence class. The dashed lines show the different alternatives that we explored here, and the solid lines represent our reference model. We observe that the speciation and net-diversification rates are robust to different linear extinction rates within the congruence. As expected, the relative extinction rate changes because we chose different extinction rates.}
+\label{fig:congruent_models_mu_linear_inc}
 \end{figure}
 
 
 
 \subsubsection{Linear decreasing extinction rates}
 
-Let us assume that the extinction rate was still constant, but at a range of different values.
-Specifically, let's assume that the true extinction rate was $\mu(t)=\{0.0,0.025,0.05,0.075,0.1\}$.
-For our models we need to create extinction rate functions with these values.
+As in our previous example, we want to explore linear extinction rates but this time we choose linear \emph{decreasing} extinction rates.
+Specifically, let's assume that the slope was $\alpha=\{0.0,-0.00025, \ldots, -0.0001\}$.
+We follow the same approach to define the linear extinction rate functions.
 <<>>=
 mu_max = 0.1
 mu_vals <- seq(0,0.001,0.00025)
@@ -496,24 +534,25 @@ Let's have a look at these \textit{alternative models}.
 ACDC.plot.congruent.models( alt_models )
 @
 <<include=FALSE>>=
-pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_linear_dec.pdf", width=8,height=8)
+pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_mu_linear_dec.pdf", width=8,height=8)
 ACDC.plot.congruent.models( alt_models )
 dev.off()
 @
 \begin{figure}[h!]
 \centering
-\includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_ACDC_Congruent_Models_linear_dec.pdf}
-\caption{Diversification rate function describing the congruence class.}
-\label{fig:congruent_models_constant}
+\includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_ACDC_Congruent_Models_mu_linear_dec.pdf}
+\caption{Diversification rate function for linear decreasing extinction rates within the congruence class. The dashed lines show the different alternatives that we explored here, and the solid lines represent our reference model. The results are qualitatively the same to the previous results.}
+\label{fig:congruent_models_mu_linear_dec}
 \end{figure}
 
 
 
 \subsubsection{Exponential increasing extinction rates}
 
-Let us assume that the extinction rate was still constant, but at a range of different values.
-Specifically, let's assume that the true extinction rate was $\mu(t)=\{0.0,0.025,0.05,0.075,0.1\}$.
-For our models we need to create extinction rate functions with these values.
+Next, similar to the linear rate functions we explore some exponential rate functions.
+We start here with the exponentially increasing rates.
+Specifically, let's assume that the slope was $\alpha=\{0.0,0.005, \ldots, 0.02\}$.
+Then, we define the extinction rate function as
 <<>>=
 mu_max = 0.015
 mu_vals <- seq(0,0.02,0.005)
@@ -534,23 +573,23 @@ Let's have a look at these \textit{alternative models}.
 ACDC.plot.congruent.models( alt_models )
 @
 <<include=FALSE>>=
-pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_exp_inc.pdf", width=8,height=8)
+pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_mu_exp_inc.pdf", width=8,height=8)
 ACDC.plot.congruent.models( alt_models )
 dev.off()
 @
 \begin{figure}[h!]
 \centering
-\includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_ACDC_Congruent_Models_exp_inc.pdf}
-\caption{Diversification rate function describing the congruence class.}
-\label{fig:congruent_models_constant}
+\includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_ACDC_Congruent_Models_mu_exp_inc.pdf}
+\caption{Diversification rate functions for exponentially increasing extinction rates within the congruence class. The dashed lines show the different alternatives that we explored here, and the solid lines represent our reference model. As in our previous example, the speciation rate and net-diversification rate are robust to the difference choices of extinction rates.}
+\label{fig:congruent_models_mu_exp_inc}
 \end{figure}
 
 
 \subsubsection{Exponential decreasing extinction rates}
 
-Let us assume that the extinction rate was still constant, but at a range of different values.
-Specifically, let's assume that the true extinction rate was $\mu(t)=\{0.0,0.025,0.05,0.075,0.1\}$.
-For our models we need to create extinction rate functions with these values.
+Finally, we explore exponentially decreasing extinction rates.
+Specifically, let's assume that the slope was $\alpha=\{0.0,-0.005, \ldots, -0.02\}$.
+The extinction rate functions are defined as before.
 <<>>=
 mu_max = 0.04
 mu_vals <- seq(0,0.02,0.005)
@@ -571,25 +610,34 @@ Let's have a look at these \textit{alternative models}.
 ACDC.plot.congruent.models( alt_models )
 @
 <<include=FALSE>>=
-pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_exp_dec.pdf", width=8,height=8)
+pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_mu_exp_dec.pdf", width=8,height=8)
 ACDC.plot.congruent.models( alt_models )
 dev.off()
 @
 \begin{figure}[h!]
 \centering
-\includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_ACDC_Congruent_Models_exp_dec.pdf}
-\caption{Diversification rate function describing the congruence class.}
-\label{fig:congruent_models_constant}
+\includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_ACDC_Congruent_Models_mu_exp_dec.pdf}
+\caption{Diversification rate functions for exponentially decreasing extinction rates within the congruence class. The dashed lines show the different alternatives that we explored here, and the solid lines represent our reference model. Again, as in all our previous examples, the speciation and net-diversification rates are robust to our relatively minor variations in extinction rates. }
+\label{fig:congruent_models_mu_exp_dec}
 \end{figure}
+
+This concludes our brief exploration of different common shapes of extinction rates.
+In summary, the speciation and net-diversification rates are robust to our relatively minor variations in extinction rates.
+Only if we would change the extinction rates in extreme and biologically unrealistic ways, e.g., by allowing the extinction rate to become implausible large, then the extinction rates can overwhelm our observed diversification rate pattern.
 
 
 \subsection{Testing alternative speciation rates}
+
+Let us now look at the congruence class from the angle of the speciation rates.
+Can we also specify different speciation rate function and obtain valid extinction rates?
 
 \subsubsection{Constant speciation rates}
 
 Let us assume that the speciation rate was constant, but at a range of different values.
 Specifically, let's assume that the true extinction rate was $\mu(t)=\{0.1,0.2,0.3,0.4\}$.
-For our models we need to create extinction rate functions with these values.
+These values represent the magnitude of speciation rates that we estimated.
+We follow exactly the same approach as with the extinction rates.
+Hence, we start by defining the speciation rate functions.
 <<>>=
 lambda_vals <- seq(0.1,0.4,0.1)
 lambda1 <- list()
@@ -619,6 +667,7 @@ dev.off()
 \caption{Diversification rate function describing the congruence class.}
 \label{fig:congruent_models_lambda_constant}
 \end{figure}
+
 
 
 \subsubsection{Exponential increasing speciation rates}
@@ -734,7 +783,7 @@ samples <- sample.congruence.class(func_spec0=lambda,
 @
 
 <<congruence-class-extinction-uniform, chache=TRUE, results='hide', include=FALSE>>=
-p      = make.congruence.class.plot(func_spec0=lambda,
+p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
                                func_ext0=mu,
                                max.t=max_t,
                                sample.grid=samples )
@@ -772,7 +821,7 @@ samples <- sample.congruence.class(func_spec0=lambda,
 @
 
 <<congruence-class-extinction-lognormal, chache=TRUE, results='hide', include=FALSE>>=
-p      = make.congruence.class.plot(func_spec0=lambda,
+p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
                                func_ext0=mu,
                                max.t=max_t,
                                sample.grid=samples )
@@ -811,13 +860,13 @@ samples <- sample.congruence.class(func_spec0=lambda,
                                    sample.extinction.rates=extinction_rate_samples)
 @
 <<eval=FALSE>>=
-p = make.congruence.class.plot(func_spec0=lambda,
+p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
                                func_ext0=mu,
                                max.t=max_t,
                                sample.grid=samples )
 @
 <<congruence-class-extinction-GMRF, chache=TRUE, results='hide', include=FALSE>>=
-p      = make.congruence.class.plot(func_spec0=lambda,
+p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
                                func_ext0=mu,
                                max.t=max_t,
                                sample.grid=samples )
@@ -855,14 +904,14 @@ samples <- sample.congruence.class(func_spec0=lambda,
                                    sample.extinction.rates=extinction_rate_samples)
 @
 <<eval=FALSE>>=
-p = make.congruence.class.plot(func_spec0=lambda,
+p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
                                func_ext0=mu,
                                max.t=max_t,
                                sample.grid=samples )
 @
 
 <<congruence-class-extinction-GMRF-trend, chache=TRUE, results='hide', include=FALSE>>=
-p      = make.congruence.class.plot(func_spec0=lambda,
+p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
                                func_ext0=mu,
                                max.t=max_t,
                                sample.grid=samples )

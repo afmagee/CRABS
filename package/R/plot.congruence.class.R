@@ -8,7 +8,7 @@
 #' @export
 #' @examples
 #' #TODO
-make.congruence.class.plot <- function(func_spec0, func_ext0, max.t, sample.grid ) {
+ACDC.plot.congruence.class.heatmap <- function(func_spec0, func_ext0, max.t, sample.grid ) {
 
     ## Here we define some global options
     NUM_TIME_DISCRETIZATIONS = 1000
