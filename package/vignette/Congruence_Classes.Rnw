@@ -371,7 +371,39 @@ Conversely, if we know the speciation rate and the pulled diversification rates,
 
 \section{Exploring alternative rate functions}
 
+We first create a congruence class object which contains all the transformed rate functions (i.e., the net-diversification rate and relative extinction rate) as well as the pulled rates.
+<<>>=
+my_model = congruence.class( lambda, mu, max_t )
+@
+Then we can plot the rates.
+<<eval=FALSE>>=
+ACDC.plot.rates( my_model )
+@
+<<include=FALSE>>=
+pdf(file="RnwFigs/Primates_ACDC_Congruence_Class.pdf", width=8,height=8)
+ACDC.plot.rates( my_model )
+dev.off()
+@
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_ACDC_Congruence_Class.pdf}
+\caption{Congruence class .}
+\label{fig:congruence_class}
+\end{figure}
 
+
+
+
+\subsection{Testing alternative extinction rates}
+
+Let us assume that the extinction rate was still constant, but at a higher value.
+<<>>=
+mu1 <- function(t) rep(1.0,length(t))
+@
+Now we compute the new speciation rate.
+<<eval=FALSE>>=
+lambda <- ...
+@
 
 \section{Exploring a congruence class}
 
