@@ -36,14 +36,17 @@ legend("topleft",legend=c("speciation","extinction"),col=c("blue","red"), lty=c(
 est_lambda0 = est_speciation[1]
 est_mu0     = est_extinction[1]
 
-# speciation_rate_samples <- function() { sample.basic.models( num.epochs=100, rate0=est_lambda0, max.rate=2, model="episodic2", fc.mean=1.5) }
-# extinction_rate_samples <- function() { sample.basic.models( num.epochs=100, max.rate=2, model="episodic2", fc.mean=1.5) }
+speciation_rate_samples <- function() { sample.basic.models( num.epochs=100, rate0=est_lambda0, max.rate=2, model="episodic2", fc.mean=1.5) }
+extinction_rate_samples <- function() { sample.basic.models( num.epochs=100, max.rate=2, model="exponential", fc.mean=2, noisy=TRUE) }
 
-speciation_rate_samples <- function() { bootstrap.rates(1000, lambda, max_t, keep.rate0=TRUE, replace=FALSE, block.size=100) }
-extinction_rate_samples <- function() { bootstrap.rates(1000, lambda, max_t, keep.rate0=FALSE, reverse.time=TRUE, replace=TRUE, block.size=5) }
+# speciation_rate_samples <- function() { bootstrap.rates(1000, lambda, max_t, keep.rate0=TRUE, replace=FALSE, block.size=100) }
+# extinction_rate_samples <- function() { bootstrap.rates(1000, lambda, max_t, keep.rate0=FALSE, reverse.time=TRUE, replace=TRUE, block.size=5) }
 
-samples <- sample.congruence.class(func_spec0=lambda, func_ext0=mu, max.t=max_t, num.epochs=100, num.samples=1000, rate.type="speciation", sample.speciation.rates=speciation_rate_samples, sample.extinction.rates=extinction_rate_samples)
-p      = make.congruence.class.plot(func_spec0=lambda, func_ext0=mu, max.t=max_t, sample.grid=samples )
-p
+samples <- sample.congruence.class(func_spec0=lambda, func_ext0=mu, max.t=max_t, num.epochs=100, num.samples=1000, rate.type="extinction", sample.speciation.rates=speciation_rate_samples, sample.extinction.rates=extinction_rate_samples)
 
+
+
+pdf("~/Downloads/congruence_spaghetti.pdf")
+  ACDC.plot.congruence.class.spaghetti(func_spec0=lambda, func_ext0=mu, max.t=max_t, sample.grid=samples )
+dev.off()
 
