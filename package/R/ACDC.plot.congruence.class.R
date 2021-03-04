@@ -151,7 +151,7 @@ ACDC.plot.congruence.class.heatmap <- function(func_spec0, func_ext0, max.t, sam
           theme(legend.position = "none", plot.title = element_text(hjust = 0.5)) +
           scale_x_continuous(name ="time before present", breaks=breaks, labels=rev(breaks))
     if ( is.null( func_spec0 ) == FALSE ) {
-        p1 <- p1 + stat_function(fun=function(t) func_spec0(max.t-t), size=2)
+        p1 <- p1 + stat_function(fun=function(t) func_spec0(max.t-t), size=1)
     }
 
     tmp <- expand.grid(PLOT_RATES_DELTA_LAMBDA, epoch_times)
@@ -174,7 +174,7 @@ ACDC.plot.congruence.class.heatmap <- function(func_spec0, func_ext0, max.t, sam
                  theme(legend.position = "none", plot.title = element_text(hjust = 0.5)) +
                  scale_x_continuous(name ="time before present", breaks=breaks, labels=rev(breaks))
     if ( is.null( func_ext0 ) == FALSE ) {
-        p3 <- p3 + stat_function(fun=function(t) func_ext0(max.t-t), size=2)
+        p3 <- p3 + stat_function(fun=function(t) func_ext0(max.t-t), size=1)
     }
 
     tmp <- expand.grid(PLOT_RATES_DELTA_MU, epoch_times)
@@ -197,7 +197,7 @@ ACDC.plot.congruence.class.heatmap <- function(func_spec0, func_ext0, max.t, sam
                  theme(legend.position = "none", plot.title = element_text(hjust = 0.5)) +
                  scale_x_continuous(name ="time before present", breaks=breaks, labels=rev(breaks))
     if ( is.null( func_net_div0 ) == FALSE ) {
-        p5 <- p5 + stat_function(fun=function(t) func_net_div0(max.t-t), size=2)
+        p5 <- p5 + stat_function(fun=function(t) func_net_div0(max.t-t), size=1)
     }
 
     tmp <- expand.grid(PLOT_RATES_DELTA_NET_DIV, epoch_times)
@@ -221,7 +221,7 @@ ACDC.plot.congruence.class.heatmap <- function(func_spec0, func_ext0, max.t, sam
                  theme(legend.position = "none", plot.title = element_text(hjust = 0.5)) +
                  scale_x_continuous(name ="time before present", breaks=breaks, labels=rev(breaks))
     if ( is.null( func_rel_ext0 ) == FALSE ) {
-        p7 <- p7 + stat_function(fun=function(t) func_rel_ext0(max.t-t), size=2)
+        p7 <- p7 + stat_function(fun=function(t) func_rel_ext0(max.t-t), size=1)
     }
 
     tmp <- expand.grid(PLOT_RATES_DELTA_REL_EXT, epoch_times)

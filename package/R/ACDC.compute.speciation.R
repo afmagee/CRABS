@@ -56,11 +56,9 @@ compute.speciation <- function( lambda0, v_p_div, v_ext1, delta_t ) {
 
   for (j in 2:NUM_TIME_DISCRETIZATIONS) {
 
-#	tmp <- 4*v_lambda1[j-1]*delta_t + (v_p_div[j]*delta_t+v_ext1[j]*delta_t-1)^2
-#	v_lambda1[j] <- (sqrt(tmp) + v_p_div[j]*delta_t+v_ext1[j]*delta_t-1) / (2*delta_t)
+	tmp <- 4*v_lambda1[j-1]*delta_t + (v_p_div[j]*delta_t+v_ext1[j]*delta_t-1)^2
+	v_lambda1[j] <- (sqrt(tmp) + v_p_div[j]*delta_t+v_ext1[j]*delta_t-1) / (2*delta_t)
 
-    tmp <- 4*v_lambda1[j-1]*delta_t + (v_p_div[j-1]*delta_t+v_ext1[j-1]*delta_t-1)^2
-	v_lambda1[j] <- (sqrt(tmp) + v_p_div[j-1]*delta_t+v_ext1[j-1]*delta_t-1) / (2*delta_t)
   }
 
   return (v_lambda1)

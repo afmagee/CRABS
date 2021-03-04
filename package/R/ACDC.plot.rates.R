@@ -34,7 +34,7 @@ ACDC.plot.rates <- function( obj ) {
   curve(p.lambda, lwd=this.lwd, col=col_lambda, lty=2, add=TRUE)
   mtext(side=1, text="time before present", line=2.5, cex=1.25)
   mtext(side=2, text="rate", line=2.25, cex=1.25)
-  mtext(side=3, text="Speciation", line=0.75, cex=1.5)
+  mtext(side=3, text="Speciation", line=0.75, cex=1.4)
 
 
   Y_MIN <- min(mu(times))
@@ -42,7 +42,7 @@ ACDC.plot.rates <- function( obj ) {
   curve(mu, xlim=rev(c(0,obj$max.t)), ylim=c(Y_MIN,Y_MAX), lwd=this.lwd, col=col_mu, ylab="", xlab="", main="", lty=1)
   mtext(side=1, text="time before present", line=2.5, cex=1.25)
   mtext(side=2, text="rate", line=2.25, cex=1.25)
-  mtext(side=3, text="Extinction", line=0.75, cex=1.5)
+  mtext(side=3, text="Extinction", line=0.75, cex=1.4)
 
 
   Y_MIN <- min(delta(times), p.delta(times))
@@ -51,7 +51,7 @@ ACDC.plot.rates <- function( obj ) {
   curve(p.delta, lwd=this.lwd, col=col_delta, lty=2, add=TRUE)
   mtext(side=1, text="time before present", line=2.5, cex=1.25)
   mtext(side=2, text="rate", line=2.25, cex=1.25)
-  mtext(side=3, text="Net-diversification", line=0.75, cex=1.5)
+  mtext(side=3, text="Net-diversification", line=0.75, cex=1.4)
 
 
   Y_MIN <- min(epsilon(times))
@@ -59,7 +59,7 @@ ACDC.plot.rates <- function( obj ) {
   curve(epsilon, xlim=rev(c(0,obj$max.t)), ylim=c(Y_MIN,Y_MAX), lwd=this.lwd, col=col_epsilon, ylab="", xlab="", main="", lty=1)
   mtext(side=1, text="time before present", line=2.5, cex=1.25)
   mtext(side=2, text="rate", line=2.25, cex=1.25)
-  mtext(side=3, text="Relative extinction", line=0.75, cex=1.5)
+  mtext(side=3, text="Relative extinction", line=0.75, cex=1.4)
 
 
 

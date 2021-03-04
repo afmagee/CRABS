@@ -15,4 +15,4 @@ Congruence_Classes.pdf: Congruence_Classes.Rnw
 	pdflatex Congruence_Classes.tex
 
 clean:
-	rm Congruence_Classes.tex Congruence_Classes.log Congruence_Classes.out Congruence_Classes.aux Congruence_Classes.toc texput.log
+	rm -f Congruence_Classes.tex Congruence_Classes.log Congruence_Classes.out Congruence_Classes.aux Congruence_Classes.toc texput.log

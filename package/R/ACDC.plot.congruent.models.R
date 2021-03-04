@@ -29,13 +29,13 @@ ACDC.plot.congruent.models <- function( obj ) {
     Y_MIN <- min(Y_MIN, lambda(times))
     Y_MAX <- max(Y_MAX, lambda(times))
   }
-  plot( NA, NA, xlim=rev(c(0,obj$max.t)), ylim=c(Y_MIN,Y_MAX), ylab="", xlab="", main="")
+  lambda = obj$lambda0
+  curve(lambda, xlim=rev(c(0,obj$max.t)), ylim=c(Y_MIN,Y_MAX), lwd=this.lwd, col="black", lty=1, ylab="", xlab="", main="")
   for (i in 1:num.models) {
     lambda = obj$lambda1[[i]]
-    curve(lambda, lwd=this.lwd, col=col_lambda[i], lty=2, add=TRUE)
+    lines(times,lambda(times),lwd=this.lwd,col=col_lambda[i],lty=2)
+
   }
-  lambda = obj$lambda0
-  curve(lambda, lwd=this.lwd, col="black", lty=1, add=TRUE)
   mtext(side=1, text="time before present", line=2.5, cex=1.25)
   mtext(side=2, text="rate", line=2.25, cex=1.25)
   mtext(side=3, text="Speciation", line=0.75, cex=1.5)
@@ -49,13 +49,12 @@ ACDC.plot.congruent.models <- function( obj ) {
     Y_MIN <- min(Y_MIN, mu(times))
     Y_MAX <- max(Y_MAX, mu(times))
   }
-  plot( NA, NA, xlim=rev(c(0,obj$max.t)), ylim=c(Y_MIN,Y_MAX), ylab="", xlab="", main="")
+  mu = obj$mu0
+  curve(mu, xlim=rev(c(0,obj$max.t)), ylim=c(Y_MIN,Y_MAX), lwd=this.lwd, col="black", lty=1, ylab="", xlab="", main="")
   for (i in 1:num.models) {
     mu = obj$mu1[[i]]
-    curve(mu, lwd=this.lwd, col=col_mu[i], lty=2, add=TRUE)
+    lines(times,mu(times),lwd=this.lwd,col=col_mu[i],lty=2)
   }
-  mu = obj$mu0
-  curve(mu, lwd=this.lwd, col="black", lty=1, add=TRUE)
   mtext(side=1, text="time before present", line=2.5, cex=1.25)
   mtext(side=2, text="rate", line=2.25, cex=1.25)
   mtext(side=3, text="Extinction", line=0.75, cex=1.5)
@@ -73,17 +72,16 @@ ACDC.plot.congruent.models <- function( obj ) {
     Y_MIN <- min(Y_MIN, delta(times))
     Y_MAX <- max(Y_MAX, delta(times))
   }
-  plot( NA, NA, xlim=rev(c(0,obj$max.t)), ylim=c(Y_MIN,Y_MAX), ylab="", xlab="", main="")
+  lambda = obj$lambda0
+  mu     = obj$mu0
+  delta  = function(t) lambda(t) - mu(t)
+  curve(delta, xlim=rev(c(0,obj$max.t)), ylim=c(Y_MIN,Y_MAX), lwd=this.lwd, col="black", lty=1, ylab="", xlab="", main="")
   for (i in 1:num.models) {
     lambda = obj$lambda1[[i]]
     mu     = obj$mu1[[i]]
     delta  = function(t) lambda(t) - mu(t)
-    curve(delta, lwd=this.lwd, col=col_delta[i], lty=2, add=TRUE)
+    lines(times,delta(times),lwd=this.lwd,col=col_delta[i],lty=2)
   }
-  lambda = obj$lambda0
-  mu     = obj$mu0
-  delta  = function(t) lambda(t) - mu(t)
-  curve(delta, lwd=this.lwd, col="black", lty=1, add=TRUE)
   mtext(side=1, text="time before present", line=2.5, cex=1.25)
   mtext(side=2, text="rate", line=2.25, cex=1.25)
   mtext(side=3, text="Net-diversification", line=0.75, cex=1.5)
@@ -101,21 +99,19 @@ ACDC.plot.congruent.models <- function( obj ) {
     Y_MIN <- min(Y_MIN, eps(times))
     Y_MAX <- max(Y_MAX, eps(times))
   }
-  plot( NA, NA, xlim=rev(c(0,obj$max.t)), ylim=c(Y_MIN,Y_MAX), ylab="", xlab="", main="")
+  lambda = obj$lambda0
+  mu     = obj$mu0
+  eps    = function(t) mu(t) / lambda(t)
+  curve(eps, xlim=rev(c(0,obj$max.t)), ylim=c(Y_MIN,Y_MAX), lwd=this.lwd, col="black", lty=1, ylab="", xlab="", main="")
   for (i in 1:num.models) {
     lambda = obj$lambda1[[i]]
     mu     = obj$mu1[[i]]
     eps    = function(t) mu(t) / lambda(t)
-    curve(eps, lwd=this.lwd, col=col_epsilon[i], lty=2, add=TRUE)
+    lines(times,eps(times),lwd=this.lwd,col=col_epsilon[i],lty=2)
   }
-  lambda = obj$lambda0
-  mu     = obj$mu0
-  eps    = function(t) mu(t) / lambda(t)
-  curve(eps, lwd=this.lwd, col="black", lty=1, add=TRUE)
   mtext(side=1, text="time before present", line=2.5, cex=1.25)
   mtext(side=2, text="rate", line=2.25, cex=1.25)
   mtext(side=3, text="Relative extinction", line=0.75, cex=1.5)
-
 
 
 }
