@@ -8,7 +8,7 @@
 ACDC.plot.congruent.models <- function( obj ) {
 
   ## general settings
-  num.intervals = 10000
+  num.intervals = 1000
   times         = (0:num.intervals) / num.intervals * obj$max.t
   num.models    = length( obj$lambda1 )
 

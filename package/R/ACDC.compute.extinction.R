@@ -14,12 +14,20 @@ ACDC.compute.extinction <- function( congruence.class, func.lambda=NULL, list.fu
   lambda_1 = list()
   mu_1     = list()
   if ( is.null( func.lambda ) == FALSE ) {
+     ## make sure that the initial conditions holds
+     if ( abs(congruence.class$lambda(0) - func.lambda(0)) > 1E-8 ) {
+       stop("The initial values of the reference and alternative speciation rate functions are not identical")
+     }
      v_spec1        = func.lambda( times )
      v_mu1          = compute.extinction( v_p_div, v_spec1, delta_t )
      lambda_1[[1]]  = func.lambda
      mu_1[[1]]      = approxfun( times, v_mu1)
   } else if ( is.null( list.funcs.lambda ) == FALSE  ) {
     for (i in 1:length(list.funcs.lambda)) {
+       ## make sure that the initial conditions holds
+       if ( abs(congruence.class$lambda(0) - list.funcs.lambda[[i]](0)) > 1E-8 ) {
+         stop("The initial values of the reference and alternative speciation rate functions are not identical")
+       }
        v_spec1        = list.funcs.lambda[[i]]( times )
        v_mu1          = compute.extinction( v_p_div, v_spec1, delta_t )
        lambda_1[[i]]  = list.funcs.lambda[[i]]
@@ -40,10 +48,10 @@ ACDC.compute.extinction <- function( congruence.class, func.lambda=NULL, list.fu
 #' Create the piecewise-constant extinction rate
 #'
 #' @param lambda0 The rate at present
-#' @param v_p_div The pulled diversification rate at all changepioints
-#' @param v_ext1 The extinction rate at all changepoints
+#' @param v_p_div The pulled diversification rate at all change-points
+#' @param v_ext1 The extinction rate at all change-points
 #' @param delta_t The width of each grid cell
-#' @return Extinction rate at all changepoints
+#' @return Extinction rate at all change-points
 #' @keywords internal
 compute.extinction <- function( v_p_div, v_spec1, delta_t ) {
 

@@ -8,7 +8,7 @@
 #' @export
 #' @examples
 #' #TODO
-congruence.class <- function(func_spec0, func_ext0, max.t, num.intervals=10000 ) {
+congruence.class <- function(func_spec0, func_ext0, max.t, num.intervals=1000 ) {
 
   ## create our vector of times (i.e., change-points)
   ## for the piecewise linear approximation

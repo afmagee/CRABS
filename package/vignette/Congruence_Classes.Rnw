@@ -15,6 +15,7 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{natbib}
+\usepackage{placeins}
 \usepackage{xspace}
 
 \newcommand{\R}{\textsf{R}\xspace}
@@ -621,11 +622,115 @@ dev.off()
 \label{fig:congruent_models_mu_exp_dec}
 \end{figure}
 
+
+
+\subsubsection{2-epoch extinction rates}
+
+Let us assume that the extinction rate changed abruptly at a pre-defined change-point.
+We'll try to fix the change-point to the estimated rapid increase in diversification.
+Thus, we are modeling the extinction rate as a 2-epoch model.
+Furthermore, let us try a range of different factors of increase/decrease.
+Specifically, let's assume that the rate increase/decrease was by a factor of $\alpha=\{1,2,4\}$.
+Again, we create the list of extinction rate functions.
+<<>>=
+mu_min = 0.05
+t_shift = 5.5
+alpha_vals <- seq(-2,2,1)
+mu1 <- list()
+for (i in 1:length(alpha_vals)) {
+  mu1[[i]] = local({
+    alpha = alpha_vals[i]
+    function(t) { ifelse( t < t_shift, mu_min*2^alpha, mu_min) }
+  })
+}
+@
+Now we compute the new speciation rate given the extinction rates.
+<<eval=TRUE>>=
+alt_models <- ACDC.compute.speciation( my_model, list.funcs.mu=mu1 )
+@
+Let's have a look at these \textit{alternative models}.
+<<eval=FALSE>>=
+ACDC.plot.congruent.models( alt_models )
+@
+<<include=FALSE>>=
+pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_mu_shift.pdf", width=8,height=8)
+ACDC.plot.congruent.models( alt_models )
+dev.off()
+@
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_ACDC_Congruent_Models_mu_shift.pdf}
+\caption{Diversification rate functions for 2-epoch extinction rate functions within the congruence class. The solid line shows the reference model and the dashed lines show the alternative models. We observe no noticeable effect on the overall trend of the derived speciation rates.}
+\label{fig:congruent_models_mu_shift}
+\end{figure}
+
+
+
+\subsubsection{Reversed trend extinction rates}
+
+As a last example, let us explore the case where the extinction rate had the opposite trend to the estimated speciation rate.
+That is, if the speciation rate was going up, now we model that the extinction rate goes down.
+This should produce the same pattern in the net-diversification rate.
+We create this reversed/opposite trend extinction rate function by subtracting the observed speciation rate from some arbitrary baseline (which is necessary to make sure that all extinction rates are positive).
+<<>>=
+mu_min = 0.5
+mu1 <- function(t) mu_min - lambda(t)
+@
+Now we compute the new speciation rate given the extinction rates.
+<<eval=TRUE>>=
+alt_models <- ACDC.compute.speciation( my_model, func.mu=mu1 )
+@
+Let's have a look at these \textit{alternative models}.
+<<eval=FALSE>>=
+ACDC.plot.congruent.models( alt_models )
+@
+<<include=FALSE>>=
+pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_mu_reverse_add.pdf", width=8,height=8)
+ACDC.plot.congruent.models( alt_models )
+dev.off()
+@
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_ACDC_Congruent_Models_mu_reverse_add.pdf}
+\caption{Diversification rate functions for our reversed trend additive extinction rate function. The solid line shows the reference model and the dashed lines show the alternative model. Interestingly, the reversed model where the extinction rate goes down instead of the speciation rate going up is not exactly in the congruence class, as we see that the net-diversification rates are not identical. Instead, we see that the speciation rate now drops first just to still increase towards the present.}
+\label{fig:congruent_models_mu_rev_trend_add}
+\end{figure}
+
+
+In Figure~\ref{fig:congruent_models_mu_rev_trend_add} we used an additive trend by subtracting the rate.
+However, we can also use a multiplicative model by subtracting the log speciation rate and then back-transforming the extinction rate from the log-scale.
+<<>>=
+mu_min = 0.0075
+mu1 <- function(t) exp(log(mu_min) - log(lambda(t)))
+@
+Now we compute the new speciation rate given the extinction rates.
+<<eval=TRUE>>=
+alt_models <- ACDC.compute.speciation( my_model, func.mu=mu1 )
+@
+Let's have a look at these \textit{alternative models}.
+<<eval=FALSE>>=
+ACDC.plot.congruent.models( alt_models )
+@
+<<include=FALSE>>=
+pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_mu_reverse_mult.pdf", width=8,height=8)
+ACDC.plot.congruent.models( alt_models )
+dev.off()
+@
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_ACDC_Congruent_Models_mu_reverse_mult.pdf}
+\caption{Diversification rate functions for our reversed multiplicative trend extinction rate function. The solid line shows the reference model and the dashed lines show the alternative model. Interestingly, the derived speciation rate is qualitatively identical except that the speciation rate first decreases before sharply increasing towards the present.}
+\label{fig:congruent_models_mu_rev_trend_mult}
+\end{figure}
+
+
 This concludes our brief exploration of different common shapes of extinction rates.
-In summary, the speciation and net-diversification rates are robust to our relatively minor variations in extinction rates.
+In summary, the speciation and net-diversification rates are mostly robust to our relatively minor variations in extinction rates.
+Specifically, the observed pattern of a sharp increase of the speciation rate towards the present is robust to all variation of extinction rates we tested.
 Only if we would change the extinction rates in extreme and biologically unrealistic ways, e.g., by allowing the extinction rate to become implausible large, then the extinction rates can overwhelm our observed diversification rate pattern.
 
 
+\FloatBarrier
 \subsection{Testing alternative speciation rates}
 
 Let us now look at the congruence class from the angle of the speciation rates.
@@ -633,24 +738,19 @@ Can we also specify different speciation rate function and obtain valid extincti
 
 \subsubsection{Constant speciation rates}
 
-Let us assume that the speciation rate was constant, but at a range of different values.
+Let us assume that the speciation rate was constant.
+However, the congruence class as defined by \cite{Louca2020} dictates that $\lambda(0) = \lambda'(0)$, assuming the same present day sampling fraction for both models.
+Thus, there is only one possible constant rate speciation model within the congruence class with $\lambda'(t) = \lambda(0)$
 Specifically, let's assume that the true extinction rate was $\mu(t)=\{0.1,0.2,0.3,0.4\}$.
 These values represent the magnitude of speciation rates that we estimated.
 We follow exactly the same approach as with the extinction rates.
 Hence, we start by defining the speciation rate functions.
 <<>>=
-lambda_vals <- seq(0.1,0.4,0.1)
-lambda1 <- list()
-for (i in 1:length(lambda_vals)) {
-  lambda1[[i]] = local({
-    lambda = lambda_vals[i]
-    function(t) { rep(lambda,length(t)) }
-  })
-}
+lambda1 <- function(t) { rep(lambda(0),length(t)) }
 @
 Now we compute the new extinction rate given the speciation rates.
 <<eval=TRUE>>=
-alt_models <- ACDC.compute.extinction( my_model, list.funcs.lambda=lambda1 )
+alt_models <- ACDC.compute.extinction( my_model, func.lambda=lambda1 )
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
@@ -664,26 +764,30 @@ dev.off()
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_ACDC_Congruent_Models_lambda_constant.pdf}
-\caption{Diversification rate function describing the congruence class.}
+\caption{Diversification rate functions for different constant speciation rates within the congruence class. The solid line shows our reference model and the different dashed lines show alternative rates/model. Most interesting, we observe that for the constant speciation rate function we compute an extinction rate that was negative towards the present.}
 \label{fig:congruent_models_lambda_constant}
 \end{figure}
 
+In this example we observe that for the constant speciation rate function the derived extinction rate function was negative at the present.
+A negative extinction rate is clearly unrealistic.
+Thus, we can conclude that there is no constant rate speciation rate function within the congruence class.
 
 
-\subsubsection{Exponential increasing speciation rates}
 
-Let us assume that the speciation rate was exponentially increasing.
-Furthermore, let us try a range of different factors of increase.
-Specifically, let's assume that the true extinction rate was $\alpha=\{0.0,0.025,0.05,0.075,0.1\}$.
-For our models we need to create extinction rate functions with these values.
+\subsubsection{Exponential increasing/decreasing speciation rates}
+
+Let us assume that the speciation rate was exponentially increasing or decreasing.
+Furthermore, let us try a range of different factors of increase/decrease.
+Specifically, let's assume that the rate increase was $\alpha=\{-0.04,-0.03,\ldots, 0.04\}$.
+Again, we create the list of speciation rate functions.
 <<>>=
-lambda_min = 0.06
-alpha_vals <- seq(0,0.03,0.005)
+lambda_present = lambda(0)
+alpha_vals <- c(seq(0.0,0.04,0.02),seq(-0.5,-0.1,0.2))
 lambda1 <- list()
 for (i in 1:length(alpha_vals)) {
   lambda1[[i]] = local({
     alpha = alpha_vals[i]
-    function(t) { lambda_min * exp(alpha*(max_t-t)) }
+    function(t) { lambda_present * exp(alpha*t) }
   })
 }
 @
@@ -696,19 +800,20 @@ Let's have a look at these \textit{alternative models}.
 ACDC.plot.congruent.models( alt_models )
 @
 <<include=FALSE>>=
-pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_lambda_exp_inc.pdf", width=8,height=8)
+pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_lambda_exp.pdf", width=8,height=8)
 ACDC.plot.congruent.models( alt_models )
 dev.off()
 @
 \begin{figure}[h!]
 \centering
-\includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_ACDC_Congruent_Models_lambda_exp_inc.pdf}
-\caption{Diversification rate function describing the congruence class.}
-\label{fig:congruent_models_lambda_exp_inc}
+\includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_ACDC_Congruent_Models_lambda_exp.pdf}
+\caption{Diversification rate functions for exponentially increasing speciation rate functions within the congruence class. The solid line shows the reference model and the dashed lines show the alternative models. Again, we observe that for all speciation rate functions that the derived extinction rate functions are negative towards the present and/or at some other point in time.}
+\label{fig:congruent_models_lambda_exp}
 \end{figure}
 
-
-
+Our results here for the exponentially increasing speciation functions show again that the derived extinction rates are negative towards the present and/or at another point in time.
+Because of the initial condition that all speciation rate functions within the congruence class must have the same value at time $t=0$ (the present), it is very challenging to find other speciation rate functions that have valid extinction rates (i.e., $\mu(t)\leq 0$).
+This indicates that the congruence class is much more restrictive for the space of valid speciation rates.
 
 
 
