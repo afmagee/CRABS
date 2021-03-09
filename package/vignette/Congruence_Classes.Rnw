@@ -166,7 +166,7 @@ The alternative, ``GMRF'' for Gaussian Markov random field, produces smoother ch
 This MRF noise allows rates to go up or down, such that \code{direction} gives the overall trend across many sampled rates rather than a guarantee for any one rate.
 To change this, and force rates to go one direction while allowing stochastic noise from an MRF, set \code{monotonic=TRUE}.
 
-The argument \code{fc.mean} dictates the average amount of change from first to last rate as a fold change.
+The argument \code{fc.mean} dictates (more or less) the average amount of change from first to last rate as a fold change.
 Specifically, \code{fc.mean} must be a value greater than 1 (1.00...01 is allowed), and \code{direction} determines the direction of change.
 If \code{direction=``increasing''}, then \code{fc.mean} defines first/last, while if \code{direction=``decreasing''}, \code{fc.mean} defines last/first.
 The default is 3, which is biologically plausible but not the universally best option.
@@ -174,6 +174,9 @@ Fold changes are drawn from a Gamma distribution with rate 1.25, offset 1, and a
 
 All rate curves are sampled by rejection sampling to guarantee that the rates are all between \code{minimum.rate} and \code{maximum.rate}.
 By default, rates are assumed to be in [0,10] which is probably the extreme end of plausible variation.
+This rejection sampling means that the actual average change may not quite be what it is set to be.
+For example if one sets the model to be a decrease through time, sets the rate at present to be 0.5, and the maximum rate to be 0.75, clearly the average fold chane could not be a larger than 1.5x increase.
+Be aware, setting rejection limits that make it difficult to sample trajectories can make this function (which is normally quite fast) take a very long time!
 
 The initial rate is drawn from a lognormal distribution with median \code{rate0.median} and log(sigma) = \code{rate0.logsd}, which is to say a Lognormal(log(\code{rate0.median}),\code{rate0.logsd}) distribution.
 The default is rates with median 0.1 and a 95\% range covering [0.01,1].
@@ -184,8 +187,6 @@ This allows sampling speciation rates, as the initial speciation rate must be th
 
 
 \subsection{\code{sample.rates}}
-
-
 
 
 
@@ -1058,18 +1059,287 @@ We get into some more of these restrictions in another section.
 The second assumption is about how rates vary over time.
 One could argue that if diversification rates were low, say 42 million years ago, then you would assume that the diversification rates were also low 43 million years ago.
 This would mean that diversification rates are autocorrelated and do not vary completely arbitrarily over time.
-We explore a few different options of rate variation over time in the next sections, which include:
+
+In the next subsections, we explore a few different options of rate variation over time in the next sections, which include:
 \begin{enumerate}
+  \item HSMRF (autocorrelated) rates
+  \item exponentially decreasing rates with stochastic variation
+  \item linearly increasing rates with stochastic variation
+  \item n-piece episodic models
   \item uncorrelated/independent rates
-  \item (geometric) autorocorrelated rates
-  \item (geometric) autorocorrelated rates with a trend
 \end{enumerate}
+With the built-in functions \code{sample.basic.models} and \code{sample.rates}, users have freedom to explore these, and many other forms of rate variation.
+If these functions are not sufficient, as shown in previous sections, it is easy to customize the sampling to your liking.
+
+
+\subsection{Temporally autocorrelated extinction rates}\label{sec:extinction_HSMRF}
+
+Here, we generate a variety of alternative extinction rates using HSMRF models \citep{Magee2020}.
+When sampling from models, we get random walks, or temporally autocorrelated, extinction rates, and the HSMRF tends to produce random walks that look like piecewise constant functions.
+The rates produced here have no overall trend, the median change from past to present is 0.
+We use the function \code{sample.basic.models} to construct these rates, which by default assumes that rates are between 0 and 10, though here we change these boundaries slightly to bound the rates to be between 0 and 1.
+Our motivation for these values was, that (i) having a maximal expected extinction time per lineage of 1.0 million years seems reasonable from the fossil record, and (ii) we estimated a maximal speciation rate of 0.4, which is clearly smaller than 1.0.
+
+<<sample-function-extinction-uniform>>=
+extinction_rate_samples <- function() {
+   sample.basic.models( num.epochs=100,
+                        model="MRF",
+                        maximum.rate=1)
+}
+@
+
+<<sample-extinction-uniform, cache=TRUE, results='hide'>>=
+samples <- sample.congruence.class(func_spec0=lambda,
+                                   func_ext0=mu,
+                                   max.t=max_t,
+                                   num.epochs=100,
+                                   num.samples=1000,
+                                   rate.type="extinction",
+                                   sample.extinction.rates=extinction_rate_samples)
+@
+<<eval=FALSE>>=
+p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
+                               func_ext0=mu,
+                               max.t=max_t,
+                               sample.grid=samples )
+@
+<<congruence-class-extinction-uniform, chache=TRUE, results='hide', include=FALSE>>=
+p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
+                               func_ext0=mu,
+                               max.t=max_t,
+                               sample.grid=samples )
+
+ggsave(p,file="RnwFigs/Primates_HSMRF_ACDC_extinction_HSMRF.pdf", width=5,height=10)
+@
+<<eval=FALSE>>=
+ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
+                                     func_ext0=mu,
+                                     max.t=max_t,
+                                     sample.grid=samples,
+                                     max.curves=100 )
+@
+<<congruence-class-extinction-uniform-spaghetti, chache=TRUE, results='hide', include=FALSE>>=
+pdf(file="RnwFigs/Primates_HSMRF_ACDC_extinction_HSMRF_speghetti.pdf",width=5,height=10)
+ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
+                                     func_ext0=mu,
+                                     max.t=max_t,
+                                     sample.grid=samples,
+                                     max.curves=100 )
+dev.off()
+@
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.48\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_HSMRF.pdf}
+\includegraphics[width=0.48\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_HSMRF_speghetti.pdf}
+\caption{Congruence class assuming HSMRF-distributed extinction rates.}
+\label{fig:extinction_HSMRF_spaghetti}
+\end{figure}
+
+
+\subsection{Exponentially decreasing extinction rates}\label{sec:extinction_exponential}
+
+Here, we generate a variety of alternative extinction rates using HSMRF models \citep{Magee2020} with an exponential trend.
+We otherwise make the same assumptions as above.
+To help the rates we simulate fit within 0 and 1, we set the fold change average to be 2 instead of the default 3.
+
+<<sample-function-extinction-uniform>>=
+extinction_rate_samples <- function() {
+   sample.basic.models( num.epochs=100,
+                        model="exponential",
+                        maximum.rate=1,
+                        fc.mean=2)
+}
+@
+
+<<sample-extinction-uniform, cache=TRUE, results='hide'>>=
+samples <- sample.congruence.class(func_spec0=lambda,
+                                   func_ext0=mu,
+                                   max.t=max_t,
+                                   num.epochs=100,
+                                   num.samples=1000,
+                                   rate.type="extinction",
+                                   sample.extinction.rates=extinction_rate_samples)
+@
+<<eval=FALSE>>=
+p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
+                               func_ext0=mu,
+                               max.t=max_t,
+                               sample.grid=samples )
+@
+<<congruence-class-extinction-uniform, chache=TRUE, results='hide', include=FALSE>>=
+p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
+                               func_ext0=mu,
+                               max.t=max_t,
+                               sample.grid=samples )
+
+ggsave(p,file="RnwFigs/Primates_HSMRF_ACDC_extinction_exponential.pdf", width=5,height=10)
+@
+<<eval=FALSE>>=
+ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
+                                     func_ext0=mu,
+                                     max.t=max_t,
+                                     sample.grid=samples,
+                                     max.curves=100 )
+@
+<<congruence-class-extinction-uniform-spaghetti, chache=TRUE, results='hide', include=FALSE>>=
+pdf(file="RnwFigs/Primates_HSMRF_ACDC_extinction_exponential_speghetti.pdf",width=5,height=10)
+ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
+                                     func_ext0=mu,
+                                     max.t=max_t,
+                                     sample.grid=samples,
+                                     max.curves=100 )
+dev.off()
+@
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.48\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_exponential.pdf}
+\includegraphics[width=0.48\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_exponential_speghetti.pdf}
+\caption{Congruence class assuming exponentially changing extinction rates.}
+\label{fig:extinction_exponential_spaghetti}
+\end{figure}
+
+
+\subsection{Linearly increasing extinction rates}\label{sec:extinction_linear}
+
+Here, we generate a variety of alternative extinction rates using GMRF models \citep{Magee2020} with a linear trend.
+Unlike the exponential section, we here assume that rates have increased, that the increase has been monotonic (there were no decreases, where in the exponential decreases above there were occasional increases), and that the stochastic variability comes from a GMRF.
+We otherwise make the same assumptions as above.
+
+<<sample-function-extinction-uniform>>=
+extinction_rate_samples <- function() {
+   sample.basic.models( num.epochs=100,
+                        direction="increase",
+                        model="linear",
+                        monotonic=TRUE,
+                        MRF.type="GMRF",
+                        maximum.rate=1,
+                        fc.mean=2)
+}
+@
+
+<<sample-extinction-uniform, cache=TRUE, results='hide'>>=
+samples <- sample.congruence.class(func_spec0=lambda,
+                                   func_ext0=mu,
+                                   max.t=max_t,
+                                   num.epochs=100,
+                                   num.samples=1000,
+                                   rate.type="extinction",
+                                   sample.extinction.rates=extinction_rate_samples)
+@
+<<eval=FALSE>>=
+p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
+                               func_ext0=mu,
+                               max.t=max_t,
+                               sample.grid=samples )
+@
+<<congruence-class-extinction-uniform, chache=TRUE, results='hide', include=FALSE>>=
+p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
+                               func_ext0=mu,
+                               max.t=max_t,
+                               sample.grid=samples )
+
+ggsave(p,file="RnwFigs/Primates_HSMRF_ACDC_extinction_linear.pdf", width=5,height=10)
+@
+<<eval=FALSE>>=
+ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
+                                     func_ext0=mu,
+                                     max.t=max_t,
+                                     sample.grid=samples,
+                                     max.curves=100 )
+@
+<<congruence-class-extinction-uniform-spaghetti, chache=TRUE, results='hide', include=FALSE>>=
+pdf(file="RnwFigs/Primates_HSMRF_ACDC_extinction_linear_speghetti.pdf",width=5,height=10)
+ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
+                                     func_ext0=mu,
+                                     max.t=max_t,
+                                     sample.grid=samples,
+                                     max.curves=100 )
+dev.off()
+@
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.48\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_linear.pdf}
+\includegraphics[width=0.48\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_linear_speghetti.pdf}
+\caption{Congruence class assuming linearly changing extinction rates.}
+\label{fig:extinction_linear_spaghetti}
+\end{figure}
+
+
+\subsection{Episodic extinction rates}\label{sec:extinction_episodic}
+
+Here, we generate a variety of alternative extinction rates without stochastic noise.
+Without noise (\code{noisy=FALSE}), all changes will be in the same direction, here decreases.
+The model we generate is an episodic model with 5 rates.
+Here, we consider decreasing rates with larger changes from past to present than the previous section.
+To help rates stay within the [0,1] bounds we have chosen, we set the rate median at present to be slightly smaller than the default 0.1.
+
+<<sample-function-extinction-uniform>>=
+extinction_rate_samples <- function() {
+   sample.basic.models( num.epochs=100,
+                        direction="decrease",
+                        model="episodic5",
+                        noisy=FALSE,
+                        maximum.rate=1,
+                        fc.mean=4,
+                        rate0.median=0.05)
+}
+@
+
+<<sample-extinction-uniform, cache=TRUE, results='hide'>>=
+samples <- sample.congruence.class(func_spec0=lambda,
+                                   func_ext0=mu,
+                                   max.t=max_t,
+                                   num.epochs=100,
+                                   num.samples=1000,
+                                   rate.type="extinction",
+                                   sample.extinction.rates=extinction_rate_samples)
+@
+<<eval=FALSE>>=
+p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
+                               func_ext0=mu,
+                               max.t=max_t,
+                               sample.grid=samples )
+@
+<<congruence-class-extinction-uniform, chache=TRUE, results='hide', include=FALSE>>=
+p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
+                               func_ext0=mu,
+                               max.t=max_t,
+                               sample.grid=samples )
+
+ggsave(p,file="RnwFigs/Primates_HSMRF_ACDC_extinction_episodic.pdf", width=5,height=10)
+@
+<<eval=FALSE>>=
+ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
+                                     func_ext0=mu,
+                                     max.t=max_t,
+                                     sample.grid=samples,
+                                     max.curves=100 )
+@
+<<congruence-class-extinction-uniform-spaghetti, chache=TRUE, results='hide', include=FALSE>>=
+pdf(file="RnwFigs/Primates_HSMRF_ACDC_extinction_episodic_speghetti.pdf",width=5,height=10)
+ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
+                                     func_ext0=mu,
+                                     max.t=max_t,
+                                     sample.grid=samples,
+                                     max.curves=100 )
+dev.off()
+@
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.48\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_episodic.pdf}
+\includegraphics[width=0.48\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_episodic_speghetti.pdf}
+\caption{Congruence class assuming episodicly changing extinction rates.}
+\label{fig:extinction_episodic_spaghetti}
+\end{figure}
 
 
 
 
 \subsection{A uniform grid of extinction rates}\label{sec:extinction_uniform}
 
+The previous functions used \code{sample.basic.models} to construct a variety of pre-defined hypotheses.
+\ACDC also implements \code{sample.rates} to allow more flexibility in user-defined rate functions (and of course the user is free to define their own functions as well).
+Here we show this with IID rates.
 We assume that the extinction rates could have had any value between 0 and 1 (you could easily pick different numbers here).
 Our motivation for these values was, that (i) having a maximal expected extinction time per lineage of 1.0 million years seems reasonable from the fossil record, and (ii) we estimated a maximal speciation rate of 0.4, which is clearly smaller than 1.0.
 
@@ -1134,199 +1404,6 @@ dev.off()
 \label{fig:extinction_uniform_spaghetti}
 \end{figure}
 
-
-
-
-\subsection{Lognormal extinction rates.}
-
-<<sample-function-extinction-lognormal, cache=TRUE>>=
-rsample_extinction = function(n) rlnorm(n,log(est_mu0),2*0.58)
-extinction_rate_samples <- function() {
-  sample.rates( num.epochs=100,
-                rsample=rsample_extinction,
-                rsample0=NULL,
-                autocorrelated=FALSE)
-}
-@
-
-<<sample-extinction-lognormal, cache=TRUE, results='hide'>>=
-samples <- sample.congruence.class(func_spec0=lambda,
-                                   func_ext0=mu,
-                                   max.t=max_t,
-                                   num.epochs=100,
-                                   num.samples=1000,
-                                   rate.type="extinction",
-                                   sample.extinction.rates=extinction_rate_samples)
-@
-
-<<congruence-class-extinction-lognormal, chache=TRUE, results='hide', include=FALSE>>=
-p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
-                               func_ext0=mu,
-                               max.t=max_t,
-                               sample.grid=samples )
-@
-
-<<include=FALSE>>=
-ggsave(p,file="RnwFigs/Primates_HSMRF_ACDC_extinction_lognormal.pdf", width=5,height=10)
-@
-<<eval=FALSE>>=
-ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
-                                     func_ext0=mu,
-                                     max.t=max_t,
-                                     sample.grid=samples,
-                                     max.curves=100 )
-@
-<<congruence-class-extinction-lognormal-spaghetti, chache=TRUE, results='hide', include=FALSE>>=
-pdf(file="RnwFigs/Primates_HSMRF_ACDC_extinction_lognormal_speghetti.pdf",width=5,height=10)
-ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
-                                     func_ext0=mu,
-                                     max.t=max_t,
-                                     sample.grid=samples,
-                                     max.curves=100 )
-dev.off()
-@
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.48\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_lognormal.pdf}
-\includegraphics[width=0.48\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_lognormal_speghetti.pdf}
-\caption{Congruence class assuming independent and lognormal distributed extinction rates.}
-\label{fig:extinction_lognormal_spaghetti}
-\end{figure}
-
-
-
-
-
-
-\subsection{Autocorrelated extinction rates.}
-
-<<sample-function-extinction-GMRF, cache=TRUE>>=
-rsample_extinction = function( prev ) rlnorm(n=1,log(prev),0.58/10)
-rsample_extinction0 = function() rlnorm(n=1,log(est_mu0),1*0.58)
-
-extinction_rate_samples <- function() {
-  sample.rates( num.epochs=100,
-                rsample=rsample_extinction,
-                rsample0=rsample_extinction0,
-                autocorrelated=TRUE)
-}
-@
-
-<<sample-extinction-GMRF, cache=TRUE, results='hide'>>=
-samples <- sample.congruence.class(func_spec0=lambda,
-                                   func_ext0=mu,
-                                   max.t=max_t,
-                                   num.epochs=100,
-                                   num.samples=1000,
-                                   rate.type="extinction",
-                                   sample.extinction.rates=extinction_rate_samples)
-@
-<<eval=FALSE>>=
-p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
-                               func_ext0=mu,
-                               max.t=max_t,
-                               sample.grid=samples )
-@
-<<congruence-class-extinction-GMRF, chache=TRUE, results='hide', include=FALSE>>=
-p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
-                               func_ext0=mu,
-                               max.t=max_t,
-                               sample.grid=samples )
-@
-
-<<include=FALSE>>=
-ggsave(p,file="RnwFigs/Primates_HSMRF_ACDC_extinction_GMRF.pdf", width=5,height=10)
-@
-<<eval=FALSE>>=
-ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
-                                     func_ext0=mu,
-                                     max.t=max_t,
-                                     sample.grid=samples,
-                                     max.curves=100 )
-@
-<<congruence-class-extinction-GMRF-spaghetti, chache=TRUE, results='hide', include=FALSE>>=
-pdf(file="RnwFigs/Primates_HSMRF_ACDC_extinction_GMRF_speghetti.pdf",width=5,height=10)
-ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
-                                     func_ext0=mu,
-                                     max.t=max_t,
-                                     sample.grid=samples,
-                                     max.curves=100 )
-dev.off()
-@
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.48\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_GMRF.pdf}
-\includegraphics[width=0.48\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_GMRF_speghetti.pdf}
-\caption{Congruence class assuming GMRF distributed extinction rates.}
-\label{fig:extinction_GMRF_spaghetti}
-\end{figure}
-
-
-
-
-\subsection{Autocorrelated extinction rates with trend}
-
-<<sample-function-extinction-GMRF-trend, cache=TRUE>>=
-rsample_extinction = function( prev ) rlnorm(n=1,log(prev)+0.02,0.58/10)
-rsample_extinction0 = function() rlnorm(n=1,log(est_mu0),1*0.58)
-
-extinction_rate_samples <- function() {
-  sample.rates( num.epochs=100,
-                rsample=rsample_extinction,
-                rsample0=rsample_extinction0,
-                autocorrelated=TRUE)
-}
-@
-
-<<sample-extinction-GMRF-trend, cache=TRUE, results='hide'>>=
-samples <- sample.congruence.class(func_spec0=lambda,
-                                   func_ext0=mu,
-                                   max.t=max_t,
-                                   num.epochs=100,
-                                   num.samples=1000,
-                                   rate.type="extinction",
-                                   sample.extinction.rates=extinction_rate_samples)
-@
-<<eval=FALSE>>=
-p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
-                               func_ext0=mu,
-                               max.t=max_t,
-                               sample.grid=samples )
-@
-
-<<congruence-class-extinction-GMRF-trend, chache=TRUE, results='hide', include=FALSE>>=
-p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
-                               func_ext0=mu,
-                               max.t=max_t,
-                               sample.grid=samples )
-@
-
-<<include=FALSE>>=
-ggsave(p,file="RnwFigs/Primates_HSMRF_ACDC_extinction_GMRF_trend.pdf", width=5,height=10)
-@
-<<eval=FALSE>>=
-ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
-                                     func_ext0=mu,
-                                     max.t=max_t,
-                                     sample.grid=samples,
-                                     max.curves=100 )
-@
-<<congruence-class-extinction-GMRF_trend-spaghetti, chache=TRUE, results='hide', include=FALSE>>=
-pdf(file="RnwFigs/Primates_HSMRF_ACDC_extinction_GMRF_trend_speghetti.pdf",width=5,height=10)
-ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
-                                     func_ext0=mu,
-                                     max.t=max_t,
-                                     sample.grid=samples,
-                                     max.curves=100 )
-dev.off()
-@
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.48\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_GMRF_trend.pdf}
-\includegraphics[width=0.48\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_GMRF_trend_speghetti.pdf}
-\caption{Congruence class assuming GMRF with trend distributed extinction rates.}
-\label{fig:extinction_GMRF_trend_spaghetti}
-\end{figure}
 
 
 
