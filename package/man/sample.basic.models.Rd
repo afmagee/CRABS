@@ -4,10 +4,11 @@
 \alias{sample.basic.models}
 \title{Samples simple increase/decrease models through time with noise.}
 \usage{
-sample.basic.models(num.epochs, rate0 = NULL, model = "exponential",
-  MRF.type = "HSMRF", direction = "decrease", noisy = TRUE,
-  fc.mean = 3, rate0.median = 0.1, rate0.sd = 1.17481,
-  monotonic = FALSE, min.rate = 0, max.rate = 10)
+sample.basic.models(num.epochs = 100, rate0 = NULL,
+  model = "exponential", direction = "decrease", noisy = TRUE,
+  MRF.type = "HSMRF", monotonic = FALSE, fc.mean = 3,
+  rate0.median = 0.1, rate0.logsd = 1.17481, min.rate = 0,
+  max.rate = 10)
 }
 \arguments{
 \item{num.epochs}{The number of rates to draw}
@@ -16,26 +17,26 @@ sample.basic.models(num.epochs, rate0 = NULL, model = "exponential",
 
 \item{model}{"MRF" for pure MRF model, otherwise MRF has a trend of type "exponential","linear", or "episodic<n>"}
 
-\item{MRF.type}{"HSMRF" or "GMRF", type for stochastic noise.}
-
 \item{direction}{"increase" or "decrease" (measured in past to present)}
 
 \item{noisy}{If FALSE, no MRF noise is added to the trajectory}
+
+\item{MRF.type}{"HSMRF" or "GMRF", type for stochastic noise.}
+
+\item{monotonic}{Whether the curve should be forced to always move in one direction.}
 
 \item{fc.mean}{Determines the average amount of change when drawing from the model.}
 
 \item{rate0.median}{When not specified, rate at present is drawn from a lognormal distribution with this median.}
 
-\item{rate0.sd}{When not specified, rate at present is drawn from a lognormal distribution with this sd}
-
-\item{monotonic}{Whether the curve should be forced to always move in one direction.}
+\item{rate0.logsd}{When not specified, rate at present is drawn from a lognormal distribution with this sd}
 
 \item{minimum.rate}{The minimum rate (rescaling fone after after drawing rates).}
 
 \item{maximum.rate}{The maximum rate (rescaling fone after after drawing rates).}
 }
 \value{
-Extinction rate at all changepoints
+Speciation or extinction rate at a number of timepoints.
 }
 \description{
 Samples simple increase/decrease models through time with noise.
