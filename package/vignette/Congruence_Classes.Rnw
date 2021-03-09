@@ -166,6 +166,9 @@ The alternative, ``GMRF'' for Gaussian Markov random field, produces smoother ch
 This MRF noise allows rates to go up or down, such that \code{direction} gives the overall trend across many sampled rates rather than a guarantee for any one rate.
 To change this, and force rates to go one direction while allowing stochastic noise from an MRF, set \code{monotonic=TRUE}.
 
+To have no trends, and pure MRF models, \code{model=``MRF''}.
+Note that this means that setting \code{model=``MRF''} and \code{noisy=FALSE} amounts to a constant-rate model (by disabling both trends and stochastic variability).
+
 The argument \code{fc.mean} dictates (more or less) the average amount of change from first to last rate as a fold change.
 Specifically, \code{fc.mean} must be a value greater than 1 (1.00...01 is allowed), and \code{direction} determines the direction of change.
 If \code{direction=``increasing''}, then \code{fc.mean} defines first/last, while if \code{direction=``decreasing''}, \code{fc.mean} defines last/first.
