@@ -112,7 +112,7 @@ sample.basic.models <- function(num.epochs=100, rate0=NULL, model="exponential",
     if ( njumps == 1 ) {
       delta_deterministic[sample.int(num.epochs,1)] <- (fc * x0) - x0
     } else {
-      delta_deterministic[sample.int(num.epochs,njumps)] <- (fc * x0) - x0 * rdirichlet(njumps,1)
+      delta_deterministic[sample.int(num.epochs,njumps)] <- ((fc * x0) - x0) * rdirichlet(njumps,1)
     }
     x[2:(num.epochs+1)] <- x[1] + cumsum(delta_deterministic)
   } else if ( grepl("MRF",model) ) {
