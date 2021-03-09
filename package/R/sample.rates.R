@@ -54,12 +54,6 @@ sample.rates <- function(num.epochs, lambda0=NULL, rsample=NULL, rsample0=NULL, 
 #' #TODO
 sample.basic.models <- function(num.epochs=100, rate0=NULL, model="exponential", direction="decrease", noisy=TRUE, MRF.type="HSMRF", monotonic=FALSE, fc.mean=3, rate0.median=0.1, rate0.logsd=1.17481, min.rate=0, max.rate=10) {
   # recover()
-  s <- 1
-  if ( direction == "increase" ) {
-    s <- -1
-  } else if ( direction != "decrease" ) {
-    stop("Invalid \"direction\"")
-  }
   
   # We use rejection sampling to find a model that fits within minimum and maximum rates
   # To speed up sampling, we break this into three rejection sampling steps, handling separately the:
@@ -70,9 +64,10 @@ sample.basic.models <- function(num.epochs=100, rate0=NULL, model="exponential",
   # rate at present
   x0 <- min.rate - 10
   if ( !is.null(rate0) ) {
-    if ( x0 < min.rate || x0 > max.rate ) {
+    if ( rate0 < min.rate || rate0 > max.rate ) {
       stop("User-defined rate0 is outside [min.rate,max.rate].")
     }
+    x0 <- rate0
   } else {
     while ( x0 < min.rate || x0 > max.rate ) {
       x0 <- rlnorm(1,log(rate0.median),rate0.logsd)
@@ -90,19 +85,21 @@ sample.basic.models <- function(num.epochs=100, rate0=NULL, model="exponential",
   # cat(fc,"\n")
   # cat(fc * x0,"\n")
   
+  if ( direction == "increase" ) {
+    fc <- 1/fc
+  } else if ( direction != "decrease" ) {
+    stop("Invalid \"direction\"")
+  }
+  
   # Deterministic component of trajectory
   delta_deterministic <- rep(0,num.epochs)
   x <- numeric(num.epochs+1)
   x[1] <- x0
   if ( model == "exponential" ) {
-    delta_deterministic <- rep(s*log(fc)/(num.epochs),num.epochs)
+    delta_deterministic <- rep(log(fc)/(num.epochs),num.epochs)
     x[2:(num.epochs+1)] <- x[1] * exp(cumsum(delta_deterministic))
   } else if ( model == "linear" ) {
-    if (s == 1) {
-      delta_deterministic <- rep(((x0*fc)-x0)/(num.epochs),num.epochs)
-    } else {
-      delta_deterministic <- rep(((x0/fc)-x0)/(num.epochs),num.epochs)
-    }
+    delta_deterministic <- rep(((x0*fc)-x0)/(num.epochs),num.epochs)
     x[2:(num.epochs+1)] <- x[1] + cumsum(delta_deterministic)
   } else if ( grepl("episodic",model) ) {
     njumps <- as.numeric(gsub("episodic","",model)) - 1

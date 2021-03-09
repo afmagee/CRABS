@@ -31,9 +31,9 @@ sample.basic.models(num.epochs = 100, rate0 = NULL,
 
 \item{rate0.logsd}{When not specified, rate at present is drawn from a lognormal distribution with this sd}
 
-\item{minimum.rate}{The minimum rate (rescaling fone after after drawing rates).}
+\item{min.rate}{The minimum rate (rescaling fone after after drawing rates).}
 
-\item{maximum.rate}{The maximum rate (rescaling fone after after drawing rates).}
+\item{max.rate}{The maximum rate (rescaling fone after after drawing rates).}
 }
 \value{
 Speciation or extinction rate at a number of timepoints.
