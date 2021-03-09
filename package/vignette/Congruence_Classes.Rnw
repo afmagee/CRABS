@@ -394,7 +394,7 @@ You could now skip over the next software section and estimate the entire congru
 \RevBayes \citep{Hoehna2016b} provides several methods to estimate diversification rates through time.
 Here we used the \href{https://revbayes.github.io/tutorials/divrate/ebd.html}{\RevBayes tutorial} using the episodic-birth-death model with a Horseshoe-Markov-Random-Field (HSMRF) prior distribution to estimate diversification rates \citep{Magee2020}.
 We assume here that you followed the \RevBayes tutorial and have the output stored as a log-file in the \textit{output} folder.
-If you have not run a \RevBayes analysis and wish to explore functionality of the package, we have provided a thinned output file, accessible with \code{data("HSMRFBDP_primates")}.
+If you have not run a \RevBayes analysis and wish to explore functionality of the package, we have provided a thinned output file, accessible with \code{data(``HSMRFBDP\_primates'')}.
 
 For some of our plotting, we need the speciation times.
 So we extract these from the tree.
@@ -620,7 +620,7 @@ dev.off()
 
 \subsubsection{Linear increasing extinction rates}
 
-As in our previous example, we want to explore linear extinction rates but this time we choose linear \emph{decreasing} extinction rates.
+As in our previous example, we want to explore linear extinction rates but this time we choose linear \emph{increasing} extinction rates.
 Specifically, let's assume that the slope was $\alpha=\{0.0,-0.00025, \ldots, -0.0001\}$.
 We follow the same approach to define the linear extinction rate functions.
 As before, since in \ACDC, rate functions are defined in backwards time, while these look like increasing extinction rates, they are in fact decreasing extinction rates from past to present.
