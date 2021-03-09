@@ -29,7 +29,8 @@ Overall, the idea is that we make clear what we had in mind when we designed the
 
 ## Simpler functions to create rate samples
 
-We should use and describe the rate functions implemented by Andy.
+AFM's comment: I have added examples of these to current section 6.
+I tried to span most of what the functions are capable of, without using all ~20 combinations of toggles available.
 
 
 ## Examples using posterior distributions instead of point estimates.
