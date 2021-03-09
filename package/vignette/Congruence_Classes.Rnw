@@ -172,7 +172,7 @@ If \code{direction=``increasing''}, then \code{fc.mean} defines first/last, whil
 The default is 3, which is biologically plausible but not the universally best option.
 Fold changes are drawn from a Gamma distribution with rate 1.25, offset 1, and a shape parameter that gives the desired mean.
 
-All rate curves are sampled by rejection sampling to guarantee that the rates are all between \code{minimum.rate} and \code{maximum.rate}.
+All rate curves are sampled by rejection sampling to guarantee that the rates are all between \code{min.rate} and \code{max.rate}.
 By default, rates are assumed to be in [0,10] which is probably the extreme end of plausible variation.
 This rejection sampling means that the actual average change may not quite be what it is set to be.
 For example if one sets the model to be a decrease through time, sets the rate at present to be 0.5, and the maximum rate to be 0.75, clearly the average fold chane could not be a larger than 1.5x increase.
@@ -443,7 +443,7 @@ curve( lambda, xlim=c(max_t, 0), lwd=2, lty=1, col="blue",
        ylim=ylim, main="Primates", xlab="time", ylab="rate",
        cex.main=1.5, cex.lab=1.5 )
 curve( mu, add=TRUE, lwd=2, lty=1, col="red" )
-legend("bottomright",legend=c("speciation","extinction"),
+legend("topleft",legend=c("speciation","extinction"),
        col=c("blue","red"), lty=c(1,1), cex=1.2)
 @
 
@@ -1080,15 +1080,15 @@ The rates produced here have no overall trend, the median change from past to pr
 We use the function \code{sample.basic.models} to construct these rates, which by default assumes that rates are between 0 and 10, though here we change these boundaries slightly to bound the rates to be between 0 and 1.
 Our motivation for these values was, that (i) having a maximal expected extinction time per lineage of 1.0 million years seems reasonable from the fossil record, and (ii) we estimated a maximal speciation rate of 0.4, which is clearly smaller than 1.0.
 
-<<sample-function-extinction-uniform>>=
+<<sample-function-extinction-HSMRF>>=
 extinction_rate_samples <- function() {
    sample.basic.models( num.epochs=100,
                         model="MRF",
-                        maximum.rate=1)
+                        max.rate=1)
 }
 @
 
-<<sample-extinction-uniform, cache=TRUE, results='hide'>>=
+<<sample-extinction-HSMRF, cache=TRUE, results='hide'>>=
 samples <- sample.congruence.class(func_spec0=lambda,
                                    func_ext0=mu,
                                    max.t=max_t,
@@ -1103,7 +1103,7 @@ p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
                                max.t=max_t,
                                sample.grid=samples )
 @
-<<congruence-class-extinction-uniform, chache=TRUE, results='hide', include=FALSE>>=
+<<congruence-class-extinction-HSMRF, chache=TRUE, results='hide', include=FALSE>>=
 p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
                                func_ext0=mu,
                                max.t=max_t,
@@ -1118,7 +1118,7 @@ ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
                                      sample.grid=samples,
                                      max.curves=100 )
 @
-<<congruence-class-extinction-uniform-spaghetti, chache=TRUE, results='hide', include=FALSE>>=
+<<congruence-class-extinction-HSMRF-spaghetti, chache=TRUE, results='hide', include=FALSE>>=
 pdf(file="RnwFigs/Primates_HSMRF_ACDC_extinction_HSMRF_speghetti.pdf",width=5,height=10)
 ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
                                      func_ext0=mu,
@@ -1142,16 +1142,16 @@ Here, we generate a variety of alternative extinction rates using HSMRF models \
 We otherwise make the same assumptions as above.
 To help the rates we simulate fit within 0 and 1, we set the fold change average to be 2 instead of the default 3.
 
-<<sample-function-extinction-uniform>>=
+<<sample-function-extinction-exponential>>=
 extinction_rate_samples <- function() {
    sample.basic.models( num.epochs=100,
                         model="exponential",
-                        maximum.rate=1,
+                        max.rate=1,
                         fc.mean=2)
 }
 @
 
-<<sample-extinction-uniform, cache=TRUE, results='hide'>>=
+<<sample-extinction-exponential, cache=TRUE, results='hide'>>=
 samples <- sample.congruence.class(func_spec0=lambda,
                                    func_ext0=mu,
                                    max.t=max_t,
@@ -1166,7 +1166,7 @@ p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
                                max.t=max_t,
                                sample.grid=samples )
 @
-<<congruence-class-extinction-uniform, chache=TRUE, results='hide', include=FALSE>>=
+<<congruence-class-extinction-exponential, chache=TRUE, results='hide', include=FALSE>>=
 p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
                                func_ext0=mu,
                                max.t=max_t,
@@ -1181,7 +1181,7 @@ ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
                                      sample.grid=samples,
                                      max.curves=100 )
 @
-<<congruence-class-extinction-uniform-spaghetti, chache=TRUE, results='hide', include=FALSE>>=
+<<congruence-class-extinction-exponential-spaghetti, chache=TRUE, results='hide', include=FALSE>>=
 pdf(file="RnwFigs/Primates_HSMRF_ACDC_extinction_exponential_speghetti.pdf",width=5,height=10)
 ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
                                      func_ext0=mu,
@@ -1205,19 +1205,19 @@ Here, we generate a variety of alternative extinction rates using GMRF models \c
 Unlike the exponential section, we here assume that rates have increased, that the increase has been monotonic (there were no decreases, where in the exponential decreases above there were occasional increases), and that the stochastic variability comes from a GMRF.
 We otherwise make the same assumptions as above.
 
-<<sample-function-extinction-uniform>>=
+<<sample-function-extinction-linear>>=
 extinction_rate_samples <- function() {
    sample.basic.models( num.epochs=100,
                         direction="increase",
                         model="linear",
                         monotonic=TRUE,
                         MRF.type="GMRF",
-                        maximum.rate=1,
+                        max.rate=1,
                         fc.mean=2)
 }
 @
 
-<<sample-extinction-uniform, cache=TRUE, results='hide'>>=
+<<sample-extinction-linear, cache=TRUE, results='hide'>>=
 samples <- sample.congruence.class(func_spec0=lambda,
                                    func_ext0=mu,
                                    max.t=max_t,
@@ -1232,7 +1232,7 @@ p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
                                max.t=max_t,
                                sample.grid=samples )
 @
-<<congruence-class-extinction-uniform, chache=TRUE, results='hide', include=FALSE>>=
+<<congruence-class-extinction-linear, chache=TRUE, results='hide', include=FALSE>>=
 p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
                                func_ext0=mu,
                                max.t=max_t,
@@ -1247,7 +1247,7 @@ ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
                                      sample.grid=samples,
                                      max.curves=100 )
 @
-<<congruence-class-extinction-uniform-spaghetti, chache=TRUE, results='hide', include=FALSE>>=
+<<congruence-class-extinction-linear-spaghetti, chache=TRUE, results='hide', include=FALSE>>=
 pdf(file="RnwFigs/Primates_HSMRF_ACDC_extinction_linear_speghetti.pdf",width=5,height=10)
 ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
                                      func_ext0=mu,
@@ -1273,19 +1273,19 @@ The model we generate is an episodic model with 5 rates.
 Here, we consider decreasing rates with larger changes from past to present than the previous section.
 To help rates stay within the [0,1] bounds we have chosen, we set the rate median at present to be slightly smaller than the default 0.1.
 
-<<sample-function-extinction-uniform>>=
+<<sample-function-extinction-episodic>>=
 extinction_rate_samples <- function() {
    sample.basic.models( num.epochs=100,
                         direction="decrease",
                         model="episodic5",
                         noisy=FALSE,
-                        maximum.rate=1,
+                        max.rate=1,
                         fc.mean=4,
                         rate0.median=0.05)
 }
 @
 
-<<sample-extinction-uniform, cache=TRUE, results='hide'>>=
+<<sample-extinction-episodic, cache=TRUE, results='hide'>>=
 samples <- sample.congruence.class(func_spec0=lambda,
                                    func_ext0=mu,
                                    max.t=max_t,
@@ -1300,7 +1300,7 @@ p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
                                max.t=max_t,
                                sample.grid=samples )
 @
-<<congruence-class-extinction-uniform, chache=TRUE, results='hide', include=FALSE>>=
+<<congruence-class-extinction-episodic, chache=TRUE, results='hide', include=FALSE>>=
 p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
                                func_ext0=mu,
                                max.t=max_t,
@@ -1315,7 +1315,7 @@ ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
                                      sample.grid=samples,
                                      max.curves=100 )
 @
-<<congruence-class-extinction-uniform-spaghetti, chache=TRUE, results='hide', include=FALSE>>=
+<<congruence-class-extinction-episodic-spaghetti, chache=TRUE, results='hide', include=FALSE>>=
 pdf(file="RnwFigs/Primates_HSMRF_ACDC_extinction_episodic_speghetti.pdf",width=5,height=10)
 ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
                                      func_ext0=mu,

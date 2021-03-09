@@ -46,8 +46,8 @@ sample.rates <- function(num.epochs, lambda0=NULL, rsample=NULL, rsample0=NULL, 
 #' @param fc.mean Determines the average amount of change when drawing from the model.
 #' @param rate0.median When not specified, rate at present is drawn from a lognormal distribution with this median.
 #' @param rate0.logsd When not specified, rate at present is drawn from a lognormal distribution with this sd
-#' @param minimum.rate The minimum rate (rescaling fone after after drawing rates).
-#' @param maximum.rate The maximum rate (rescaling fone after after drawing rates).
+#' @param min.rate The minimum rate (rescaling fone after after drawing rates).
+#' @param max.rate The maximum rate (rescaling fone after after drawing rates).
 #' @return Speciation or extinction rate at a number of timepoints.
 #' @export
 #' @example 
