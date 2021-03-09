@@ -15,7 +15,7 @@ An R package to explore congruence classes. Here we list what is still missing t
 - Update **ACDC.read.TESS** to construct a list of rate functions (one function per posterior sample) instead of using the mean/median rate.
 - Update **congruence.class** to take a list of rate functions as an alternative. Then, the output should also be a list.
 - Update **sample.congruence.class** to take a list of rate functions as an alternative. Then, we should both sample the reference rate as well as a congruent rate.
-
+- When updating **sample.congruence.class**, **sample.rates** and **sample.basic.models** need adjusting to allow speciation rates to be set to more than one value. This probably means we have to make intermediate functions that take a vector and an index and plug them into the base functions. This could get ugly.
 
 # Vignette
 

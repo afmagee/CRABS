@@ -1,16 +1,15 @@
 library(ggplot2)
 library(gridExtra)
 library(TreePar)
-
-# I wasn't feeling authoritative enough to name it myself.
-library(PACKAGENAME)
+library(ACDC)
 
 # source("src/utils.R")
 # source("src/sample.congruence.class.R")
 # source("src/plot.congruence.class.R")
 #source("src/nonparametric.pulled.diversification.R")
 
-tree <- read.nexus("~/Dropbox/UW/Horseshoe_proof_of_concept/2_empirical_analyses/1_Pygopodidae/data/pygo_starting_tree.tre")
+
+tree <- primates
 
 times <- sort( as.numeric( branching.times( tree ) ) )
 
@@ -19,12 +18,16 @@ max_t <- max(x)
 
 
 ## RevBayes HSMRF example
-samples <- read.table(file="~/Dropbox/UW/Horseshoe_proof_of_concept/2_empirical_analyses/output/HSMRFBDP_10x_run_1.log",stringsAsFactors=FALSE,header=TRUE)
+data("HSMRFBDP_primates")
+samples <- primates_hsmrf_log
 par <- samples[,grepl(paste0("^","speciation"),names(samples))]
 par <- par[,grepl("[0-9]",names(par))]
 est_speciation <- apply(par,2,quantile,prob=0.5)
 lambda <- approxfun( (0:(length(est_speciation)-1))/(length(est_speciation)-1) * max_t, est_speciation )
-est_extinction <- rep(quantile(samples$extinction,prob=0.5),length(est_speciation))
+
+par <- samples[,grepl(paste0("^","extinction"),names(samples))]
+par <- par[,grepl("[0-9]",names(par))]
+est_extinction <- apply(par,2,quantile,prob=0.5)
 mu <- approxfun( (0:(length(est_extinction)-1))/(length(est_extinction)-1) * max_t, est_extinction )
 
 ylim <- c(min(0,est_speciation,est_extinction),max(est_speciation,est_extinction))

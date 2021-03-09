@@ -39,20 +39,20 @@ sample.rates <- function(num.epochs, lambda0=NULL, rsample=NULL, rsample0=NULL, 
 #' @param num.epochs The number of rates to draw
 #' @param rate0 The rate at present, otherwise drawn randomly.
 #' @param model "MRF" for pure MRF model, otherwise MRF has a trend of type "exponential","linear", or "episodic<n>"
-#' @param MRF.type "HSMRF" or "GMRF", type for stochastic noise.
 #' @param direction "increase" or "decrease" (measured in past to present)
-#' @param monotonic Whether the curve should be forced to always move in one direction.
 #' @param noisy If FALSE, no MRF noise is added to the trajectory
+#' @param MRF.type "HSMRF" or "GMRF", type for stochastic noise.
+#' @param monotonic Whether the curve should be forced to always move in one direction.
 #' @param fc.mean Determines the average amount of change when drawing from the model.
 #' @param rate0.median When not specified, rate at present is drawn from a lognormal distribution with this median.
-#' @param rate0.sd When not specified, rate at present is drawn from a lognormal distribution with this sd
+#' @param rate0.logsd When not specified, rate at present is drawn from a lognormal distribution with this sd
 #' @param minimum.rate The minimum rate (rescaling fone after after drawing rates).
 #' @param maximum.rate The maximum rate (rescaling fone after after drawing rates).
-#' @return Extinction rate at all changepoints
+#' @return Speciation or extinction rate at a number of timepoints.
 #' @export
 #' @example 
 #' #TODO
-sample.basic.models <- function(num.epochs, rate0=NULL, model="exponential", MRF.type="HSMRF", direction="decrease", noisy=TRUE, fc.mean=3, rate0.median=0.1, rate0.sd=1.17481, monotonic=FALSE, min.rate=0, max.rate=10) {
+sample.basic.models <- function(num.epochs=100, rate0=NULL, model="exponential", direction="decrease", noisy=TRUE, MRF.type="HSMRF", monotonic=FALSE, fc.mean=3, rate0.median=0.1, rate0.logsd=1.17481, min.rate=0, max.rate=10) {
   # recover()
   s <- 1
   if ( direction == "increase" ) {
@@ -75,7 +75,7 @@ sample.basic.models <- function(num.epochs, rate0=NULL, model="exponential", MRF
     }
   } else {
     while ( x0 < min.rate || x0 > max.rate ) {
-      x0 <- rlnorm(1,log(rate0.median),rate0.sd)
+      x0 <- rlnorm(1,log(rate0.median),rate0.logsd)
     }
   }
   
