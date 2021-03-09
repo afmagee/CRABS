@@ -49,6 +49,7 @@
 \title{Exploration of birth-death congruence classes}
 
 \begin{document}
+\SweaveOpts{concordance=TRUE}
 
 \maketitle
 
@@ -117,7 +118,7 @@ Now you are ready to use \ACDC to explore congruence classes in macroevolutionar
 
 
 
-\section{Overview of function in \ACDC}
+\section{Overview of functions in \ACDC}
 
 Before we are going to provide some example on how to explore the congruence class, we give you here an overview of the function available in \ACDC.
 
@@ -132,7 +133,7 @@ Before we are going to provide some example on how to explore the congruence cla
         \noalign{\smallskip}
         \code{ACDC.plot.congruence.class.heatmap} & Creates a heatmap of the most frequent rates within the congruence class, given a sample of rate functions from the congruent class (see sample.congruence.class) & Section~\ref{sec:extinction_uniform} \\
         \code{sample.basic.models} & & \\
-        \code{sample.congruence.class} & Ssamples rate functions from the congruence class given a reference speciation and extinction rate function (the true/empirically estimated rate functions). You also need to provide some boundaries/restrictions to the congruence class. The obtained samples can then be inspected visually using \code{ACDC.plot.congruence.class.heatmap} and \code{ACDC.plot.congruence.class.spaghetti} & Section~\ref{sec:extinction_uniform} \\
+        \code{sample.congruence.class} & Samples rate functions from the congruence class given a reference speciation and extinction rate function (the true/empirically estimated rate functions). You also need to provide some boundaries/restrictions to the congruence class. The obtained samples can then be inspected visually using \code{ACDC.plot.congruence.class.heatmap} and \code{ACDC.plot.congruence.class.spaghetti} & Section~\ref{sec:extinction_uniform} \\
         \code{sample.rates} & Helps you to randomly sample either a new speciation or extinction rate function given some constraints and/or expected behavior (e.g., autocorrelated vs independent rates) & Section~\ref{sec:extinction_uniform} \\
         \hline
       \end{tabular}
@@ -148,8 +149,36 @@ Nevertheless, we recommend to make yourself familiar with these available functi
 \subsection{\code{ACDC.plot.congruence.class.heatmap}}
 
 
-\subsection{\code{sample.basic.models}}
+\subsection{\code{ACDC.plot.congruence.class.spaghetti}}
 
+
+\subsection{\code{sample.basic.models}}
+This function is designed to enable easy generation of commonly employed diversification-rate scenarios.
+The basic models are specified by the argument \code{model} exponentially increasing/decreasing rates, linearly decreasing rates, episodic (or piecewise constant rates), and Markov random field (MRF) models (constant rates are also possible).
+The direction of change (increase or decrease) is controlled by the argument \code{direction}.
+The function uses a discrete-time approximation to draw rates, the number of episodes is defined using the argument \code{num.epochs}, which is 100 by default for compatibility with \code{sample.congruence.class}.
+So, for example, the code \code{sample.basic.models()}, which uses all defaults, samples exponentially decreasing rates.
+
+By default, the exponential, linear, and episodic models are sampled with an additional random component given by a MRF.
+This can be stopped by setting \code{noisy=FALSE}.
+The argument \code{MRF.type} allows you to control the type of Markov random field model, the default is ``HSMRF'' for Horseshoe Markov random fields \citep{Magee2020}, which produces jumpier changes.
+The alternative, ``GMRF'' for Gaussian Markov random field, produces smoother changes.
+This MRF noise allows rates to go up or down, such that \code{direction} gives the overall trend across many sampled rates rather than a guarantee for any one rate.
+To change this, and force rates to go one direction while allowing stochastic noise from an MRF, set \code{monotonic=TRUE}.
+
+The argument \code{fc.mean} dictates the average amount of change from first to last rate as a fold change.
+Specifically, \code{fc.mean} must be a value greater than 1 (1.00...01 is allowed), and \code{direction} determines the direction of change.
+If \code{direction=``increasing''}, then \code{fc.mean} defines first/last, while if \code{direction=``decreasing''}, \code{fc.mean} defines last/first.
+The default is 3, which is biologically plausible but not the universally best option.
+Fold changes are drawn from a Gamma distribution with rate 1.25, offset 1, and a shape parameter that gives the desired mean.
+
+All rate curves are sampled by rejection sampling to guarantee that the rates are all between \code{minimum.rate} and \code{maximum.rate}.
+By default, rates are assumed to be in [0,10] which is probably the extreme end of plausible variation.
+
+The initial rate is drawn from a lognormal distribution with median \code{rate0.median} and log(sigma) = \code{rate0.logsd}, which is to say a Lognormal(log(\code{rate0.median}),\code{rate0.logsd}) distribution.
+The default is rates with median 0.1 and a 95\% range covering [0.01,1].
+Note that the argument \code{rate0} overrides drawing random starting values if it is set.
+This allows sampling speciation rates, as the initial speciation rate must be the same in all replicates.
 
 \subsection{\code{sample.congruence.class}}
 
@@ -364,6 +393,7 @@ You could now skip over the next software section and estimate the entire congru
 \RevBayes \citep{Hoehna2016b} provides several methods to estimate diversification rates through time.
 Here we used the \href{https://revbayes.github.io/tutorials/divrate/ebd.html}{\RevBayes tutorial} using the episodic-birth-death model with a Horseshoe-Markov-Random-Field (HSMRF) prior distribution to estimate diversification rates \citep{Magee2020}.
 We assume here that you followed the \RevBayes tutorial and have the output stored as a log-file in the \textit{output} folder.
+If you have not run a \RevBayes analysis and wish to explore functionality of the package, we have provided a thinned output file, accessible with \code{data("HSMRFBDP_primates")}.
 
 For some of our plotting, we need the speciation times.
 So we extract these from the tree.
@@ -412,7 +442,7 @@ curve( lambda, xlim=c(max_t, 0), lwd=2, lty=1, col="blue",
        ylim=ylim, main="Primates", xlab="time", ylab="rate",
        cex.main=1.5, cex.lab=1.5 )
 curve( mu, add=TRUE, lwd=2, lty=1, col="red" )
-legend("topleft",legend=c("speciation","extinction"),
+legend("bottomright",legend=c("speciation","extinction"),
        col=c("blue","red"), lty=c(1,1), cex=1.2)
 @
 
@@ -544,13 +574,14 @@ dev.off()
 
 
 
-\subsubsection{Linear increasing extinction rates}
+\subsubsection{Linear decreasing extinction rates}
 
 Next, we will explore different linear rate functions for the extinction rate.
 Let us assume that the extinction rate was linear with a range of different slopes.
 Specifically, let's assume that the slope was $\alpha=\{0.0,0.0005, \ldots, 0.0002\}$.
 We played around with these $\alpha$ values to get reasonable rate functions.
 You will need to modify these for your dataset.
+Note that in \ACDC, rate functions are defined in backwards time, so while these look like decreasing extinction rates, they are in fact increasing extinction rates when you consider time forward from past to present.
 
 We create extinction rate functions with these $\alpha$ values.
 <<>>=
@@ -586,11 +617,12 @@ dev.off()
 
 
 
-\subsubsection{Linear decreasing extinction rates}
+\subsubsection{Linear increasing extinction rates}
 
 As in our previous example, we want to explore linear extinction rates but this time we choose linear \emph{decreasing} extinction rates.
 Specifically, let's assume that the slope was $\alpha=\{0.0,-0.00025, \ldots, -0.0001\}$.
 We follow the same approach to define the linear extinction rate functions.
+As before, since in \ACDC, rate functions are defined in backwards time, while these look like increasing extinction rates, they are in fact decreasing extinction rates from past to present.
 <<>>=
 mu_max = 0.1
 mu_vals <- seq(0,0.001,0.00025)
@@ -624,10 +656,11 @@ dev.off()
 
 
 
-\subsubsection{Exponential increasing extinction rates}
+\subsubsection{Exponential decreasing extinction rates}
 
 Next, similar to the linear rate functions we explore some exponential rate functions.
-We start here with the exponentially increasing rates.
+We start here with the exponentially decreasing rates.
+Recall that the extinction rate is a function of time such that $\mu(0)$ is the rate at the present and $\mu(1)$ is the rate 1 time unit previously, thus what appear to be exponential increases are in fact decreases.
 Specifically, let's assume that the slope was $\alpha=\{0.0,0.005, \ldots, 0.02\}$.
 Then, we define the extinction rate function as
 <<>>=
@@ -662,10 +695,11 @@ dev.off()
 \end{figure}
 
 
-\subsubsection{Exponential decreasing extinction rates}
+\subsubsection{Exponential increasing extinction rates}
 
-Finally, we explore exponentially decreasing extinction rates.
+Finally, we explore exponentially increasing extinction rates.
 Specifically, let's assume that the slope was $\alpha=\{0.0,-0.005, \ldots, -0.02\}$.
+Recall that the extinction rate is defined backwards in time such that these negative exponents correspond to rates that increase from past to present.
 The extinction rate functions are defined as before.
 <<>>=
 mu_max = 0.04
@@ -854,7 +888,7 @@ Thus, we can conclude that there is no constant rate speciation rate function wi
 
 Let us assume that the speciation rate was exponentially increasing or decreasing.
 Furthermore, let us try a range of different factors of increase/decrease.
-Specifically, let's assume that the rate increase was $\alpha=\{-0.04,-0.03,\ldots, 0.04\}$.
+Specifically, let's assume that the rate was $\alpha=\{-0.04,-0.03,\ldots, 0.04\}$.
 Again, we create the list of speciation rate functions.
 <<>>=
 lambda_present = lambda(0)
