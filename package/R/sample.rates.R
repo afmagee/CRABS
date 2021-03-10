@@ -144,7 +144,11 @@ sample.basic.models <- function(num.epochs=100, rate0=NULL, model="exponential",
         }
         
         if ( monotonic ) {
-          delta_stochastic <- s * abs(delta_stochastic)
+          delta_stochastic <- abs(delta_stochastic)
+          
+          if ( direction == "increase" ) {
+            delta_stochastic <- -delta_stochastic
+          }
         }
         
         noise <- c(1,exp(cumsum(delta_stochastic)))
