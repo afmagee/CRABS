@@ -37,6 +37,11 @@ AFM comment: If we swap chapters 3 (reading in data) and 4 (congruence class bac
 
 AFM comment: I think the biggest TODO left in the vignette is documenting the basic functions.
 
+
+## More motivation about generating rate functions
+
+Why do you we have different methods to generate rates functions and not only draw rates uniformly? This needs to be explained more clearly. For example, this is not clear for section 6.2
+
 ## Examples using posterior distributions instead of point estimates.
 
 Once these features are available, we should show a simple example.
