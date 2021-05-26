@@ -66,40 +66,6 @@ get.hsmrf.global.scale <- approxfun(x=c(2,10,20,50,100,200,500,1000,2000,5000,10
 get.gmrf.global.scale <- approxfun(x=c(2,10,20,50,100,200,500,1000,2000,5000,10000,100000),
                                     y=c(2.871193,0.1064935,0.04975563,0.01911503,0.009376335,0.004549474,0.001693932,0.0007408964,0.0002640923,0.0001002221,7.352401e-05,4.42448e-05))
 
-
-#' Compute likelihood
-#'
-#' @param phy an object of class "phylo"
-#' @param model an object of class "ACDC"
-#' @param ... additional arguments passed to `tess.likelihood(...)`
-#'
-#' @return
-#' @export
-#'
-#' @examples
-#' lambda <- function(t) exp(0.3*t) - 0.5*t + 1
-#' mu <- function(t) exp(0.3*t) - 0.2*t + 0.2
-#' 
-#' model <- congruence.class(lambda, mu, times = seq(0, 3, by = 0.005))
-#' 
-#' set.seed(123)
-#' phy <- rcoal(25)
-#' 
-#' acdc.likelihood(phy, model)
-acdc.likelihood <- function(phy, model, ...){
-  th <- max(node.depth.edgelength(phy)) ## tree height
-  
-  ## translate the time coordinates
-  mu <- function(t) model$mu(th - t)
-  lambda <- function(t) model$lambda(th - t)
-  times <- branching.times(phy)
-  
-  ## tess takes input as time starting at the root, increasing toward present
-  res <- tess.likelihood(times = times, lambda = lambda, mu = mu, ...)
-  return(res)
-}
-
-
 #' model2df
 #'
 #' @param model an object of class "ACDC"
