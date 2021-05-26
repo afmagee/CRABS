@@ -416,26 +416,22 @@ Then, from this log-file we want to automatically extract the speciation and ext
 Be careful that you used the same names as we did.
 Otherwise you need to modify this code-snippet accordingly.
 <<RevBayes-extract-output, cache=TRUE>>=
-par_speciation <- samples[,grepl(paste0("^","speciation"),names(samples))]
-par_speciation <- par_speciation[,grepl("[0-9]",names(par_speciation))]
-par_extinction <- samples[,grepl(paste0("^","extinction"),names(samples))]
-par_extinction <- par_extinction[,grepl("[0-9]",names(par_extinction))]
+par_speciation <- samples[, startsWith(names(samples), "speciation_rate.")]
+par_extinction <- samples[, startsWith(names(samples), "extinction_rate.")]
 @
 In principle we can use now the full posterior estimates.
 However, in this example we are only interested in the posterior median.
 We strongly encourage to use the medians and not the means because the posterior median is a more robust estimate for rates, see \cite{Magee2020}.
 <<RevBayes-compute-median, cache=TRUE>>=
-est_speciation <- apply(par_speciation,2,quantile,prob=0.5)
-est_extinction <- apply(par_extinction,2,quantile,prob=0.5)
+est_speciation <- apply(par_speciation, 2, median)
+est_extinction <- apply(par_extinction, 2, median)
 @
 Since we assumed in the tutorial epochs of equal size, we can simply use the \code{approxfun} to create the speciation and extinction rate functions.
 <<RevBayes-functions, cache=TRUE>>=
-lambda <- approxfun( (0:(length(est_speciation)-1)) /
-                     (length(est_speciation)-1) * max_t,
-                     est_speciation )
-mu <- approxfun(     (0:(length(est_extinction)-1)) /
-                     (length(est_extinction)-1) * max_t,
-                     est_extinction )
+lambda <- approxfun(seq(0, max_t, length.out = length(est_speciation)),
+                    est_speciation)
+mu <- approxfun(seq(0, max_t, length.out = length(est_extinction)),
+                est_extinction)
 @
 Finally, let's have a look at the estimated rate functions.
 <<RevBayes-plot-functions, fig.height=4, fig.width=4, fig.align="center", fig.cap="Estimated speciation and extinction rates using RevBayes on the primates phylogeny of Springer et al. (2012).">>=
@@ -467,7 +463,7 @@ Then we solve the pulled diversification rate equation for this new rate functio
 
 The pulled diversification rate is defined as
 \begin{equation}
-	r_p(t) = \lambda(t) - \mu(t) - \frac{1}{\lambda(t)} \frac{\text{d}\lambda(t)}{\text{d}t}
+	r_p(t) = \lambda(t) - \mu(t) + \frac{1}{\lambda(t)} \frac{\text{d}\lambda(t)}{\text{d}t}
 \end{equation}
 As you may notice, the latter part of this equation entails the derivative of the speciation rate function.
 This derivative is only known for simple rate models, for example the constant rate process, linear rates or exponential rates.
@@ -482,7 +478,7 @@ That means, if you would use your entire screen width and 2560 intervals, than y
 
 Since we are using piecewise linear rates, we get (at the interval times) the pulled diversification rate function as
 \begin{equation}
-	r_p(t_i) = \lambda_i - \mu_i - \frac{1}{\lambda_i} \frac{\lambda_i - \lambda_{i-1}}{\Delta t} \label{eq:pulled_diversification_linear}
+	r_p(t_i) = \lambda_i - \mu_i + \frac{1}{\lambda_i} \frac{\lambda_i - \lambda_{i-1}}{\Delta t} \label{eq:pulled_diversification_linear}
 \end{equation}
 This function is much simpler to compute and is used in our package.
 
@@ -494,7 +490,7 @@ Next, if we know the pulled diversification rate and the new extinction rate, th
 
 Conversely, if we know the speciation rate and the pulled diversification rates, then we can solve Equation~\ref{eq:pulled_diversification_linear} for $\mu$ and get
 \begin{equation}
-	\mu_i = \lambda_i - r_p(t_i) - \frac{1}{\lambda_i} \frac{\lambda_i - \lambda_{i-1}}{\Delta t}
+	\mu_i = \lambda_i - r_p(t_i) + \frac{1}{\lambda_i} \frac{\lambda_i - \lambda_{i-1}}{\Delta t}
 \end{equation}
 
 These are our fundamental pieces about the congruence classes.
