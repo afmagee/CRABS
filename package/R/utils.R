@@ -98,3 +98,31 @@ acdc.likelihood <- function(phy, model, ...){
   res <- tess.likelihood(times = times, lambda = lambda, mu = mu, ...)
   return(res)
 }
+
+
+#' model2df
+#'
+#' @param model an object of class "ACDC"
+#' @param gather boolean. Whether to return wide or long data frame
+#'
+#' @return a data frame
+#' @export
+#'
+#' @examples
+#' lambda <- function(t) 2.0 + sin(0.8*t)
+#' mu <- function(t) 1.5 + exp(0.15*t)
+#' times <- seq(from = 0, to = 4, length.out = 1000)
+#' model <- congruence.class( lambda, mu, times = times)
+#' 
+#' model2df(model)
+model2df <- function(model, gather = TRUE){
+  df <- tibble::tibble("Time" = model$times,
+               "Speciation" = sapply(model$times, model$lambda),
+               "Extinction" = sapply(model$times, model$mu),
+               "Net-diversification" = sapply(model$times, function(x) model$lambda(x) - model$mu(x)),
+               "Relative extinction" = sapply(model$times, function(x) model$mu(x)/model$lambda(x)))
+  if (gather){
+    df <- tidyr::gather(df, "rate", "value", -Time)  
+  }
+  return(df)
+}
