@@ -4,17 +4,29 @@
 \alias{ACDC.plot.congruent.models}
 \title{Plots the rate functions including the pulled rates.}
 \usage{
-ACDC.plot.congruent.models(obj)
+ACDC.plot.congruent.models(models)
 }
 \arguments{
-\item{obj}{A list of rate functions produced by .}
+\item{models}{A list congruent birth-death models}
 }
 \value{
-void.
+nothing
 }
 \description{
 Plots the rate functions including the pulled rates.
 }
 \examples{
-#TODO
+lambda <- function(x) exp(0.3*x) - 0.5*x + 1
+mu <- function(x) exp(0.3*x) - 0.2*x + 0.2
+times <- seq(0, 5, by = 0.005)
+
+model <- congruence.class(lambda, mu, times = times)
+
+mus <- list(function(t) 0.2 + exp(0.1*t), 
+           function(t) 0.2 + sin(0.35*t) + 0.1*t,
+                       function(t) 1.0, 
+                       function(t) 0.5 + 0.2*t)
+models <- ACDC.congruent.models(model, mus = mus)
+
+ACDC.plot.congruent.models(models)
 }
