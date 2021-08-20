@@ -513,20 +513,20 @@ my_model = congruence.class( lambda, mu, max_t )
 @
 The \code{my\_model} includes all the rate functions.
 You could plot these yourself, or you can use our simple plotting function.
-<<eval=FALSE>>=
-ACDC.plot.rates( my_model )
-@
-<<include=FALSE>>=
-pdf(file="RnwFigs/Primates_ACDC_Congruence_Class.pdf", width=8,height=8)
-ACDC.plot.rates( my_model )
-dev.off()
-@
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_ACDC_Congruence_Class.pdf}
-\caption{Diversification rate function describing the congruence class. The solid lines show the traditional rates and the dashed lines show the pulled versions of the same rates. We observe that the pulled net-diversification rate has a very steep dip exactly at the time of the increase in the estimated speciation rate. This dip originates from the derivate of the speciation, so it is not surprising that at the time of a steep speciation rate increase, we obtain a steep drop in pulled diversification rate.}
-\label{fig:congruence_class}
-\end{figure}
+%<<eval=FALSE>>=
+%ACDC.plot.rates( my_model )
+%@
+%<<include=FALSE>>=
+%pdf(file="RnwFigs/Primates_ACDC_Congruence_Class.pdf", width=8,height=8)
+%ACDC.plot.rates( my_model )
+%dev.off()
+%@
+%\begin{figure}[h!]
+%\centering
+%\includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_ACDC_Congruence_Class.pdf}
+%\caption{Diversification rate function describing the congruence class. The solid lines show the traditional rates and the dashed lines show the pulled versions of the same rates. We observe that the pulled net-diversification rate has a very steep dip exactly at the time of the increase in the estimated speciation rate. This dip originates from the derivate of the speciation, so it is not surprising that at the time of a steep speciation rate increase, we obtain a steep drop in pulled diversification rate.}
+%\label{fig:congruence_class}
+%\end{figure}
 
 Now that we have our reference model and congruence class functions, we can explore alternative rate functions within the congruence class.
 
