@@ -17,10 +17,11 @@ logpsi <- function(s, t, model, rho, rtol){
   res = part_a + 2*(part_b - part_c)
 }
 
-fooE <- function(t, model, rtol){
+fooE <- function(t, model, rho, rtol){
   f <- function(s) model$lambda(s) * exp(R(s, model, rtol))
   f <- Vectorize(f)
   res <- exp(R(t, model, rtol)) / ((1.0 / rho) + quadgk(f, 0.0, t, tol = rtol))
+  return(res)
 }
 
 #' Compute likelihood
@@ -68,7 +69,7 @@ acdc.loglikelihood <- function(phy, model, rho = 1.0, TESS = FALSE, rtol = 0.01,
       res <- res + log(model$lambda(times[i])) + logpsi(0.0, times[i], model, rho, rtol)
     }
     
-    res <- res - log(fooE(times[1], model, rtol))
+    res <- res - log(fooE(times[1], model, rho, rtol))
   }
   return(res)
 }
