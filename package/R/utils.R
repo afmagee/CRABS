@@ -11,7 +11,7 @@ compute.pulled.diversification <- function( v_spec0, v_ext0, delta_t ) {
   l            <- v_spec0[-length(v_ext0)]
   l_plus_one   <- v_spec0[-1]
   l_derivative <- (l_plus_one - l) / delta_t
-  l_derivative <- c(l_derivative[1],l_derivative)
+  l_derivative <- c(l_derivative[1], l_derivative)
 
   # finally, add the 1/lambda * lambda dt to the pulled diversification rate
   v_p_div <- v_spec0 - v_ext0 + 1/v_spec0 * l_derivative
@@ -34,6 +34,36 @@ compute.pulled.speciation <- function( v_spec0, v_ext0, times ) {
   v_p_spec     <- v_spec0 * p_surv(times)
 
   return (v_p_spec)
+}
+
+
+
+
+
+pulled.speciation <- function( model ) {
+  pulled.spec <- function(t, state, parameters){
+    Lp <- state["Lp"]
+    rp <- parameters["rp"]
+    
+    dLp = Lp * (model$p.delta(t) - Lp)
+    return(list(dLp))
+  }
+  
+  rho <- 1.0
+  lambda0 <- model$lambda(0.0)
+  
+  parameters <- c(rp = model$p.delta)
+  state <- c(Lp = rho*lambda0)
+  
+  res <- as.data.frame(radau(y = state, times = model$times, func = pulled.spec, parms = parameters), 
+                        atol = 1e-06, rtol = 1e-06)
+  
+  # compute the derivatives
+  #p_surv       <- p.survival.rate(v_spec0, v_ext0, times)
+  #v_p_spec     <- v_spec0 * p_surv(times)
+  Lp <- approxfun(res$time, res$Lp)
+  
+  return (Lp)
 }
 
 
@@ -82,11 +112,15 @@ get.gmrf.global.scale <- approxfun(x=c(2,10,20,50,100,200,500,1000,2000,5000,100
 #' 
 #' model2df(model)
 model2df <- function(model, gather = TRUE){
-  df <- tibble::tibble("Time" = model$times,
-               "Speciation" = sapply(model$times, model$lambda),
-               "Extinction" = sapply(model$times, model$mu),
-               "Net-diversification" = sapply(model$times, function(x) model$lambda(x) - model$mu(x)),
-               "Relative extinction" = sapply(model$times, function(x) model$mu(x)/model$lambda(x)))
+  times <- model$times
+  l <- model$lambda(times)
+  ex <- model$mu(times)
+  
+  df <- tibble::tibble("Time" = times,
+               "Speciation" = l,
+               "Extinction" = ex,
+               "Net-diversification" = l - ex,
+               "Relative extinction" = ex / l)
   if (gather){
     df <- tidyr::gather(df, "rate", "value", -Time)  
   }

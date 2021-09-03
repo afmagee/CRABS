@@ -8,17 +8,18 @@
 ACDC.compute.extinction <- function( congruence.class, func.lambda=NULL, list.funcs.lambda=NULL ) {
 
   times   = congruence.class$times
-  v_p_div = congruence.class$p.delta( times )
-  delta_t = congruence.class$delta.t
+  v_p_div = sapply(times, congruence.class$p.delta)#congruence.class$p.delta( times )
+  delta_t = congruence.class$delta_t
 
   lambda_1 = list()
   mu_1     = list()
+  #stop()
   if ( is.null( func.lambda ) == FALSE ) {
      ## make sure that the initial conditions holds
      if ( abs(congruence.class$lambda(0) - func.lambda(0)) > 1E-8 ) {
        stop("The initial values of the reference and alternative speciation rate functions are not identical")
      }
-     v_spec1        = func.lambda( times )
+     v_spec1        = sapply(times, func.lambda)
      v_mu1          = compute.extinction( v_p_div, v_spec1, delta_t )
      lambda_1[[1]]  = func.lambda
      mu_1[[1]]      = approxfun( times, v_mu1)
@@ -42,6 +43,44 @@ ACDC.compute.extinction <- function( congruence.class, func.lambda=NULL, list.fu
               mu1=mu_1,
               max.t=congruence.class$max.t )
 
+  return (res)
+}
+
+#' @export
+congruent.extinction <- function( model, func.lambda ) {
+  times   = model$times
+  v_p_div = sapply(times, model$p.delta)
+  delta_t = model$delta_t
+  
+  if (length(func.lambda(times)) == 1){
+    func.lambda <- Vectorize(func.lambda)
+  }
+  
+  ## make sure that the initial conditions holds
+  if ( abs(model$lambda(0) - func.lambda(0)) > 1E-8 ) {
+    stop("The initial values of the reference and alternative speciation rate functions are not identical")
+  }
+  
+  v_spec1        = sapply(times, func.lambda)
+  v_mu1          = compute.extinction( v_p_div, v_spec1, delta_t )
+  lambda_1  = func.lambda
+  mu_1      = approxfun( times, v_mu1)
+  
+  ## create the parameter transformations as rate functions
+  func_div    <- function(t) lambda_1(t) - mu_1(t)
+  func_turn   <- function(t) mu_1(t) / lambda_1(t)
+  
+  res = list(lambda = lambda_1,
+             mu = mu_1,
+             delta = func_div,
+             epsilon = func_turn,
+             p.delta = model$p.delta,
+             times = times,
+             max.t = model$max.t,
+             delta_t = model$delta_t,
+             num.intervals = model$num.intervals)
+  class(res) <- c("ACDC")
+  
   return (res)
 }
 
