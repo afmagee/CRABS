@@ -6,9 +6,9 @@ Maintainer: Sebastian Hoehna <Sebastian.Hoehna@gmail.com>
 Encoding: UTF-8
 LazyData: true
 Depends: R (>= 3.4.4)
-Imports: ape, ggplot2, gridExtra
+Imports: ape, ggplot2, gridExtra, deSolve, pracma, RColorBrewer, dplyr, tibble
 Description: Provides functionality for computing and exploring the space of congruent birth-death models, and visualizing the results.
 License: GPL-3
 Suggests: knitr
 VignetteBuilder: knitr
-RoxygenNote: 6.1.0
+RoxygenNote: 7.1.1
