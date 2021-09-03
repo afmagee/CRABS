@@ -39,8 +39,8 @@ compute.pulled.speciation <- function( v_spec0, v_ext0, times ) {
 
 
 
-
-pulled.speciation <- function( model ) {
+## From equation (57) in Louca & Pennell (2020) supplement. Page 10.
+pulled.speciation <- function( model, rho = 1.0 ) {
   pulled.spec <- function(t, state, parameters){
     Lp <- state["Lp"]
     rp <- parameters["rp"]
@@ -48,19 +48,15 @@ pulled.speciation <- function( model ) {
     dLp = Lp * (model$p.delta(t) - Lp)
     return(list(dLp))
   }
-  
-  rho <- 1.0
+
   lambda0 <- model$lambda(0.0)
   
   parameters <- c(rp = model$p.delta)
   state <- c(Lp = rho*lambda0)
   
-  res <- as.data.frame(radau(y = state, times = model$times, func = pulled.spec, parms = parameters), 
+  res <- as.data.frame(deSolve::radau(y = state, times = model$times, func = pulled.spec, parms = parameters), 
                         atol = 1e-06, rtol = 1e-06)
-  
-  # compute the derivatives
-  #p_surv       <- p.survival.rate(v_spec0, v_ext0, times)
-  #v_p_spec     <- v_spec0 * p_surv(times)
+
   Lp <- approxfun(res$time, res$Lp)
   
   return (Lp)
@@ -108,7 +104,7 @@ get.gmrf.global.scale <- approxfun(x=c(2,10,20,50,100,200,500,1000,2000,5000,100
 #' lambda <- function(t) 2.0 + sin(0.8*t)
 #' mu <- function(t) 1.5 + exp(0.15*t)
 #' times <- seq(from = 0, to = 4, length.out = 1000)
-#' model <- congruence.class( lambda, mu, times = times)
+#' model <- create.model( lambda, mu, times = times)
 #' 
 #' model2df(model)
 model2df <- function(model, gather = TRUE){
