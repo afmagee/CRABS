@@ -4,8 +4,7 @@
 \alias{ACDC.plot.congruence.class.heatmap}
 \title{Plots for congruent birth-death models.}
 \usage{
-ACDC.plot.congruence.class.heatmap(func_spec0, func_ext0, max.t,
-  sample.grid)
+ACDC.plot.congruence.class.heatmap(func_spec0, func_ext0, max.t, sample.grid)
 }
 \arguments{
 \item{func_spec0}{The speciation rate function (measured in time before present).}

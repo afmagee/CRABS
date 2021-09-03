@@ -4,10 +4,17 @@
 \alias{sample.congruence.class}
 \title{Stochastic exploration of congruent models.}
 \usage{
-sample.congruence.class(func_spec0 = NULL, func_ext0 = NULL,
-  func_p_div = NULL, max.t, num.epochs, num.samples,
-  rate.type = "both", sample.speciation.rates = NULL,
-  sample.extinction.rates = NULL)
+sample.congruence.class(
+  func_spec0 = NULL,
+  func_ext0 = NULL,
+  func_p_div = NULL,
+  max.t,
+  num.epochs,
+  num.samples,
+  rate.type = "both",
+  sample.speciation.rates = NULL,
+  sample.extinction.rates = NULL
+)
 }
 \arguments{
 \item{func_spec0}{The speciation rate function (measured in time before present).}

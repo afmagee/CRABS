@@ -4,8 +4,7 @@
 \alias{ACDC.compute.speciation}
 \title{Create the piecewise-constant speciation rate from extinction rate}
 \usage{
-ACDC.compute.speciation(congruence.class, func.mu = NULL,
-  list.funcs.mu = NULL)
+ACDC.compute.speciation(congruence.class, func.mu = NULL, list.funcs.mu = NULL)
 }
 \arguments{
 \item{congruence.class}{The model congruence class}

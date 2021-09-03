@@ -4,7 +4,13 @@
 \alias{congruence.class}
 \title{Computes the congruent class, i.e., the pulled rates.}
 \usage{
-congruence.class(func_spec0, func_ext0, max.t, num.intervals = 1000)
+congruence.class(
+  func_spec0,
+  func_ext0,
+  times = seq(from = 0, to = 5, by = 0.005),
+  func_p_spec = NULL,
+  func_p_div = NULL
+)
 }
 \arguments{
 \item{func_spec0}{The speciation rate function (measured in time before present).}
@@ -22,5 +28,10 @@ A list of rate functions representing this congruence class.
 Computes the congruent class, i.e., the pulled rates.
 }
 \examples{
-#TODO
+lambda <- function(t) exp(0.3*t) - 0.5*t + 1
+mu <- function(t) exp(0.3*t) - 0.2*t + 0.2
+
+model <- congruence.class(lambda, mu, times = seq(0, 5, by = 0.005))
+
+model
 }

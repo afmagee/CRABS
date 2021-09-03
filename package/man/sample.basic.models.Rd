@@ -4,11 +4,20 @@
 \alias{sample.basic.models}
 \title{Samples simple increase/decrease models through time with noise.}
 \usage{
-sample.basic.models(num.epochs = 100, rate0 = NULL,
-  model = "exponential", direction = "decrease", noisy = TRUE,
-  MRF.type = "HSMRF", monotonic = FALSE, fc.mean = 3,
-  rate0.median = 0.1, rate0.logsd = 1.17481, min.rate = 0,
-  max.rate = 10)
+sample.basic.models(
+  num.epochs = 100,
+  rate0 = NULL,
+  model = "exponential",
+  direction = "decrease",
+  noisy = TRUE,
+  MRF.type = "HSMRF",
+  monotonic = FALSE,
+  fc.mean = 3,
+  rate0.median = 0.1,
+  rate0.logsd = 1.17481,
+  min.rate = 0,
+  max.rate = 10
+)
 }
 \arguments{
 \item{num.epochs}{The number of rates to draw}

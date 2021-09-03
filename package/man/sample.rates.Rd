@@ -4,8 +4,13 @@
 \alias{sample.rates}
 \title{Sample custom functions through time.}
 \usage{
-sample.rates(num.epochs, lambda0 = NULL, rsample = NULL,
-  rsample0 = NULL, autocorrelated = FALSE)
+sample.rates(
+  num.epochs,
+  lambda0 = NULL,
+  rsample = NULL,
+  rsample0 = NULL,
+  autocorrelated = FALSE
+)
 }
 \arguments{
 \item{num.epochs}{The number of rates to draw}

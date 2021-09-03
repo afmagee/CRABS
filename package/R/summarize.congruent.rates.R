@@ -7,8 +7,7 @@
 #' @return List of summaries for all congruent rates and observed rates.
 #' @export
 #' @example 
-#' #TODO
-summarize.congruent.rates <- function(func_spec0,func_ext0,max.t,sample.grid) {
+summarize_congruent_rates <- function(func_spec0,func_ext0,max.t,sample.grid) {
   # recover()
   
   ## Here we define some global options

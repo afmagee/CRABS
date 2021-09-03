@@ -4,8 +4,13 @@
 \alias{ACDC.plot.congruence.class.spaghetti}
 \title{Plots for congruent birth-death models.}
 \usage{
-ACDC.plot.congruence.class.spaghetti(func_spec0, func_ext0, max.t,
-  sample.grid, max.curves = 500)
+ACDC.plot.congruence.class.spaghetti(
+  func_spec0,
+  func_ext0,
+  max.t,
+  sample.grid,
+  max.curves = 500
+)
 }
 \arguments{
 \item{func_spec0}{The speciation rate function (measured in time before present).}

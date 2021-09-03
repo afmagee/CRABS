@@ -4,8 +4,11 @@
 \alias{ACDC.compute.extinction}
 \title{Create the piecewise-constant extinction rate from speciation rate}
 \usage{
-ACDC.compute.extinction(congruence.class, func.lambda = NULL,
-  list.funcs.lambda = NULL)
+ACDC.compute.extinction(
+  congruence.class,
+  func.lambda = NULL,
+  list.funcs.lambda = NULL
+)
 }
 \arguments{
 \item{congruence.class}{The model congruence class}

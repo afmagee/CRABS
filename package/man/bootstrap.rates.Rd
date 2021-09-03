@@ -4,9 +4,16 @@
 \alias{bootstrap.rates}
 \title{Samples curves like the given curve by bootstrapping.}
 \usage{
-bootstrap.rates(num.epochs, func_rate, max.t, keep.rate0 = TRUE,
-  reverse.time = FALSE, invert = FALSE, replace = TRUE,
-  block.size = 1)
+bootstrap.rates(
+  num.epochs,
+  func_rate,
+  max.t,
+  keep.rate0 = TRUE,
+  reverse.time = FALSE,
+  invert = FALSE,
+  replace = TRUE,
+  block.size = 1
+)
 }
 \arguments{
 \item{num.epochs}{The discretization fineness}
