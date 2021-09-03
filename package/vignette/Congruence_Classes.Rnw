@@ -509,7 +509,7 @@ Then, we turn the approach around and specify some alternative speciation rate f
 
 We first create a congruence class object which contains all the transformed rate functions (i.e., the net-diversification rate and relative extinction rate) as well as the pulled rates (i.e., the pulled net-diversification and the pulled speciation rate).
 <<>>=
-my_model = congruence.class( lambda, mu, max_t )
+my_model <- create.model( lambda, mu, times = seq(0, max(node.depth.edgelength(phy)), length.out = 100) )
 @
 The \code{my\_model} includes all the rate functions.
 You could plot these yourself, or you can use our simple plotting function.
@@ -554,15 +554,15 @@ for (i in 1:length(mu_vals)) {
 @
 Now we compute the new speciation rate given the extinction rates.
 <<eval=TRUE>>=
-alt_models <- ACDC.compute.speciation( my_model, list.funcs.mu=mu1 )
+alt_models <- ACDC.congruent.models(my_model, mus = mu1)
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
-ACDC.plot.congruent.models( alt_models )
+plot( alt_models )
 @
 <<include=FALSE>>=
 pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_mu_constant.pdf", width=8,height=8)
-ACDC.plot.congruent.models( alt_models )
+plot( alt_models )
 dev.off()
 @
 \begin{figure}[h!]
@@ -597,15 +597,15 @@ for (i in 1:length(mu_vals)) {
 @
 Now we compute the new speciation rate given the extinction rates.
 <<eval=TRUE>>=
-alt_models <- ACDC.compute.speciation( my_model, list.funcs.mu=mu1 )
+alt_models <- ACDC.congruent.models(my_model, mus = mu1)
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
-ACDC.plot.congruent.models( alt_models )
+plot( alt_models )
 @
 <<include=FALSE>>=
 pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_mu_linear_inc.pdf", width=8,height=8)
-ACDC.plot.congruent.models( alt_models )
+plot( alt_models )
 dev.off()
 @
 \begin{figure}[h!]
@@ -636,7 +636,7 @@ for (i in 1:length(mu_vals)) {
 @
 Now we compute the new speciation rate given the extinction rates.
 <<eval=TRUE>>=
-alt_models <- ACDC.compute.speciation( my_model, list.funcs.mu=mu1 )
+alt_models <- ACDC.congruent.models( my_model, mus = mu1 )
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
@@ -676,7 +676,7 @@ for (i in 1:length(mu_vals)) {
 @
 Now we compute the new speciation rate given the extinction rates.
 <<eval=TRUE>>=
-alt_models <- ACDC.compute.speciation( my_model, list.funcs.mu=mu1 )
+alt_models <- ACDC.congruent.models( my_model, mus = mu1 )
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
@@ -714,7 +714,7 @@ for (i in 1:length(mu_vals)) {
 @
 Now we compute the new speciation rate given the extinction rates.
 <<eval=TRUE>>=
-alt_models <- ACDC.compute.speciation( my_model, list.funcs.mu=mu1 )
+alt_models <- ACDC.congruent.models( my_model, mus = mu1 )
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
@@ -756,7 +756,7 @@ for (i in 1:length(alpha_vals)) {
 @
 Now we compute the new speciation rate given the extinction rates.
 <<eval=TRUE>>=
-alt_models <- ACDC.compute.speciation( my_model, list.funcs.mu=mu1 )
+alt_models <- ACDC.congruent.models( my_model, mus = mu1 )
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
@@ -788,7 +788,7 @@ mu1 <- function(t) mu_min - lambda(t)
 @
 Now we compute the new speciation rate given the extinction rates.
 <<eval=TRUE>>=
-alt_models <- ACDC.compute.speciation( my_model, func.mu=mu1 )
+alt_models <- ACDC.congruent.models( my_model, mus = mu1 )
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
@@ -815,7 +815,7 @@ mu1 <- function(t) exp(log(mu_min) - log(lambda(t)))
 @
 Now we compute the new speciation rate given the extinction rates.
 <<eval=TRUE>>=
-alt_models <- ACDC.compute.speciation( my_model, func.mu=mu1 )
+alt_models <- ACDC.congruent.models( my_model, mus = mu1 )
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
@@ -860,7 +860,7 @@ lambda1 <- function(t) { rep(lambda(0),length(t)) }
 @
 Now we compute the new extinction rate given the speciation rates.
 <<eval=TRUE>>=
-alt_models <- ACDC.compute.extinction( my_model, func.lambda=lambda1 )
+alt_models <- ACDC.congruent.models( my_model, lambda = lambda1)
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
@@ -903,7 +903,7 @@ for (i in 1:length(alpha_vals)) {
 @
 Now we compute the new extinction rate given the speciation rates.
 <<eval=TRUE>>=
-alt_models <- ACDC.compute.extinction( my_model, list.funcs.lambda=lambda1 )
+alt_models <- ACDC.congruent.models( my_model, lambda = lambda1)
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
@@ -941,7 +941,7 @@ mu1[[2]] = mu.TreePar
 @
 Now we compute the new speciation rate given the extinction rates.
 <<eval=TRUE>>=
-alt_models <- ACDC.compute.speciation( my_model, list.funcs.mu=mu1 )
+alt_models <- ACDC.congruent.models( my_model, mus =mu1 )
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
@@ -972,7 +972,7 @@ mu1[[2]] = mu.TreePar
 @
 Now we compute the new speciation rate given the extinction rates.
 <<eval=TRUE>>=
-alt_models <- ACDC.compute.speciation( my_model, list.funcs.mu=mu1 )
+alt_models <- ACDC.congruent.models( my_model, mus = mu1 )
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
@@ -1003,7 +1003,7 @@ mu1[[2]] = mu.RevBayes
 @
 Now we compute the new speciation rate given the extinction rates.
 <<eval=TRUE>>=
-alt_models <- ACDC.compute.speciation( my_model, list.funcs.mu=mu1 )
+alt_models <- ACDC.congruent.models( my_model, mus = mu1 )
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
