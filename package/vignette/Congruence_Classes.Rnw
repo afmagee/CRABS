@@ -49,7 +49,14 @@
 \title{Exploration of birth-death congruence classes}
 
 \begin{document}
-\SweaveOpts{concordance=TRUE}
+
+<<include=FALSE>>=
+library(knitr)
+opts_chunk$set(
+concordance=TRUE
+)
+@
+
 
 \maketitle
 
@@ -509,7 +516,7 @@ Then, we turn the approach around and specify some alternative speciation rate f
 
 We first create a congruence class object which contains all the transformed rate functions (i.e., the net-diversification rate and relative extinction rate) as well as the pulled rates (i.e., the pulled net-diversification and the pulled speciation rate).
 <<>>=
-my_model <- create.model( lambda, mu, times = seq(0, max(node.depth.edgelength(phy)), length.out = 100) )
+my_model <- create.model( lambda, mu, times = seq(0, max_t, length.out = 100) )
 @
 The \code{my\_model} includes all the rate functions.
 You could plot these yourself, or you can use our simple plotting function.
@@ -640,11 +647,11 @@ alt_models <- ACDC.congruent.models( my_model, mus = mu1 )
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
-ACDC.plot.congruent.models( alt_models )
+plot( alt_models )
 @
 <<include=FALSE>>=
 pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_mu_linear_dec.pdf", width=8,height=8)
-ACDC.plot.congruent.models( alt_models )
+plot( alt_models )
 dev.off()
 @
 \begin{figure}[h!]
@@ -680,11 +687,11 @@ alt_models <- ACDC.congruent.models( my_model, mus = mu1 )
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
-ACDC.plot.congruent.models( alt_models )
+plot( alt_models )
 @
 <<include=FALSE>>=
 pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_mu_exp_inc.pdf", width=8,height=8)
-ACDC.plot.congruent.models( alt_models )
+plot( alt_models )
 dev.off()
 @
 \begin{figure}[h!]
@@ -718,11 +725,11 @@ alt_models <- ACDC.congruent.models( my_model, mus = mu1 )
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
-ACDC.plot.congruent.models( alt_models )
+plot( alt_models )
 @
 <<include=FALSE>>=
 pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_mu_exp_dec.pdf", width=8,height=8)
-ACDC.plot.congruent.models( alt_models )
+plot( alt_models )
 dev.off()
 @
 \begin{figure}[h!]
@@ -760,11 +767,11 @@ alt_models <- ACDC.congruent.models( my_model, mus = mu1 )
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
-ACDC.plot.congruent.models( alt_models )
+plot( alt_models )
 @
 <<include=FALSE>>=
 pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_mu_shift.pdf", width=8,height=8)
-ACDC.plot.congruent.models( alt_models )
+plot( alt_models )
 dev.off()
 @
 \begin{figure}[h!]
@@ -792,11 +799,11 @@ alt_models <- ACDC.congruent.models( my_model, mus = mu1 )
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
-ACDC.plot.congruent.models( alt_models )
+plot( alt_models )
 @
 <<include=FALSE>>=
 pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_mu_reverse_add.pdf", width=8,height=8)
-ACDC.plot.congruent.models( alt_models )
+plot( alt_models )
 dev.off()
 @
 \begin{figure}[h!]
@@ -819,11 +826,11 @@ alt_models <- ACDC.congruent.models( my_model, mus = mu1 )
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
-ACDC.plot.congruent.models( alt_models )
+plot( alt_models )
 @
 <<include=FALSE>>=
 pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_mu_reverse_mult.pdf", width=8,height=8)
-ACDC.plot.congruent.models( alt_models )
+plot( alt_models )
 dev.off()
 @
 \begin{figure}[h!]
@@ -864,11 +871,11 @@ alt_models <- ACDC.congruent.models( my_model, lambda = lambda1)
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
-ACDC.plot.congruent.models( alt_models )
+plot( alt_models )
 @
 <<include=FALSE>>=
 pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_lambda_constant.pdf", width=8,height=8)
-ACDC.plot.congruent.models( alt_models )
+plot( alt_models )
 dev.off()
 @
 \begin{figure}[h!]
@@ -907,11 +914,11 @@ alt_models <- ACDC.congruent.models( my_model, lambda = lambda1)
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
-ACDC.plot.congruent.models( alt_models )
+plot( alt_models )
 @
 <<include=FALSE>>=
 pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_lambda_exp.pdf", width=8,height=8)
-ACDC.plot.congruent.models( alt_models )
+plot( alt_models )
 dev.off()
 @
 \begin{figure}[h!]
@@ -945,11 +952,11 @@ alt_models <- ACDC.congruent.models( my_model, mus =mu1 )
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
-ACDC.plot.congruent.models( alt_models )
+plot( alt_models )
 @
 <<include=FALSE>>=
 pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_all_software_RevBayes.pdf", width=8,height=8)
-ACDC.plot.congruent.models( alt_models )
+plot( alt_models )
 dev.off()
 @
 \begin{figure}[h!]
@@ -976,11 +983,11 @@ alt_models <- ACDC.congruent.models( my_model, mus = mu1 )
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
-ACDC.plot.congruent.models( alt_models )
+plot( alt_models )
 @
 <<include=FALSE>>=
 pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_all_software_TESS.pdf", width=8,height=8)
-ACDC.plot.congruent.models( alt_models )
+plot( alt_models )
 dev.off()
 @
 \begin{figure}[h!]
@@ -1007,11 +1014,11 @@ alt_models <- ACDC.congruent.models( my_model, mus = mu1 )
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
-ACDC.plot.congruent.models( alt_models )
+plot( alt_models )
 @
 <<include=FALSE>>=
 pdf(file="RnwFigs/Primates_ACDC_Congruent_Models_all_software_TreePar.pdf", width=8,height=8)
-ACDC.plot.congruent.models( alt_models )
+plot( alt_models )
 dev.off()
 @
 \begin{figure}[h!]
