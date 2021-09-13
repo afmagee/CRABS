@@ -98,17 +98,17 @@ compute.speciation <- function( lambda0, v_p_div, v_ext1, delta_t ) {
   v_lambda1    <- c()
   v_lambda1[1] <- lambda0
 
-  #stop()
   for (j in 2:NUM_TIME_DISCRETIZATIONS) {
   # Finite forwards difference
-    v_lambda1[j] <- v_lambda1[j-1]*(1 + delta_t * (v_p_div[j-1] - v_lambda1[j-1] + v_ext1[j-1]))
+    # this might not be numerically stable. Can run-off to negative infinite in some cases
+    #v_lambda1[j] <- v_lambda1[j-1]*(1 + delta_t * (v_p_div[j-1] - v_lambda1[j-1] + v_ext1[j-1]))
+    #cat("j: ", j, " - lambda: ", v_lambda1[j-1], " - mu: ", v_ext1[j-1], "\n")
     
   # Finite backward difference
-	#tmp <- 4*v_lambda1[j-1]*delta_t + (v_p_div[j]*delta_t+v_ext1[j]*delta_t-1)^2
-	#v_lambda1[j] <- (sqrt(tmp) + v_p_div[j]*delta_t+v_ext1[j]*delta_t-1) / (2*delta_t)
+	tmp <- 4*v_lambda1[j-1]*delta_t + (v_p_div[j]*delta_t+v_ext1[j]*delta_t-1)^2
+	v_lambda1[j] <- (sqrt(tmp) + v_p_div[j]*delta_t+v_ext1[j]*delta_t-1) / (2*delta_t)
 
   }
-  #stop()
 
   return (v_lambda1)
 }

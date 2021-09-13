@@ -1,3 +1,34 @@
+#' Create a set of congruent models
+#'
+#' @param model The reference model. An object of class "ACDC"
+#' @param mus A list of extinction-rate functions
+#' @param lambdas A list of speciation-rate functions
+#' @param keep_ref Whether or not to keep the reference model in the congruent set
+#'
+#' @return An object of class "ACDCset"
+#' @export
+#'
+#' @examples
+#' 
+#' lambda <- function(t) exp(0.3*t) - 0.5*t + 1
+#' mu <- function(t) exp(0.3*t) - 0.2*t + 0.2
+#' 
+#' ## A reference model
+#' model <- congruence.class(lambda, mu, times = seq(0, 5, by = 0.005))
+#' 
+#' mu1 <- lapply(c(0.5, 1.5, 3.0), function(m) function(t) m)
+#' 
+#' model_set1 <- ACDC.congruent.models(model, mus = mu1)
+#' 
+#' model_set1
+#' 
+#' lambda0 = lambda(0.0) ## Speciation rates must all be equal at the present
+#' bs <- c(-0.1, 0.0, 0.1)
+#' lambda1 <- lapply(bs, function(b) function(t) lambda0 + b*t)
+#' 
+#' model_set2 <- ACDC.congruent.models(model, lambdas = lambda1)
+#' 
+#' model_set2
 ACDC.congruent.models <- function(model, mus = NULL, lambdas = NULL, keep_ref = TRUE){
   lambda0 <- model$lambda(0)
   times   <- model$times
@@ -24,18 +55,12 @@ ACDC.congruent.models <- function(model, mus = NULL, lambdas = NULL, keep_ref = 
     if(length(mus) == 1 ){
       mus <- list(mus)
     }
-    
+  
     for (i in seq_along(mus)){
-      cat(i,".")
-      v_ext1         <- sapply(times, mus[[i]])
-      
-      
-      v_lambda1      <- compute.speciation( lambda0, v_p_div, v_ext1, delta_t )
-      lambda_1       <- approxfun( times, v_lambda1)
-      
-      models1[[i]] <- congruence.class(lambda_1, mus[[i]], times, model$p.lambda, model$p.delta)
+      models1[[i]] <- congruent.speciation(model, mus[[i]])
     }
     names(models1) <- paste0("model", seq_along(models1))
+    
   }
   
   models2 <- list()
@@ -45,18 +70,13 @@ ACDC.congruent.models <- function(model, mus = NULL, lambdas = NULL, keep_ref = 
       lambdas <- list(lambdas)
     }
     
-    
     for ( i in seq_along(lambdas)){
       lambda <- lambdas[[i]]
       if(!abs(lambda(min(times)) - model$lambda(min(times))) < 0.0001){
         stop("Initial speciation rate (at present = tips) must be equal across the congruence set.")
       }
       
-      v_spec1         <- sapply(times, lambda)
-      v_mu1      <- compute.extinction( v_p_div, v_spec1, delta_t )
-      mu_1       <- approxfun( times, v_mu1)
-      
-      models2[[i]] <- congruence.class(lambda, mu_1, times, model$p.lambda, model$p.delta)
+      models2[[i]] <- congruent.extinction(model, lambdas[[i]])
     }
     names(models2) <- paste0("model", seq_along(models2)+length(models1))
     
@@ -81,6 +101,12 @@ print.ACDCset <- function(models, ...){
   cat("A congruent set of piecewise-linear birth-death models\n")
   cat("Knots:", length(models[[1]]$times), "\n")
   cat("Delta-tau:", models[[1]]$delta_t, "\n")
-  plot.ACDCset(models)
+  cat("n_models: ", length(models), "\n")
+  if (length(models) <= 50){
+    plot.ACDCset(models)  
+  }else{
+    cat("Your set is too large (>50), and won't be plotted.")
+  }
+  
   invisible()
 }
