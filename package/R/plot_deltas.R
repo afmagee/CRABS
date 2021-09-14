@@ -32,7 +32,7 @@ plotdata <- function(model_set, threshold){
 }
 
 
-baz <- function(model_set, threshold = 0.005){
+summary_trends <- function(model_set, threshold = 0.005, return_data = FALSE){
   ##
   df <- plotdata(model_set, threshold)
   
@@ -69,5 +69,9 @@ baz <- function(model_set, threshold = 0.005){
   # grid.draw(p, size = "last")
   # invisible(p)
   p <- cowplot::plot_grid(p3, p2, p1, ncol = 1, greedy = FALSE, align = "vh")
-  return(p)
+  if(return_data){
+    return(list(heatmap_data = df, rate_data = df2))
+  }else{
+    return(p)  
+  }
 }
