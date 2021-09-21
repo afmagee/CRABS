@@ -57,25 +57,3 @@ create.model <- function(func_spec0, func_ext0, times = seq(from = 0, to = 5, by
   
   return (res)
 }
-
-
-#' Print method for ACDC object
-#'
-#' @param x and object of class ACDC
-#' @param ... other arguments
-#'
-#' @export
-#' @examples
-#' lambda <- function(t) exp(0.3*t) - 0.5*t + 1
-#' mu <- function(t) exp(0.3*t) - 0.2*t + 0.2
-#' 
-#' model <- create.model(lambda, mu, times = seq(0, 5, by = 0.005))
-#'
-#' print(model)
-print.ACDC <- function(x, ...){
-  cat("Piecewise-linear birth-death model\n")
-  cat("Knots:", length(x$times), "\n")
-  cat("Delta-tau:", x$delta_t, "\n")
-  ACDC.plot.rates(x, ...)
-  invisible()
-}
