@@ -14,7 +14,7 @@
 #' mu <- function(t) exp(0.3*t) - 0.2*t + 0.2
 #' 
 #' ## A reference model
-#' model <- congruence.class(lambda, mu, times = seq(0, 5, by = 0.005))
+#' model <- create.model(lambda, mu, times = seq(0, 5, by = 0.005))
 #' 
 #' mu1 <- lapply(c(0.5, 1.5, 3.0), function(m) function(t) m)
 #' 
@@ -88,25 +88,3 @@ ACDC.congruent.models <- function(model, mus = NULL, lambdas = NULL, keep_ref = 
 
 
 
-#' Print method for ACDCset object
-#'
-#' @param models an object of class ACDCset
-#' @param ... other arguments
-#'
-#' @return
-#'
-#' @examples
-#' @export
-print.ACDCset <- function(models, ...){
-  cat("A congruent set of piecewise-linear birth-death models\n")
-  cat("Knots:", length(models[[1]]$times), "\n")
-  cat("Delta-tau:", models[[1]]$delta_t, "\n")
-  cat("n_models: ", length(models), "\n")
-  if (length(models) <= 50){
-    plot.ACDCset(models)  
-  }else{
-    cat("Your set is too large (>50), and won't be plotted.")
-  }
-  
-  invisible()
-}

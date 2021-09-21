@@ -4,13 +4,12 @@
 \alias{plot.ACDCsets}
 \title{Plots the rate functions}
 \usage{
-\method{plot}{ACDCsets}(model_sets)
+\method{plot}{ACDCsets}(x, ...)
 }
 \arguments{
-\item{model_sets}{A list of objects of class ACDCset}
-}
-\value{
-nothing
+\item{x}{A list of objects of class ACDCsets}
+
+\item{...}{other parameters}
 }
 \description{
 Plots the rate functions
@@ -23,16 +22,16 @@ times <- seq(0, 5, by = 0.005)
 model <- create.model(lambda, mu, times = times)
 
 mus1 <- list(function(t) 0.2 + exp(0.1*t), 
-            function(t) 0.2 + sin(0.35*t) + 0.1*t,)
+            function(t) 0.2 + sin(0.35*t) + 0.1*t)
                         
 mus2 <- list(function(t) 1.0, 
              function(t) 0.5 + 0.2*t)
                         
 models <- list()
 class(models) <- c("list", "ACDCsets") 
-models[["set1"]] <- create.model(model, mus = mus1)
+models[["set1"]] <- ACDC.congruent.models(model, mus = mus1)
 
-models[["set2"]] <- create.model(model, mus = mus2)
+models[["set2"]] <- ACDC.congruent.models(model, mus = mus2)
 
 plot(models)
 

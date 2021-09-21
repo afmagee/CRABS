@@ -11,7 +11,9 @@
 #'
 #' @examples
 #' 
+#' \dontrun{
 #' model <- ACDC.read.RevBayes("path/to/HSMRFBDP_primates.log", max_t = 73, )
+#' }
 ACDC.read.RevBayes <- function(path,
                                max_t = 100,
                                summary_type = "none",
@@ -44,7 +46,7 @@ ACDC.read.RevBayes <- function(path,
       lambda <- approxfun(times_rb, speciation[i,])
       mu <- approxfun(times_rb, extinction[i, ])
 
-      model <- congruence.class( lambda, mu, times = times_rb)
+      model <- create.model( lambda, mu, times = times_rb)
       models[[i]] <- model
     }
 
@@ -57,7 +59,7 @@ ACDC.read.RevBayes <- function(path,
     lambda <- approxfun(times_rb, speciation_summary)
     mu <- approxfun(times_rb, extinction_summary)
     
-    model <- congruence.class( lambda, mu, times = times_rb)
+    model <- create.model( lambda, mu, times = times_rb)
     return(model)
   }
   

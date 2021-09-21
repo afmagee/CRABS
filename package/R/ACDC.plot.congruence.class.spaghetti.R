@@ -69,7 +69,7 @@ ACDC.plot.congruence.class.spaghetti <- function(func_spec0, func_ext0, max.t, s
   }
 
   ## Transparent grey so we can see patterns, could scale to number of plots
-  spaghetti_col <- adjustcolor("#666666",alpha=0.2)
+  spaghetti_col <- adjustcolor("#666666",alpha.f=0.2)
 
   ## Make plots!
   Y_MIN <- min( func_spec0(times), grid.lambda )

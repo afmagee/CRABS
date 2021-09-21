@@ -7,11 +7,9 @@
 congruent.speciation(model, func.mu)
 }
 \arguments{
-\item{func.mu}{A extinction rate function}
+\item{model}{The reference model}
 
-\item{congruence.class}{The model congruence class}
-
-\item{list.funcs.mu}{A list of extinction rate functions}
+\item{func.mu}{An extinction rate function}
 }
 \value{
 An object with a list of speciation and extinction rate functions.

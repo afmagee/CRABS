@@ -4,15 +4,12 @@
 \alias{print.ACDCsets}
 \title{Print method for ACDCsets object}
 \usage{
-\method{print}{ACDCsets}(model_sets, ...)
+\method{print}{ACDCsets}(x, ...)
 }
 \arguments{
-\item{...}{other arguments}
+\item{x}{and object of class ACDCsets}
 
-\item{model}{and object of class ACDCsets}
-}
-\value{
-
+\item{...}{other parameters}
 }
 \description{
 Print method for ACDCsets object

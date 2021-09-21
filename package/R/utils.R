@@ -118,7 +118,7 @@ model2df <- function(model, gather = TRUE){
                "Net-diversification" = l - ex,
                "Relative extinction" = ex / l)
   if (gather){
-    df <- tidyr::gather(df, "rate", "value", -Time)  
+    df <- gather(df, "rate", "value", -Time)  
   }
   return(df)
 }

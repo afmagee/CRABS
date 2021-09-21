@@ -1,14 +1,14 @@
 Package: ACDC
-Title: Exploration of birth-death congruence classes
+Title: Analysis of Congruent Dversification Analyses
 Version: 0.0.1
 Author: Sebastian Hoehna, Bjoern Kopperud, Andrew Magee
 Maintainer: Sebastian Hoehna <Sebastian.Hoehna@gmail.com>
 Encoding: UTF-8
 LazyData: true
-Depends: R (>= 3.4.4)
-Imports: ape, ggplot2, gridExtra, deSolve, pracma, RColorBrewer, dplyr, tibble
-Description: Provides functionality for computing and exploring the space of congruent birth-death models, and visualizing the results.
-License: GPL-3
+Depends: R (>= 3.5.0), ggplot2
+Imports: ape, magrittr, gridExtra, deSolve, pracma, RColorBrewer, dplyr, tibble, colorspace, patchwork, latex2exp, tidyr, TESS
+Description: ACDC includes tools for exploring congruent phylogenetic birth-death models. ACDC can construct the pulled speciation- and net-diversification rates from a reference model. Given alternative speciation- or extinction rates, it can construct new models that are congruent with the reference model. Functionality is included to sample new rate functions, and to visualize the distribution of one congruence class. See also Louca & Pennell (2020) <doi:10.1038/s41586-020-2176-1>.
+License: GPL-3 + file LICENSE
 Suggests: knitr
 VignetteBuilder: knitr
 RoxygenNote: 7.1.1

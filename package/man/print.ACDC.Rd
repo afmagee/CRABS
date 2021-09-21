@@ -4,15 +4,12 @@
 \alias{print.ACDC}
 \title{Print method for ACDC object}
 \usage{
-\method{print}{ACDC}(model, ...)
+\method{print}{ACDC}(x, ...)
 }
 \arguments{
-\item{model}{and object of class ACDC}
+\item{x}{and object of class ACDC}
 
 \item{...}{other arguments}
-}
-\value{
-
 }
 \description{
 Print method for ACDC object

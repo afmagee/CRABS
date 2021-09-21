@@ -1,7 +1,7 @@
 #' Plots the rate functions
 #'
-#' @param model_sets A list of objects of class ACDCset
-#' @return nothing
+#' @param x A list of objects of class ACDCsets
+#' @param ... other parameters
 #' @export
 #' @examples
 #' lambda <- function(x) exp(0.3*x) - 0.5*x + 1
@@ -11,31 +11,31 @@
 #' model <- create.model(lambda, mu, times = times)
 #'
 #' mus1 <- list(function(t) 0.2 + exp(0.1*t), 
-#'             function(t) 0.2 + sin(0.35*t) + 0.1*t,)
+#'             function(t) 0.2 + sin(0.35*t) + 0.1*t)
 #'                         
 #' mus2 <- list(function(t) 1.0, 
 #'              function(t) 0.5 + 0.2*t)
 #'                         
 #' models <- list()
 #' class(models) <- c("list", "ACDCsets") 
-#' models[["set1"]] <- create.model(model, mus = mus1)
+#' models[["set1"]] <- ACDC.congruent.models(model, mus = mus1)
 #' 
-#' models[["set2"]] <- create.model(model, mus = mus2)
+#' models[["set2"]] <- ACDC.congruent.models(model, mus = mus2)
 #' 
 #' plot(models)
 #' 
-plot.ACDCsets <- function( model_sets ) {
-  par(mfrow=c(length(model_sets), 4), mar = c(0,3,0,0), oma = c(5,1,3,1))
+plot.ACDCsets <- function( x, ... ) {
+  op <- graphics::par(mfrow=c(length(x), 4), mar = c(0,3,0,0), oma = c(5,1,3,1))
   rates <- c("lambda", "mu", "delta", "epsilon")
-  setnames <- names(model_sets)
+  setnames <- names(x)
   
   # Y_MIN <- Inf
   # Y_MAX <- 0
   # Y_MIN_REL_EXT <- Inf
   # Y_MAX_REL_EXT <- 0
   # 
-  # for (models_index in seq_along(model_sets)){
-  #   models <- model_sets[[models_index]]
+  # for (models_index in seq_along(x)){
+  #   models <- x[[models_index]]
   #   
   #   num.models    = length( models )
   #   
@@ -67,13 +67,13 @@ plot.ACDCsets <- function( model_sets ) {
   # Y_MINS <- c(Y_MIN, Y_MIN, Y_MIN, Y_MIN_REL_EXT)
   # Y_MAXS <- c(Y_MAX, Y_MAX, Y_MAX, Y_MAX_REL_EXT)
   
-  times <- model_sets[[1]][[1]][["times"]]
+  times <- x[[1]][[1]][["times"]]
   Y_MINS <- list()
   Y_MAXS <- list()
   
   for (rate_name in rates){
-    Y_MINS[[rate_name]] <- min(sapply(model_sets, function(models) min(sapply(models, function(model) min(model[[rate_name]](times))))))
-    Y_MAXS[[rate_name]] <- max(sapply(model_sets, function(models) max(sapply(models, function(model) max(model[[rate_name]](times))))))  
+    Y_MINS[[rate_name]] <- min(sapply(x, function(models) min(sapply(models, function(model) min(model[[rate_name]](times))))))
+    Y_MAXS[[rate_name]] <- max(sapply(x, function(models) max(sapply(models, function(model) max(model[[rate_name]](times))))))  
   }
   Y_MINS[["lambda"]] <- Y_MINS[["mu"]] <- do.call(min, Y_MINS[c("lambda", "mu")])
   Y_MAXS[["lambda"]] <- Y_MAXS[["mu"]] <- do.call(max, Y_MAXS[c("lambda", "mu")])
@@ -81,8 +81,8 @@ plot.ACDCsets <- function( model_sets ) {
   
 
   
-  for (models_index in seq_along(model_sets)){
-    models <- model_sets[[models_index]]
+  for (models_index in seq_along(x)){
+    models <- x[[models_index]]
     
     ## general settings
     times <- models[[1]]$times
@@ -93,10 +93,14 @@ plot.ACDCsets <- function( model_sets ) {
     ## plot settings
     this.lwd      = 1
     
-    cols = list("lambda" = c("black", tail(brewer.pal(num.models, "Blues"), n = -1)), 
-                "mu" = c("black", tail(brewer.pal(num.models, "Reds"), n = -1)), 
-                "delta" = c("black", tail(brewer.pal(num.models, "Purples"), n = -1)), 
-                "epsilon" = c("black", tail(brewer.pal(num.models, "Greens"), n = -1)))
+    # cols = list("lambda" = c("black", tail(brewer.pal(num.models, "Blues"), n = -1)), 
+    #             "mu" = c("black", tail(brewer.pal(num.models, "Reds"), n = -1)), 
+    #             "delta" = c("black", tail(brewer.pal(num.models, "Purples"), n = -1)), 
+    #             "epsilon" = c("black", tail(brewer.pal(num.models, "Greens"), n = -1)))
+    cols = list("lambda" = c("black", tail(colorspace::sequential_hcl(palette = "Blues", n = num.models), n = -1)),
+                "mu" = c("black", tail(colorspace::sequential_hcl(palette = "Reds", n = num.models), n = -1)),
+                "delta" = c("black", tail(colorspace::sequential_hcl(palette = "Purples", n = num.models), n = -1)),
+                "epsilon" = c("black", tail(colorspace::sequential_hcl(palette = "Greens", n = num.models), n = -1)))
     
 
     table1 <- list("lambda" = "Speciation", 
@@ -120,7 +124,7 @@ plot.ACDCsets <- function( model_sets ) {
       }
       
       ## Add annotations, fix axes
-      if (models_index == length(model_sets)){
+      if (models_index == length(x)){
         mtext(side=1, text="time before present", line=2.5, cex=1.25) 
         axis(1)
       }
@@ -136,21 +140,20 @@ plot.ACDCsets <- function( model_sets ) {
       
     }    
   }
+  graphics::par(op)
 }
 
 
 
 #' Print method for ACDCsets object
 #'
-#' @param model and object of class ACDCsets
-#' @param ... other arguments
-#'
-#' @return
+#' @param x and object of class ACDCsets
+#' @param ... other parameters
 #'
 #' @examples
 #' @export
-print.ACDCsets <- function(model_sets, ...){
+print.ACDCsets <- function(x, ...){
   cat("Set of piecewise-linear birth-death models\n")
-  plot.ACDCsets(model_sets)
+  plot.ACDCsets(x, ...)
   invisible()
 }

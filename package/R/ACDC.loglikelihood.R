@@ -1,6 +1,6 @@
 R <- function(t, model, rtol){
   f <- function(u) model$lambda(u) - model$mu(u)
-  quadgk(f, 0, t, tol = rtol)
+  pracma::quadgk(f, 0, t, tol = rtol)
 }
 
 logpsi <- function(s, t, model, rho, rtol){
@@ -9,10 +9,10 @@ logpsi <- function(s, t, model, rho, rtol){
   part_a <- R(t, model, rtol) - R(s, model, rtol)
   
   fb <- function(u) model$lambda(u)*exp(R(u, model, rtol)); fb <- Vectorize(fb)
-  part_b <- log(1.0 + rho * quadgk(fb, 0.0, s, tol = rtol))
+  part_b <- log(1.0 + rho * pracma::quadgk(fb, 0.0, s, tol = rtol))
   
   fc <- function(u) model$lambda(u)*exp(R(u, model, rtol)); fc <- Vectorize(fc)
-  part_c <- log(1.0 + rho * quadgk(fc, 0.0, t, tol = rtol))
+  part_c <- log(1.0 + rho * pracma::quadgk(fc, 0.0, t, tol = rtol))
   
   res = part_a + 2*(part_b - part_c)
 }
@@ -20,7 +20,7 @@ logpsi <- function(s, t, model, rho, rtol){
 fooE <- function(t, model, rho, rtol){
   f <- function(s) model$lambda(s) * exp(R(s, model, rtol))
   f <- Vectorize(f)
-  res <- exp(R(t, model, rtol)) / ((1.0 / rho) + quadgk(f, 0.0, t, tol = rtol))
+  res <- exp(R(t, model, rtol)) / ((1.0 / rho) + pracma::quadgk(f, 0.0, t, tol = rtol))
   return(res)
 }
 
@@ -28,11 +28,12 @@ fooE <- function(t, model, rho, rtol){
 #'
 #' @param phy an object of class "phylo"
 #' @param model an object of class "ACDC"
+#' @param rho the taxon sampling fraction
 #' @param TESS whether or not to call `tess.likelihood()`
 #' @param rtol relative tolerance for numerical integration
 #' @param ... additional arguments passed to `tess.likelihood(...)`
 #'
-#' @return
+#' @return the log-likelihood of the tree given the model
 #' @export
 #'
 #' @examples
@@ -40,7 +41,7 @@ fooE <- function(t, model, rho, rtol){
 #' lambda <- function(t) exp(0.3*t) - 0.5*t + 1
 #' mu <- function(t) exp(0.3*t) - 0.2*t + 0.2
 #' 
-#' model <- congruence.class(lambda, mu, times = seq(0, 3, by = 0.005))
+#' model <- create.model(lambda, mu, times = seq(0, 3, by = 0.005))
 #' 
 #' set.seed(123)
 #' phy <- rcoal(25)

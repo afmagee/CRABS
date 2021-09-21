@@ -17,9 +17,11 @@ create.model(
 
 \item{func_ext0}{The extinction rate function (measured in time before present).}
 
-\item{max.t}{The maximum time (before present) to consider rates.}
+\item{times}{the time knots for the piecewise-linear rate functions}
 
-\item{num.intervals}{The number of discretization.}
+\item{func_p_spec}{the pulled speciation rate function}
+
+\item{func_p_div}{the pulled net-diversification rate function}
 }
 \value{
 A list of rate functions representing this congruence class.

@@ -4,10 +4,12 @@
 \alias{plot.ACDCset}
 \title{Plots the rate functions}
 \usage{
-\method{plot}{ACDCset}(models)
+\method{plot}{ACDCset}(x, ...)
 }
 \arguments{
-\item{models}{A list of congruent birth-death models}
+\item{x}{A list of congruent birth-death x}
+
+\item{...}{other parameters}
 }
 \value{
 nothing

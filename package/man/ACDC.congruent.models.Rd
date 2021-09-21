@@ -27,7 +27,7 @@ lambda <- function(t) exp(0.3*t) - 0.5*t + 1
 mu <- function(t) exp(0.3*t) - 0.2*t + 0.2
 
 ## A reference model
-model <- congruence.class(lambda, mu, times = seq(0, 5, by = 0.005))
+model <- create.model(lambda, mu, times = seq(0, 5, by = 0.005))
 
 mu1 <- lapply(c(0.5, 1.5, 3.0), function(m) function(t) m)
 

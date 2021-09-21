@@ -11,6 +11,8 @@ acdc.loglikelihood(phy, model, rho = 1, TESS = FALSE, rtol = 0.01, ...)
 
 \item{model}{an object of class "ACDC"}
 
+\item{rho}{the taxon sampling fraction}
+
 \item{TESS}{whether or not to call `tess.likelihood()`}
 
 \item{rtol}{relative tolerance for numerical integration}
@@ -18,7 +20,7 @@ acdc.loglikelihood(phy, model, rho = 1, TESS = FALSE, rtol = 0.01, ...)
 \item{...}{additional arguments passed to `tess.likelihood(...)`}
 }
 \value{
-
+the log-likelihood of the tree given the model
 }
 \description{
 Compute likelihood
@@ -28,7 +30,7 @@ library(ape)
 lambda <- function(t) exp(0.3*t) - 0.5*t + 1
 mu <- function(t) exp(0.3*t) - 0.2*t + 0.2
 
-model <- congruence.class(lambda, mu, times = seq(0, 3, by = 0.005))
+model <- create.model(lambda, mu, times = seq(0, 3, by = 0.005))
 
 set.seed(123)
 phy <- rcoal(25)

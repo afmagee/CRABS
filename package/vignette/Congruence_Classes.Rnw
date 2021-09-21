@@ -939,7 +939,7 @@ This indicates that the congruence class is much more restrictive for the space 
 \subsubsection{\RevBayes as the reference model}
 
 <<RevBayes-reference-congruence-class, cache=TRUE>>=
-my_model = congruence.class( lambda.RevBayes, mu.RevBayes, max_t )
+my_model = create.model( lambda.RevBayes, mu.RevBayes, times = seq(0, max_t, length.out = 100) )
 @
 <<>>=
 mu1 <- list()
@@ -970,7 +970,7 @@ dev.off()
 \subsubsection{\TESS as the reference model}
 
 <<TESS-reference-congruence-class, cache=TRUE>>=
-my_model = congruence.class( lambda.TESS, mu.TESS, max_t )
+my_model = create.model( lambda.TESS, mu.TESS, times = seq(0, max_t, length.out = 100) )
 @
 <<>>=
 mu1 <- list()
@@ -1001,7 +1001,7 @@ dev.off()
 \subsubsection{\TreePar as the reference model}
 
 <<TreePar-reference-congruence-class, cache=TRUE>>=
-my_model = congruence.class( lambda.TreePar, mu.TreePar, max_t )
+my_model = create.model( lambda.TreePar, mu.TreePar, times = seq(0, max_t, length.out = 100) )
 @
 <<>>=
 mu1 <- list()

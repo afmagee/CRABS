@@ -31,5 +31,7 @@ Title
 }
 \examples{
 
+\dontrun{
 model <- ACDC.read.RevBayes("path/to/HSMRFBDP_primates.log", max_t = 73, )
+}
 }

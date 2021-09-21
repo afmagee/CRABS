@@ -1,52 +1,44 @@
-#' Create the piecewise-constant extinction rate from speciation rate
-#'
-#' @param congruence.class The model congruence class
-#' @param func.lambda A speciation rate function
-#' @param list.funcs.lambda A list of speciation rate functions
-#' @return An object with a list of speciation and extinction rate functions.
-#' @export
-ACDC.compute.extinction <- function( congruence.class, func.lambda=NULL, list.funcs.lambda=NULL ) {
+# ACDC.compute.extinction <- function( congruence.class, func.lambda=NULL, list.funcs.lambda=NULL ) {
+# 
+#   times   = congruence.class$times
+#   v_p_div = sapply(times, congruence.class$p.delta)#congruence.class$p.delta( times )
+#   delta_t = congruence.class$delta_t
+# 
+#   lambda_1 = list()
+#   mu_1     = list()
+#   #stop()
+#   if ( is.null( func.lambda ) == FALSE ) {
+#      ## make sure that the initial conditions holds
+#      if ( abs(congruence.class$lambda(0) - func.lambda(0)) > 1E-8 ) {
+#        stop("The initial values of the reference and alternative speciation rate functions are not identical")
+#      }
+#      v_spec1        = sapply(times, func.lambda)
+#      v_mu1          = compute.extinction( v_p_div, v_spec1, delta_t )
+#      lambda_1[[1]]  = func.lambda
+#      mu_1[[1]]      = approxfun( times, v_mu1)
+#   } else if ( is.null( list.funcs.lambda ) == FALSE  ) {
+#     for (i in 1:length(list.funcs.lambda)) {
+#        ## make sure that the initial conditions holds
+#        if ( abs(congruence.class$lambda(0) - list.funcs.lambda[[i]](0)) > 1E-8 ) {
+#          stop("The initial values of the reference and alternative speciation rate functions are not identical")
+#        }
+#        v_spec1        = list.funcs.lambda[[i]]( times )
+#        v_mu1          = compute.extinction( v_p_div, v_spec1, delta_t )
+#        lambda_1[[i]]  = list.funcs.lambda[[i]]
+#        mu_1[[i]]      = approxfun( times, v_mu1)
+#     }
+#   }
+# 
+# 
+#   res = list( lambda0=congruence.class$lambda,
+#               mu0=congruence.class$mu,
+#               lambda1=lambda_1,
+#               mu1=mu_1,
+#               max.t=congruence.class$max.t )
+# 
+#   return (res)
+# }
 
-  times   = congruence.class$times
-  v_p_div = sapply(times, congruence.class$p.delta)#congruence.class$p.delta( times )
-  delta_t = congruence.class$delta_t
-
-  lambda_1 = list()
-  mu_1     = list()
-  #stop()
-  if ( is.null( func.lambda ) == FALSE ) {
-     ## make sure that the initial conditions holds
-     if ( abs(congruence.class$lambda(0) - func.lambda(0)) > 1E-8 ) {
-       stop("The initial values of the reference and alternative speciation rate functions are not identical")
-     }
-     v_spec1        = sapply(times, func.lambda)
-     v_mu1          = compute.extinction( v_p_div, v_spec1, delta_t )
-     lambda_1[[1]]  = func.lambda
-     mu_1[[1]]      = approxfun( times, v_mu1)
-  } else if ( is.null( list.funcs.lambda ) == FALSE  ) {
-    for (i in 1:length(list.funcs.lambda)) {
-       ## make sure that the initial conditions holds
-       if ( abs(congruence.class$lambda(0) - list.funcs.lambda[[i]](0)) > 1E-8 ) {
-         stop("The initial values of the reference and alternative speciation rate functions are not identical")
-       }
-       v_spec1        = list.funcs.lambda[[i]]( times )
-       v_mu1          = compute.extinction( v_p_div, v_spec1, delta_t )
-       lambda_1[[i]]  = list.funcs.lambda[[i]]
-       mu_1[[i]]      = approxfun( times, v_mu1)
-    }
-  }
-
-
-  res = list( lambda0=congruence.class$lambda,
-              mu0=congruence.class$mu,
-              lambda1=lambda_1,
-              mu1=mu_1,
-              max.t=congruence.class$max.t )
-
-  return (res)
-}
-
-#' @export
 congruent.extinction <- function( model, func.lambda ) {
   times   = model$times
   v_p_div = sapply(times, model$p.delta)
