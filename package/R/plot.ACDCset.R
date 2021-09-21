@@ -37,7 +37,7 @@ plot.ACDCset <- function( x, ... ) {
   col_epsilon   = head(colorspace::sequential_hcl(palette = "Greens", n = num.x+1), n = -1)
   this.lwd      = 1
   
-  par(mfrow=c(2,2), mar = c(5, 4, 4, 2) + 0.1, oma = c(0,0,0,0))
+  op <- par(mfrow=c(2,2), mar = c(5, 4, 4, 2) + 0.1, oma = c(0,0,0,0))
   
   lambda <- x[[1]][["lambda"]]
   mu     <- x[[1]][["mu"]]
@@ -129,7 +129,7 @@ plot.ACDCset <- function( x, ... ) {
   mtext(side=2, text="rate", line=2.25, cex=1.25)
   mtext(side=3, text="Relative extinction", line=0.75, cex=1.5)
   
-  
+  graphics::par(op)
 }
 
 #' Print method for ACDCset object
@@ -139,6 +139,19 @@ plot.ACDCset <- function( x, ... ) {
 #'
 #' @export
 #' @examples
+#' lambda <- function(x) exp(0.3*x) - 0.5*x + 1
+#' mu <- function(x) exp(0.3*x) - 0.2*x + 0.2
+#' times <- seq(0, 5, by = 0.005)
+#' 
+#' model <- create.model(lambda, mu, times = times)
+#'
+#' mus <- list(function(t) 0.2 + exp(0.1*t), 
+#'            function(t) 0.2 + sin(0.35*t) + 0.1*t,
+#'                        function(t) 1.0, 
+#'                        function(t) 0.5 + 0.2*t)
+#' models <- ACDC.congruent.models(model, mus = mus)
+#' 
+#' print(models)
 print.ACDCset <- function(x, ...){
   cat("A congruent set of piecewise-linear birth-death models\n")
   cat("Knots:", length(x[[1]]$times), "\n")

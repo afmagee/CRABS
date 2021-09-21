@@ -150,8 +150,18 @@ plot.ACDCsets <- function( x, ... ) {
 #' @param x and object of class ACDCsets
 #' @param ... other parameters
 #'
-#' @examples
 #' @export
+#' @examples
+#' lambda <- function(t) exp(0.3*t) - 0.5*t + 1
+#' mu <- function(t) exp(0.3*t) - 0.2*t + 0.2
+#' 
+#' ## A reference model
+#' model <- create.model(lambda, mu, times = seq(0, 5, by = 0.005))
+#' 
+#' mu1 <- lapply(c(0.5, 1.5, 3.0), function(m) function(t) m)
+#' 
+#' model_set <- ACDC.congruent.models(model, mus = mu1)
+#' print(model_set)
 print.ACDCsets <- function(x, ...){
   cat("Set of piecewise-linear birth-death models\n")
   plot.ACDCsets(x, ...)
