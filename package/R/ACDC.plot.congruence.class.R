@@ -234,7 +234,8 @@ ACDC.plot.congruence.class.heatmap <- function(func_spec0, func_ext0, max.t, sam
                  theme(legend.position = "none", plot.title = element_text(hjust = 0.5)) +
                  scale_x_continuous(name ="time before present", breaks=breaks, labels=rev(breaks))
 
-    p <- grid.arrange(p1, p2, p3, p4, p5, p6, p7, p8, ncol = 2)
+    #p <- grid.arrange(p1, p2, p3, p4, p5, p6, p7, p8, ncol = 2)
+    p <- p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + plot_layout(ncol = 2, guides = "collect")
 
     return (p)
 }

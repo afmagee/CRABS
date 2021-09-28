@@ -8,12 +8,20 @@
 #' @return A list of rate functions representing this congruence class.
 #' @export
 #' @examples
-#' lambda <- function(t) exp(0.3*t) - 0.5*t + 1
-#' mu <- function(t) exp(0.3*t) - 0.2*t + 0.2
+#' lambda1 <- function(t) exp(0.3*t) - 0.5*t + 1
+#' mu1 <- function(t) exp(0.3*t) - 0.2*t + 0.2
 #' 
-#' model <- create.model(lambda, mu, times = seq(0, 5, by = 0.005))
+#' model1 <- create.model(lambda1, mu1, times = seq(0, 5, by = 0.005))
 #' 
-#' model
+#' model1
+#' 
+#' data("primates_ebd")
+#' 
+#' lambda2 <- approxfun(primates_ebd[["time"]], primates_ebd[["lambda"]])
+#' mu2 <- approxfun(primates_ebd[["time"]], primates_ebd[["mu"]])
+#' model2 <- create.model(lambda2, mu2, primates_ebd[["time"]])
+#' 
+#' model2
 create.model <- function(func_spec0, func_ext0, times = seq(from = 0, to = 5, by = 0.005), func_p_spec = NULL, func_p_div = NULL) {
   
   ## create our vector of times (i.e., change-points)

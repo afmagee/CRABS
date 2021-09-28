@@ -29,3 +29,18 @@ Sampled rate vector
 \description{
 Sample custom functions through time.
 }
+\examples{
+data("primates_ebd")
+
+l <- approxfun(primates_ebd[["time"]], primates_ebd[["lambda"]])
+mu <- approxfun(primates_ebd[["time"]], primates_ebd[["mu"]])
+model <- create.model(l, mu, primates_ebd[["time"]])
+
+rsample <- function(n) runif(n, min = 0.0, max = 0.9)
+mu_vals <- sample.rates(100, 0.5, rsample = rsample)
+mu <- approxfun(model$times, mu_vals)
+
+model_set <- ACDC.congruent.models(model, mus = mu)
+
+model_set
+}

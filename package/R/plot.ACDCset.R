@@ -27,10 +27,6 @@ plot.ACDCset <- function( x, ... ) {
   num.x    = length( x )
   
   ## plot settings
-  # col_lambda    = brewer.pal(num.x+1, "Blues")[2:(num.x+1)]
-  # col_mu        = brewer.pal(num.x+1, "Reds")[2:(num.x+1)]
-  # col_delta     = brewer.pal(num.x+1, "Purples")[2:(num.x+1)]
-  # col_epsilon   = brewer.pal(num.x+1, "Greens")[2:(num.x+1)]
   col_lambda    = head(colorspace::sequential_hcl(palette = "Blues", n = num.x+1), n = -1)
   col_mu        = head(colorspace::sequential_hcl(palette = "Reds", n = num.x+1), n = -1)
   col_delta     = head(colorspace::sequential_hcl(palette = "Purples", n = num.x+1), n = -1)

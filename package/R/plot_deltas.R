@@ -2,42 +2,25 @@ create_heatmatrix <- function(model, name, rate_name, threshold, relative_deltas
   times <- model$times
   
   ## \Delta \lambda_{i+1} = \lambda_{i+1} - \lambda_i
-  #lambdas <- model$lambda(times)
-  # l_i_plus_one <- tail(lambdas, n = -1)
-  # l_i <- head(lambdas, n = -1)
-  # 
-  # mus <- model$mu(times)
-  # mu_i_plus_one <- tail(mus, n = -1)
-  # mu_i <- head(mus, n = -1) 
   rate <- model[[rate_name]](times)
   rate_i_plus_one <- tail(rate, n = -1)
   rate_i <- head(rate, n = -1)
   
   if (relative_deltas){
-    #delta_lambda <- (l_i - l_i_plus_one)/l_i_plus_one  
-    #delta_mu <- (mu_i - mu_i_plus_one)/mu_i_plus_one
     delta_rate <- (rate_i - rate_i_plus_one) / rate_i_plus_one
   }else{
-    #delta_lambda <- l_i - l_i_plus_one
-    #delta_mu <- mu_i - mu_i_plus_one
     delta_rate <- rate_i - rate_i_plus_one
   }
   
   xtimes <- (head(times, n = -1) + tail(times, n = -1))/2
   
   # is increasing
-  #lambda_inc <- ifelse(delta_lambda > threshold, 1, 0)
-  #mu_inc <- ifelse(delta_mu > threshold, 1, 0)
   inc <- ifelse(delta_rate > threshold, 1, 0)
   # if decreasing
   dec <- ifelse(delta_rate <= -threshold, -1, 0)
-  #lambda_dec <- ifelse(delta_lambda <= -threshold, -1, 0)
-  #mu_dec <- ifelse(delta_mu <= -threshold, -1, 0)
   # No change (or flat) is implicitly the value 0
   
   direction <- factor(inc + dec)
-  #lambda_direction <- factor(lambda_inc + lambda_dec)
-  #mu_direction <- factor(mu_inc + mu_dec)
   
   df <- tibble::tibble(delta_rate = delta_rate,
                        direction = direction,
@@ -180,7 +163,7 @@ summary_trends <- function(model_set, threshold = 0.005, rate_name = "lambda", r
   
   delta_times <- df %>% 
     dplyr::filter(name == "reference") %>% 
-    (function(e) e$x)
+    (function(e) e$time)
   
   df_agree <- tibble::tibble(time = delta_times, freq_agree = freq_agree)
   

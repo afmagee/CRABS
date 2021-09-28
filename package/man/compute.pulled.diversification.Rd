@@ -4,7 +4,7 @@
 \alias{compute.pulled.diversification}
 \title{Create the piecewise-constant pulled diversification rate}
 \usage{
-compute.pulled.diversification(v_spec0, v_ext0, delta_t)
+\method{compute}{pulled.diversification}(v_spec0, v_ext0, delta_t)
 }
 \arguments{
 \item{v_spec0}{The speciation rate at all changepioints}

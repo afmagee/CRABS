@@ -1,6 +1,6 @@
 #' Create the piecewise-constant pulled diversification rate
 #'
-#' @param v_spec0 The speciation rate at all changepioints
+#' @param v_spec0 The speciation rate at all changepoints
 #' @param v_ext0 The extinction rate at all changepoints
 #' @param delta_t The width of each grid cell
 #' @return Pulled diversification rate at all changepoints
