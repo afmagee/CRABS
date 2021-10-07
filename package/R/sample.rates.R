@@ -18,12 +18,12 @@
 #' mu_vals <- sample.rates(100, 0.5, rsample = rsample)
 #' mu <- approxfun(model$times, mu_vals)
 #' 
-#' model_set <- ACDC.congruent.models(model, mus = mu)
+#' model_set <- congruent.models(model, mus = mu)
 #' 
 #' model_set
 sample.rates <- function(num.epochs, lambda0=NULL, rsample=NULL, rsample0=NULL, autocorrelated=FALSE) {
   
-  N_SAMPLES = ifelse( is.null(lambda0), num.epochs+1, num.epochs )
+  N_SAMPLES = ifelse( is.null(lambda0), num.epochs, num.epochs -1)
   if ( autocorrelated == FALSE ) {
     # we draw a bunch of iid samples
     new_rates = rsample(N_SAMPLES)
@@ -72,7 +72,7 @@ sample.rates <- function(num.epochs, lambda0=NULL, rsample=NULL, rsample0=NULL, 
 #' mu_vals <- sample.basic.models(num.epochs = 100, rate0 = 0.05, "MRF", noisy = TRUE, MRF.type = "HSMRF", fc.mean = 2.0, min.rate = 0.0, max.rate = 1.0)
 #' mu <- approxfun(model$times, mu_vals)
 #' 
-#' model_set <- ACDC.congruent.models(model, mus = mu)
+#' model_set <- congruent.models(model, mus = mu)
 #' 
 #' model_set
 sample.basic.models <- function(num.epochs=100, rate0=NULL, model="exponential", direction="decrease", noisy=TRUE, MRF.type="HSMRF", monotonic=FALSE, fc.mean=3, rate0.median=0.1, rate0.logsd=1.17481, min.rate=0, max.rate=10) {

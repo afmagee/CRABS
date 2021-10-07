@@ -18,7 +18,7 @@
 #' 
 #' mu1 <- lapply(c(0.5, 1.5, 3.0), function(m) function(t) m)
 #' 
-#' model_set1 <- ACDC.congruent.models(model, mus = mu1)
+#' model_set1 <- congruent.models(model, mus = mu1)
 #' 
 #' model_set1
 #' 
@@ -26,10 +26,10 @@
 #' bs <- c(-0.1, 0.0, 0.1)
 #' lambda1 <- lapply(bs, function(b) function(t) lambda0 + b*t)
 #' 
-#' model_set2 <- ACDC.congruent.models(model, lambdas = lambda1)
+#' model_set2 <- congruent.models(model, lambdas = lambda1)
 #' 
 #' model_set2
-ACDC.congruent.models <- function(model, mus = NULL, lambdas = NULL, keep_ref = TRUE){
+congruent.models <- function(model, mus = NULL, lambdas = NULL, keep_ref = TRUE){
   lambda0 <- model$lambda(0)
   times   <- model$times
   v_p_div <- model$p.delta( times )
@@ -85,6 +85,3 @@ ACDC.congruent.models <- function(model, mus = NULL, lambdas = NULL, keep_ref = 
   class(models) <- c("list", "ACDCset")
   return(models)
 }
-
-
-

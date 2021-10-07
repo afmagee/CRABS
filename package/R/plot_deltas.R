@@ -80,7 +80,7 @@ plotdata <- function(model_set, threshold, rate_name, relative_deltas){
 #' function(t) 1.5 - 0.28*t)
 #' 
 #' 
-#' model_set <- ACDC.congruent.models(reference, mus = mu1)
+#' model_set <- congruent.models(reference, mus = mu1)
 #' 
 #' p <- summary_trends(model_set, 0.01)
 #' 
@@ -150,7 +150,6 @@ summary_trends <- function(model_set, threshold = 0.005, rate_name = "lambda", r
   p3 <- ggplot(df, aes(time, name, fill = direction)) + 
     geom_tile() +
     scale_x_reverse(limits = rev(range(rate_times))) +
-    #scale_fill_brewer(palette = "PRGn", labels = direction_labels) +
     scale_fill_manual(values = c("gray", "green","purple"), labels = direction_labels)
     theme_bw() +
     theme(plot.margin = unit(c(t = 0,r = 0,b = 1,l = 1), "pt")) +

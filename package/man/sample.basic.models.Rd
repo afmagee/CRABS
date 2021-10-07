@@ -60,7 +60,7 @@ model <- create.model(l, mu, primates_ebd[["time"]])
 mu_vals <- sample.basic.models(num.epochs = 100, rate0 = 0.05, "MRF", noisy = TRUE, MRF.type = "HSMRF", fc.mean = 2.0, min.rate = 0.0, max.rate = 1.0)
 mu <- approxfun(model$times, mu_vals)
 
-model_set <- ACDC.congruent.models(model, mus = mu)
+model_set <- congruent.models(model, mus = mu)
 
 model_set
 }

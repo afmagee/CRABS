@@ -15,7 +15,7 @@
 #'            function(t) 0.2 + sin(0.35*t) + 0.1*t,
 #'                        function(t) 1.0, 
 #'                        function(t) 0.5 + 0.2*t)
-#' models <- ACDC.congruent.models(model, mus = mus)
+#' models <- congruent.models(model, mus = mus)
 #' 
 #' plot(models)
 plot.ACDCset <- function( x, ... ) {
@@ -33,7 +33,7 @@ plot.ACDCset <- function( x, ... ) {
   col_epsilon   = head(colorspace::sequential_hcl(palette = "Greens", n = num.x+1), n = -1)
   this.lwd      = 1
   
-  op <- par(mfrow=c(2,2), mar = c(5, 4, 4, 2) + 0.1, oma = c(0,0,0,0))
+  op <- par(mfrow=c(2,2), mar = c(3.5, 3.5, 2.5, 1) + 0.1, oma = c(0,0,0,0))
   
   lambda <- x[[1]][["lambda"]]
   mu     <- x[[1]][["mu"]]
@@ -55,7 +55,7 @@ plot.ACDCset <- function( x, ... ) {
     lambda = x[[i]][["lambda"]]
     lines(times,sapply(times, lambda),lwd=this.lwd,col=col_lambda[i],lty=2)
   }
-  mtext(side=1, text="time before present", line=2.5, cex=1.25)
+  #mtext(side=1, text="time before present", line=2.5, cex=1.25)
   mtext(side=2, text="rate", line=2.25, cex=1.25)
   mtext(side=3, text="Speciation", line=0.75, cex=1.5)
   
@@ -66,8 +66,8 @@ plot.ACDCset <- function( x, ... ) {
     mu <- x[[i]][["mu"]]
     lines(times,sapply(times, mu),lwd=this.lwd,col=col_mu[i],lty=2)
   }
-  mtext(side=1, text="time before present", line=2.5, cex=1.25)
-  mtext(side=2, text="rate", line=2.25, cex=1.25)
+  #mtext(side=1, text="time before present", line=2.5, cex=1.25)
+  #mtext(side=2, text="rate", line=2.25, cex=1.25)
   mtext(side=3, text="Extinction", line=0.75, cex=1.5)
   
   
@@ -122,7 +122,7 @@ plot.ACDCset <- function( x, ... ) {
     lines(times,eps(times),lwd=this.lwd,col=col_epsilon[i],lty=2)
   }
   mtext(side=1, text="time before present", line=2.5, cex=1.25)
-  mtext(side=2, text="rate", line=2.25, cex=1.25)
+  #mtext(side=2, text="rate", line=2.25, cex=1.25)
   mtext(side=3, text="Relative extinction", line=0.75, cex=1.5)
   
   graphics::par(op)
@@ -145,7 +145,7 @@ plot.ACDCset <- function( x, ... ) {
 #'            function(t) 0.2 + sin(0.35*t) + 0.1*t,
 #'                        function(t) 1.0, 
 #'                        function(t) 0.5 + 0.2*t)
-#' models <- ACDC.congruent.models(model, mus = mus)
+#' models <- congruent.models(model, mus = mus)
 #' 
 #' print(models)
 print.ACDCset <- function(x, ...){

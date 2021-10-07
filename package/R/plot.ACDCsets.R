@@ -18,9 +18,9 @@
 #'                         
 #' models <- list()
 #' class(models) <- c("list", "ACDCsets") 
-#' models[["set1"]] <- ACDC.congruent.models(model, mus = mus1)
+#' models[["set1"]] <- congruent.models(model, mus = mus1)
 #' 
-#' models[["set2"]] <- ACDC.congruent.models(model, mus = mus2)
+#' models[["set2"]] <- congruent.models(model, mus = mus2)
 #' 
 #' plot(models)
 #' 
@@ -160,7 +160,7 @@ plot.ACDCsets <- function( x, ... ) {
 #' 
 #' mu1 <- lapply(c(0.5, 1.5, 3.0), function(m) function(t) m)
 #' 
-#' model_set <- ACDC.congruent.models(model, mus = mu1)
+#' model_set <- congruent.models(model, mus = mu1)
 #' print(model_set)
 print.ACDCsets <- function(x, ...){
   cat("Set of piecewise-linear birth-death models\n")

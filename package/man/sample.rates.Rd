@@ -40,7 +40,7 @@ rsample <- function(n) runif(n, min = 0.0, max = 0.9)
 mu_vals <- sample.rates(100, 0.5, rsample = rsample)
 mu <- approxfun(model$times, mu_vals)
 
-model_set <- ACDC.congruent.models(model, mus = mu)
+model_set <- congruent.models(model, mus = mu)
 
 model_set
 }

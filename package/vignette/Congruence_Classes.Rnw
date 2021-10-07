@@ -17,6 +17,7 @@
 \usepackage{natbib}
 \usepackage{placeins}
 \usepackage{xspace}
+\usepackage{float}
 
 \newcommand{\R}{\textsf{R}\xspace}
 \newcommand{\code}{\texttt}
@@ -239,8 +240,8 @@ library(TESS)
 For some of our plotting, we need the speciation times.
 So we extract these from the tree.
 <<TESS-read-times>>=
-times <- sort( as.numeric( branching.times( tree ) ) )
-max_t <- max(times)
+btimes <- sort( as.numeric( branching.times( tree ) ) )
+max_t <- max(btimes)
 @
 
 <<TESS-analysis, echo=TRUE, cache=TRUE>>=
@@ -409,8 +410,8 @@ If you have not run a \RevBayes analysis and wish to explore functionality of th
 For some of our plotting, we need the speciation times.
 So we extract these from the tree.
 <<RevBayes-read-times>>=
-times <- sort( as.numeric( branching.times( tree ) ) )
-max_t <- max(times)
+btimes <- sort( as.numeric( branching.times( tree ) ) )
+max_t <- max(btimes)
 @
 
 Then we read in the \RevBayes log-file as a simple tab-delimited file.
@@ -561,7 +562,7 @@ for (i in 1:length(mu_vals)) {
 @
 Now we compute the new speciation rate given the extinction rates.
 <<eval=TRUE>>=
-alt_models <- ACDC.congruent.models(my_model, mus = mu1)
+alt_models <- congruent.models(my_model, mus = mu1)
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
@@ -604,7 +605,7 @@ for (i in 1:length(mu_vals)) {
 @
 Now we compute the new speciation rate given the extinction rates.
 <<eval=TRUE>>=
-alt_models <- ACDC.congruent.models(my_model, mus = mu1)
+alt_models <- congruent.models(my_model, mus = mu1)
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
@@ -643,7 +644,7 @@ for (i in 1:length(mu_vals)) {
 @
 Now we compute the new speciation rate given the extinction rates.
 <<eval=TRUE>>=
-alt_models <- ACDC.congruent.models( my_model, mus = mu1 )
+alt_models <- congruent.models( my_model, mus = mu1 )
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
@@ -683,7 +684,7 @@ for (i in 1:length(mu_vals)) {
 @
 Now we compute the new speciation rate given the extinction rates.
 <<eval=TRUE>>=
-alt_models <- ACDC.congruent.models( my_model, mus = mu1 )
+alt_models <- congruent.models( my_model, mus = mu1 )
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
@@ -721,7 +722,7 @@ for (i in 1:length(mu_vals)) {
 @
 Now we compute the new speciation rate given the extinction rates.
 <<eval=TRUE>>=
-alt_models <- ACDC.congruent.models( my_model, mus = mu1 )
+alt_models <- congruent.models( my_model, mus = mu1 )
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
@@ -763,7 +764,7 @@ for (i in 1:length(alpha_vals)) {
 @
 Now we compute the new speciation rate given the extinction rates.
 <<eval=TRUE>>=
-alt_models <- ACDC.congruent.models( my_model, mus = mu1 )
+alt_models <- congruent.models( my_model, mus = mu1 )
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
@@ -795,7 +796,7 @@ mu1 <- function(t) mu_min - lambda(t)
 @
 Now we compute the new speciation rate given the extinction rates.
 <<eval=TRUE>>=
-alt_models <- ACDC.congruent.models( my_model, mus = mu1 )
+alt_models <- congruent.models( my_model, mus = mu1 )
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
@@ -822,7 +823,7 @@ mu1 <- function(t) exp(log(mu_min) - log(lambda(t)))
 @
 Now we compute the new speciation rate given the extinction rates.
 <<eval=TRUE>>=
-alt_models <- ACDC.congruent.models( my_model, mus = mu1 )
+alt_models <- congruent.models( my_model, mus = mu1 )
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
@@ -867,7 +868,7 @@ lambda1 <- function(t) { rep(lambda(0),length(t)) }
 @
 Now we compute the new extinction rate given the speciation rates.
 <<eval=TRUE>>=
-alt_models <- ACDC.congruent.models( my_model, lambda = lambda1)
+alt_models <- congruent.models( my_model, lambda = lambda1)
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
@@ -910,7 +911,7 @@ for (i in 1:length(alpha_vals)) {
 @
 Now we compute the new extinction rate given the speciation rates.
 <<eval=TRUE>>=
-alt_models <- ACDC.congruent.models( my_model, lambda = lambda1)
+alt_models <- congruent.models( my_model, lambda = lambda1)
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
@@ -939,7 +940,7 @@ This indicates that the congruence class is much more restrictive for the space 
 \subsubsection{\RevBayes as the reference model}
 
 <<RevBayes-reference-congruence-class, cache=TRUE>>=
-my_model = create.model( lambda.RevBayes, mu.RevBayes, times = seq(0, max_t, length.out = 100) )
+my_model <- create.model( lambda.RevBayes, mu.RevBayes, times = seq(0, max_t, length.out = 100) )
 @
 <<>>=
 mu1 <- list()
@@ -948,7 +949,7 @@ mu1[[2]] = mu.TreePar
 @
 Now we compute the new speciation rate given the extinction rates.
 <<eval=TRUE>>=
-alt_models <- ACDC.congruent.models( my_model, mus =mu1 )
+alt_models <- congruent.models( my_model, mus =mu1 )
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
@@ -970,7 +971,8 @@ dev.off()
 \subsubsection{\TESS as the reference model}
 
 <<TESS-reference-congruence-class, cache=TRUE>>=
-my_model = create.model( lambda.TESS, mu.TESS, times = seq(0, max_t, length.out = 100) )
+my_model <- create.model( lambda.TESS, mu.TESS, 
+                         times = seq(0, max_t, length.out = 100) )
 @
 <<>>=
 mu1 <- list()
@@ -979,7 +981,7 @@ mu1[[2]] = mu.TreePar
 @
 Now we compute the new speciation rate given the extinction rates.
 <<eval=TRUE>>=
-alt_models <- ACDC.congruent.models( my_model, mus = mu1 )
+alt_models <- congruent.models( my_model, mus = mu1 )
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
@@ -1001,16 +1003,16 @@ dev.off()
 \subsubsection{\TreePar as the reference model}
 
 <<TreePar-reference-congruence-class, cache=TRUE>>=
-my_model = create.model( lambda.TreePar, mu.TreePar, times = seq(0, max_t, length.out = 100) )
+my_model <- create.model( lambda.TreePar, mu.TreePar, times = seq(0, max_t, length.out = 100) )
 @
 <<>>=
 mu1 <- list()
-mu1[[1]] = mu.TESS
-mu1[[2]] = mu.RevBayes
+mu1[[1]] <- mu.TESS
+mu1[[2]] <- mu.RevBayes
 @
 Now we compute the new speciation rate given the extinction rates.
 <<eval=TRUE>>=
-alt_models <- ACDC.congruent.models( my_model, mus = mu1 )
+alt_models <- congruent.models( my_model, mus = mu1 )
 @
 Let's have a look at these \textit{alternative models}.
 <<eval=FALSE>>=
@@ -1043,8 +1045,8 @@ For example, a posterior distribution with a 95% credible interval between 0.01 
 In \ACDC we provide several helper functions to sample speciation and extinction rates.
 
 <<rates-at-present>>=
-est_lambda0 = lambda(0)
-est_mu0     = mu(0)
+est_lambda0 <- lambda(0)
+est_mu0     <- mu(0)
 @
 
 
@@ -1102,15 +1104,16 @@ samples <- sample.congruence.class(func_spec0=lambda,
                                    num.samples=1000,
                                    rate.type="extinction",
                                    sample.extinction.rates=extinction_rate_samples)
+print(".")
 @
 <<eval=FALSE>>=
-p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
+p <- ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
                                func_ext0=mu,
                                max.t=max_t,
                                sample.grid=samples )
 @
 <<congruence-class-extinction-HSMRF, chache=TRUE, results='hide', include=FALSE>>=
-p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
+p <- ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
                                func_ext0=mu,
                                max.t=max_t,
                                sample.grid=samples )

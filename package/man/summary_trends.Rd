@@ -46,7 +46,7 @@ function(t) 1.2 + 0.5*t,
 function(t) 1.5 - 0.28*t)
 
 
-model_set <- ACDC.congruent.models(reference, mus = mu1)
+model_set <- congruent.models(reference, mus = mu1)
 
 p <- summary_trends(model_set, 0.01)
 

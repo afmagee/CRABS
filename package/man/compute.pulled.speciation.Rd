@@ -4,7 +4,7 @@
 \alias{compute.pulled.speciation}
 \title{Create the piecewise-constant pulled speciation rate}
 \usage{
-\method{compute}{pulled.speciation}(v_spec0, v_ext0, times)
+compute.pulled.speciation(v_spec0, v_ext0, times)
 }
 \arguments{
 \item{v_spec0}{The speciation rate at all change-points}

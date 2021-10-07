@@ -23,6 +23,6 @@ model <- create.model(lambda, mu, times = seq(0, 5, by = 0.005))
 
 mu1 <- lapply(c(0.5, 1.5, 3.0), function(m) function(t) m)
 
-model_set <- ACDC.congruent.models(model, mus = mu1)
+model_set <- congruent.models(model, mus = mu1)
 print(model_set)
 }

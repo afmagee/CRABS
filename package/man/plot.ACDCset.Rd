@@ -28,7 +28,7 @@ mus <- list(function(t) 0.2 + exp(0.1*t),
            function(t) 0.2 + sin(0.35*t) + 0.1*t,
                        function(t) 1.0, 
                        function(t) 0.5 + 0.2*t)
-models <- ACDC.congruent.models(model, mus = mus)
+models <- congruent.models(model, mus = mus)
 
 plot(models)
 }

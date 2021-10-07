@@ -24,7 +24,8 @@ sample.congruence.class <- function(func_spec0=NULL, func_ext0=NULL, func_p_div=
 
     ## Given the global settings, we can compute some general parameters
     times               = (0:NUM_TIME_DISCRETIZATIONS) / NUM_TIME_DISCRETIZATIONS * max.t
-    epoch_times         = (0:num.epochs) / num.epochs * max.t
+    #epoch_times         = (0:num.epochs) / num.epochs * max.t # this gives one too many
+    epoch_times         = seq(0, max.t, length.out = num.epochs)
     delta_t             = max.t / NUM_TIME_DISCRETIZATIONS
 
 
@@ -125,6 +126,8 @@ sample.congruence.class <- function(func_spec0=NULL, func_ext0=NULL, func_p_div=
         setTxtProgressBar(pb, i)
     }
     close(pb)
+    
+
 
     res <- list( grid.mu             = grid.mu,
                  grid.lambda         = grid.lambda,

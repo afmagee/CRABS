@@ -29,9 +29,9 @@ mus2 <- list(function(t) 1.0,
                         
 models <- list()
 class(models) <- c("list", "ACDCsets") 
-models[["set1"]] <- ACDC.congruent.models(model, mus = mus1)
+models[["set1"]] <- congruent.models(model, mus = mus1)
 
-models[["set2"]] <- ACDC.congruent.models(model, mus = mus2)
+models[["set2"]] <- congruent.models(model, mus = mus2)
 
 plot(models)
 
