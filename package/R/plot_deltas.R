@@ -50,6 +50,8 @@ plotdata <- function(model_set, threshold, rate_name, relative_deltas){
   l <- lapply(model_names, 
               function(name) create_heatmatrix(model_set[[name]], name, rate_name, threshold, relative_deltas))
   df <- do.call(rbind, l)
+  df$name <- factor(df$name, levels = rev(names(model_set)))
+  df$direction <- factor(df$direction, levels = sort(levels(df$direction)))
   return(df)
 }
 
@@ -100,12 +102,9 @@ summary_trends <- function(model_set, threshold = 0.005, rate_name = "lambda", r
   
   # Replot rates
   df2_ <- data.frame(lapply(model_set, function(model) model[[rate_name]](model$times)), times = model_set[[1]]$times)
-  #df2 <- tidyr::gather(df2_, "name", "rate_name", -times)
-  #browser()
   df2 <- tidyr::pivot_longer(df2_, cols = -times, names_to = "name", values_to = "rate")
 
   # plot rates
-  #p1 <- ggplot(df2, aes(times, lambda, color = name)) +
   p1 <- ggplot(df2, aes_string("times", "rate", color = "name")) +
     geom_line() + 
     scale_x_reverse(limits = rev(range(rate_times))) +
@@ -150,9 +149,11 @@ summary_trends <- function(model_set, threshold = 0.005, rate_name = "lambda", r
   p3 <- ggplot(df, aes(time, name, fill = direction)) + 
     geom_tile() +
     scale_x_reverse(limits = rev(range(rate_times))) +
-    scale_fill_manual(values = c("gray", "green","purple"), labels = direction_labels)
+    scale_fill_manual(values = c("purple","NA", "#7fbf7b"), labels = direction_labels)
     theme_bw() +
-    theme(plot.margin = unit(c(t = 0,r = 0,b = 1,l = 1), "pt")) +
+    theme(plot.margin = unit(c(t = 0,r = 0,b = 1,l = 1), "pt"),
+          panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank()) +
     ylab("Direction") +
     xlab("Time before present")
 
@@ -161,7 +162,7 @@ summary_trends <- function(model_set, threshold = 0.005, rate_name = "lambda", r
     sapply(agreement)
   
   delta_times <- df %>% 
-    dplyr::filter(name == "reference") %>% 
+    dplyr::filter(name == df$name[1]) %>% 
     (function(e) e$time)
   
   df_agree <- tibble::tibble(time = delta_times, freq_agree = freq_agree)
