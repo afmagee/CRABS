@@ -55,7 +55,7 @@ plotdata <- function(model_set, threshold, rate_name, relative_deltas, gmap){
   l <- lapply(model_names, 
               function(name) create_heatmatrix(model_set[[name]], name, rate_name, threshold, relative_deltas, gmap))
   df <- do.call(rbind, l)
-  df$name <- factor(df$name, levels = rev(names(model_set)))
+  #df$name <- factor(df$name, levels = names(model_set))
   df$direction <- factor(df$direction, levels = sort(levels(df$direction)))
   return(df)
 }
