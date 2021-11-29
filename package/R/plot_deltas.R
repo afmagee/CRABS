@@ -1,4 +1,4 @@
-create_heatmatrix <- function(model, name, rate_name, threshold, relative_deltas = FALSE){
+create_heatmatrix <- function(model, name, rate_name, threshold, relative_deltas = FALSE, gmap = NULL){
   times <- model$times
   
   ## \Delta \lambda_{i+1} = \lambda_{i+1} - \lambda_i
@@ -21,11 +21,16 @@ create_heatmatrix <- function(model, name, rate_name, threshold, relative_deltas
   # No change (or flat) is implicitly the value 0
   
   direction <- factor(inc + dec)
+  group_name <- gmap[[name]]
+  if(is.null(group_name)){
+    group_name <- "other"
+  }
   
   df <- tibble::tibble(delta_rate = delta_rate,
                        direction = direction,
                        time = xtimes,
-                       name = name)
+                       name = name,
+                       group_name = group_name)
   return(df)
 }
 
@@ -45,10 +50,10 @@ direction_labels <- function(x){
   ifelse(x == "-1", "Decreasing", ifelse(x == "1", "Increasing", "Flat"))
 }
 
-plotdata <- function(model_set, threshold, rate_name, relative_deltas){
+plotdata <- function(model_set, threshold, rate_name, relative_deltas, gmap){
   model_names <- names(model_set)
   l <- lapply(model_names, 
-              function(name) create_heatmatrix(model_set[[name]], name, rate_name, threshold, relative_deltas))
+              function(name) create_heatmatrix(model_set[[name]], name, rate_name, threshold, relative_deltas, gmap))
   df <- do.call(rbind, l)
   df$name <- factor(df$name, levels = rev(names(model_set)))
   df$direction <- factor(df$direction, levels = sort(levels(df$direction)))
@@ -86,9 +91,24 @@ plotdata <- function(model_set, threshold, rate_name, relative_deltas){
 #' 
 #' p <- summary_trends(model_set, 0.01)
 #' 
-summary_trends <- function(model_set, threshold = 0.005, rate_name = "lambda", return_data = FALSE, rm_singleton = TRUE, relative_deltas = FALSE){
+summary_trends <- function(model_set, threshold = 0.005, rate_name = "lambda", return_data = FALSE, rm_singleton = TRUE, relative_deltas = FALSE, group_names = NULL){
   ##
-  df <- plotdata(model_set, threshold, rate_name, relative_deltas)
+  if(!is.null(group_names)){
+    gmap <- list()
+    for (group_name in group_names){
+      idx <- which(startsWith(names(model_set), group_name))
+      
+      if (length(idx) > 0){
+        for (i in idx){
+          gmap[[names(model_set)[i]]] <- group_name
+        }
+      }
+    }
+  }else{
+    gmap <- NULL
+  }
+  
+  df <- plotdata(model_set, threshold, rate_name, relative_deltas, gmap)
   
   rate_times <- model_set[[1]]$times
   
@@ -110,26 +130,36 @@ summary_trends <- function(model_set, threshold = 0.005, rate_name = "lambda", r
     scale_x_reverse(limits = rev(range(rate_times))) +
     scale_color_manual(values = cbPalette) +
     theme_bw() +
-    ylab(latex2exp::TeX("$\\lambda$")) +
     theme(axis.title.x=element_blank(),
           axis.text.x=element_blank(),
           plot.margin = grid::unit(c(t = 1,r = 1,b = 0,l = 1), "pt"))
   
+  
+  
   # plot finite-difference derivative
   if(rate_name == "lambda"){
+    p1 <- p1 + ylab(latex2exp::TeX("$\\lambda$"))
     if(relative_deltas){
       ylabel <- latex2exp::TeX("$\\Delta\\lambda = \\frac{\\lambda_{i+1} - \\lambda_i}{\\lambda_i}$")
     }else{
       ylabel <- latex2exp::TeX("$\\Delta\\lambda = \\lambda_{i+1} - \\lambda_i$")
     }
   }else if(rate_name == "mu"){
+    p1 <- p1 + ylab(latex2exp::TeX("$\\mu$"))
     if(relative_deltas){
-      ylabel <- latex2exp::TeX("$\\Delta\\mu = \\frac{\\mu_{i+1} - \\mu}{\\mu}$")
+      ylabel <- latex2exp::TeX("$\\Delta\\mu = \\frac{\\mu_{i+1} - \\mu}{\\mu_i}$")
     }else{
       ylabel <- latex2exp::TeX("$\\Delta\\mu = \\mu_{i+1} - \\mu$")
     }
-  }else{
-    stop("rate_name must either be 'lambda' or 'mu'.")
+  }else if(rate_name == "delta"){
+    p1 <- p1 + ylab(latex2exp::TeX("$\\delta$"))
+      if(relative_deltas){
+        ylabel <- latex2exp::TeX("$\\Delta \\delta = \\frac{\\delta_{i+1} - \\delta}{\\delta_i}$")
+      }else{
+        ylabel <- latex2exp::TeX("$\\Delta \\delta = \\delta_{i+1} - \\delta_i$")
+      }
+    }else{
+    stop("rate_name must either be 'lambda' or 'mu' or 'delta'.")
   }
 
   
@@ -144,18 +174,27 @@ summary_trends <- function(model_set, threshold = 0.005, rate_name = "lambda", r
     theme(axis.title.x=element_blank(),
           axis.text.x=element_blank(),
           plot.margin = unit(c(t = 0,r = 1,b = 0,l = 1), "pt"))
-  
+
   # plot directions
   p3 <- ggplot(df, aes(time, name, fill = direction)) + 
     geom_tile() +
     scale_x_reverse(limits = rev(range(rate_times))) +
-    scale_fill_manual(values = c("purple","NA", "#7fbf7b"), labels = direction_labels)
+    scale_fill_manual(values = c("purple","white", "#7fbf7b"), labels = direction_labels) +
     theme_bw() +
     theme(plot.margin = unit(c(t = 0,r = 0,b = 1,l = 1), "pt"),
           panel.grid.major = element_blank(), 
           panel.grid.minor = element_blank()) +
     ylab("Direction") +
     xlab("Time before present")
+  
+  if(!is.null(gmap)){
+    p3 <- p3 +
+      facet_grid(group_name~., scales="free_y", space="free_y", switch = "y") +
+      theme(panel.spacing = unit(c(0), "lines"),
+            strip.background = element_rect(fill=NA))
+    #ggforce::facet_col(vars(group_name), ,scales = "free_y", space = "free_y") +
+      
+  }
 
   freq_agree <- df %>% 
     group_split(time) %>% 
