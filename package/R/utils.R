@@ -107,16 +107,20 @@ get.gmrf.global.scale <- approxfun(x=c(2,10,20,50,100,200,500,1000,2000,5000,100
 #' model <- create.model( lambda, mu, times = times)
 #' 
 #' model2df(model)
-model2df <- function(model, gather = TRUE){
+model2df <- function(model, gather = TRUE, rho = 1.0){
   times <- model$times
   l <- model$lambda(times)
   ex <- model$mu(times)
+  p.lambda <- pulled.speciation(model, rho = rho)(times)
+  p.delta <- model$p.delta(times)
   
   df <- tibble::tibble("Time" = times,
                "Speciation" = l,
                "Extinction" = ex,
                "Net-diversification" = l - ex,
-               "Relative extinction" = ex / l)
+               "Relative extinction" = ex / l,
+               "Pulled net-diversification" = p.delta,
+               "Pulled speciation" = p.lambda)
   if (gather){
     df <- gather(df, "rate", "value", -Time)  
   }
