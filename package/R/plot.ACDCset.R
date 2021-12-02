@@ -19,113 +19,199 @@
 #' 
 #' plot(models)
 plot.ACDCset <- function( x, ... ) {
-  
-  ## general settings
-  times <- x[[1]]$times
-  num.intervals = length(times)
-  max.t <- max(times)
-  num.x    = length( x )
-  
-  ## plot settings
-  col_lambda    = head(colorspace::sequential_hcl(palette = "Blues", n = num.x+1), n = -1)
-  col_mu        = head(colorspace::sequential_hcl(palette = "Reds", n = num.x+1), n = -1)
-  col_delta     = head(colorspace::sequential_hcl(palette = "Purples", n = num.x+1), n = -1)
-  col_epsilon   = head(colorspace::sequential_hcl(palette = "Greens", n = num.x+1), n = -1)
-  this.lwd      = 1
-  
-  op <- par(mfrow=c(2,2), mar = c(3.5, 3.5, 2.5, 1) + 0.1, oma = c(0,0,0,0))
-  
-  lambda <- x[[1]][["lambda"]]
-  mu     <- x[[1]][["mu"]]
-  Y_MIN  <- min( lambda(times), mu(times) )
-  Y_MAX  <- max( lambda(times), mu(times) )
-  
-  
-  
-  ## Check 
-  for (i in 2:num.x) {
-    lambda <- x[[i]]$lambda
-    mu     <- x[[i]]$mu
-    Y_MIN  <- min(Y_MIN, lambda(times), mu(times) )
-    Y_MAX  <- max(Y_MAX, lambda(times), mu(times) )
+  # ## general settings
+  # times <- x[[1]]$times
+  # num.intervals = length(times)
+  # max.t <- max(times)
+  # num.x    = length( x )
+  # 
+  # ## plot settings
+  # col_lambda    = head(colorspace::sequential_hcl(palette = "Blues", n = num.x+1), n = -1)
+  # col_mu        = head(colorspace::sequential_hcl(palette = "Reds", n = num.x+1), n = -1)
+  # col_delta     = head(colorspace::sequential_hcl(palette = "Purples", n = num.x+1), n = -1)
+  # col_epsilon   = head(colorspace::sequential_hcl(palette = "Greens", n = num.x+1), n = -1)
+  # this.lwd      = 1
+  # 
+  # op <- par(mfrow=c(2,2), mar = c(3.5, 3.5, 2.5, 1) + 0.1, oma = c(0,0,0,0))
+  # 
+  # lambda <- x[[1]][["lambda"]]
+  # mu     <- x[[1]][["mu"]]
+  # Y_MIN  <- min( lambda(times), mu(times) )
+  # Y_MAX  <- max( lambda(times), mu(times) )
+  # 
+  # 
+  # 
+  # ## Check 
+  # for (i in 2:num.x) {
+  #   lambda <- x[[i]]$lambda
+  #   mu     <- x[[i]]$mu
+  #   Y_MIN  <- min(Y_MIN, lambda(times), mu(times) )
+  #   Y_MAX  <- max(Y_MAX, lambda(times), mu(times) )
+  # }
+  # lambda = x[[1]]$lambda
+  # curve(lambda, xlim=rev(c(0,max.t)), ylim=c(Y_MIN,Y_MAX), lwd=this.lwd, col="black", lty=1, ylab="", xlab="", main="")
+  # for (i in 2:num.x) {
+  #   lambda = x[[i]][["lambda"]]
+  #   lines(times,sapply(times, lambda),lwd=this.lwd,col=col_lambda[i],lty=2)
+  # }
+  # #mtext(side=1, text="time before present", line=2.5, cex=1.25)
+  # mtext(side=2, text="rate", line=2.25, cex=1.25)
+  # mtext(side=3, text="Speciation", line=0.75, cex=1.5)
+  # 
+  # 
+  # mu <- x[[1]][["mu"]]
+  # plot(times, sapply(times, mu), "l", xlim=rev(c(0,max.t)), ylim=c(Y_MIN,Y_MAX), lwd=this.lwd, col="black", lty=1, ylab="", xlab="", main="")
+  # for (i in 2:num.x) {
+  #   mu <- x[[i]][["mu"]]
+  #   lines(times,sapply(times, mu),lwd=this.lwd,col=col_mu[i],lty=2)
+  # }
+  # #mtext(side=1, text="time before present", line=2.5, cex=1.25)
+  # #mtext(side=2, text="rate", line=2.25, cex=1.25)
+  # mtext(side=3, text="Extinction", line=0.75, cex=1.5)
+  # 
+  # 
+  # lambda = x[[1]][["lambda"]]
+  # mu     = x[[1]][["mu"]]
+  # delta  = function(t) lambda(t) - mu(t)
+  # Y_MIN <- min( delta(times) )
+  # Y_MAX <- max( delta(times) )
+  # for (i in 2:num.x) {
+  #   lambda = x[[i]][["lambda"]]
+  #   mu     = x[[i]][["mu"]]
+  #   delta  = function(t) lambda(t) - mu(t)
+  #   Y_MIN <- min(Y_MIN, delta(times))
+  #   Y_MAX <- max(Y_MAX, delta(times))
+  # }
+  # 
+  # lambda = x[[1]][["lambda"]]
+  # mu     = x[[1]][["mu"]]
+  # delta  = function(t) lambda(t) - mu(t)
+  # curve(delta, xlim=rev(c(0,max.t)), ylim=c(Y_MIN,Y_MAX), lwd=this.lwd, col="black", lty=1, ylab="", xlab="", main="")
+  # for (i in 2:num.x) {
+  #   lambda = x[[i]][["lambda"]]
+  #   mu     = x[[i]][["mu"]]
+  #   delta  = function(t) lambda(t) - mu(t)
+  #   lines(times,delta(times),lwd=this.lwd,col=col_delta[i],lty=2)
+  # }
+  # mtext(side=1, text="time before present", line=2.5, cex=1.25)
+  # mtext(side=2, text="rate", line=2.25, cex=1.25)
+  # mtext(side=3, text="Net-diversification", line=0.75, cex=1.5)
+  # 
+  # 
+  # lambda = x[[1]][["lambda"]]
+  # mu     = x[[1]][["mu"]]
+  # eps    = function(t) mu(t) / lambda(t)
+  # Y_MIN <- min( sapply(times, eps) )
+  # Y_MAX <- max( sapply(times, eps) )
+  # for (i in 2:num.x) {
+  #   lambda = x[[i]][["lambda"]]
+  #   mu     = x[[i]][["mu"]]
+  #   eps    = function(t) mu(t) / lambda(t)
+  #   Y_MIN <- min(Y_MIN, sapply(times, eps))
+  #   Y_MAX <- max(Y_MAX, sapply(times, eps))
+  # }
+  # lambda = x[[1]][["lambda"]]
+  # mu     = x[[1]][["mu"]]
+  # eps    = function(t) mu(t) / lambda(t)
+  # curve(eps, xlim=rev(c(0,max.t)), ylim=c(Y_MIN,Y_MAX), lwd=this.lwd, col="black", lty=1, ylab="", xlab="", main="")
+  # for (i in 2:num.x) {
+  #   lambda = x[[i]][["lambda"]]
+  #   mu     = x[[i]][["mu"]]
+  #   eps    = function(t) mu(t) / lambda(t)
+  #   lines(times,eps(times),lwd=this.lwd,col=col_epsilon[i],lty=2)
+  # }
+  # mtext(side=1, text="time before present", line=2.5, cex=1.25)
+  # #mtext(side=2, text="rate", line=2.25, cex=1.25)
+  # mtext(side=3, text="Relative extinction", line=0.75, cex=1.5)
+  # 
+  # graphics::par(op)
+  dfs <- lapply(x, model2df)
+  ## Add names columns
+  for (i in seq_along(dfs)){
+    df <- dfs[[i]]
+    df$name <- names(dfs)[i]
+    dfs[[i]] <- df
   }
-  lambda = x[[1]]$lambda
-  curve(lambda, xlim=rev(c(0,max.t)), ylim=c(Y_MIN,Y_MAX), lwd=this.lwd, col="black", lty=1, ylab="", xlab="", main="")
-  for (i in 2:num.x) {
-    lambda = x[[i]][["lambda"]]
-    lines(times,sapply(times, lambda),lwd=this.lwd,col=col_lambda[i],lty=2)
-  }
-  #mtext(side=1, text="time before present", line=2.5, cex=1.25)
-  mtext(side=2, text="rate", line=2.25, cex=1.25)
-  mtext(side=3, text="Speciation", line=0.75, cex=1.5)
+  df <- bind_rows(dfs)
   
-
-  mu <- x[[1]][["mu"]]
-  plot(times, sapply(times, mu), "l", xlim=rev(c(0,max.t)), ylim=c(Y_MIN,Y_MAX), lwd=this.lwd, col="black", lty=1, ylab="", xlab="", main="")
-  for (i in 2:num.x) {
-    mu <- x[[i]][["mu"]]
-    lines(times,sapply(times, mu),lwd=this.lwd,col=col_mu[i],lty=2)
-  }
-  #mtext(side=1, text="time before present", line=2.5, cex=1.25)
-  #mtext(side=2, text="rate", line=2.25, cex=1.25)
-  mtext(side=3, text="Extinction", line=0.75, cex=1.5)
+  df_lambda <- df %>% dplyr::filter(rate == "Speciation")
+  df_mu     <- df %>% dplyr::filter(rate == "Extinction")
+  df_delta  <- df %>% dplyr::filter(rate == "Net-diversification")
+  df_relext <- df %>% dplyr::filter(rate == "Relative extinction")
   
+  ylim <- range(bind_rows(df_lambda, df_mu)[["value"]])
   
-  lambda = x[[1]][["lambda"]]
-  mu     = x[[1]][["mu"]]
-  delta  = function(t) lambda(t) - mu(t)
-  Y_MIN <- min( delta(times) )
-  Y_MAX <- max( delta(times) )
-  for (i in 2:num.x) {
-    lambda = x[[i]][["lambda"]]
-    mu     = x[[i]][["mu"]]
-    delta  = function(t) lambda(t) - mu(t)
-    Y_MIN <- min(Y_MIN, delta(times))
-    Y_MAX <- max(Y_MAX, delta(times))
-  }
+  ## Speciation rate
+  col_lambda <- c(head(colorspace::sequential_hcl(palette = "Blues", n = length(unique(df_lambda$name))), n = -1), "black")
+  p1 <- df_lambda %>%
+    ggplot(aes(x = Time, y = value, color = name)) +
+    scale_x_reverse() +
+    theme_classic() +
+    geom_line(data=subset(df_lambda, name == "reference"), linetype=1) +
+    geom_line(data=subset(df_lambda, name != "reference"), linetype="longdash") +
+    labs(title = "Speciation") +
+    theme(legend.position = "NA",
+          axis.title.x = element_blank(),
+    ) +
+    ylim(ylim) +
+    ylab("rate") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    scale_color_manual(values = col_lambda)
   
-  lambda = x[[1]][["lambda"]]
-  mu     = x[[1]][["mu"]]
-  delta  = function(t) lambda(t) - mu(t)
-  curve(delta, xlim=rev(c(0,max.t)), ylim=c(Y_MIN,Y_MAX), lwd=this.lwd, col="black", lty=1, ylab="", xlab="", main="")
-  for (i in 2:num.x) {
-    lambda = x[[i]][["lambda"]]
-    mu     = x[[i]][["mu"]]
-    delta  = function(t) lambda(t) - mu(t)
-    lines(times,delta(times),lwd=this.lwd,col=col_delta[i],lty=2)
-  }
-  mtext(side=1, text="time before present", line=2.5, cex=1.25)
-  mtext(side=2, text="rate", line=2.25, cex=1.25)
-  mtext(side=3, text="Net-diversification", line=0.75, cex=1.5)
+  ## Extinction rate
+  col_mu <- c(head(colorspace::sequential_hcl(palette = "orange", n = length(unique(df_mu$name))), n = -1), "black")
+  p2 <- df_mu %>%
+    ggplot(aes(x = Time, y = value, color = name)) +
+    scale_x_reverse() +
+    theme_classic() +
+    geom_line(data=subset(df_mu, name == "reference"), linetype=1) +
+    geom_line(data=subset(df_mu, name != "reference"), linetype="longdash") +
+    ggtitle("Extinction") +
+    ylim(ylim) +
+    theme(legend.position = "NA",
+          axis.title.y = element_blank(),
+          axis.title.x = element_blank(),
+    ) +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    scale_color_manual(values = col_mu)
   
+  ## Net-diversification rate
+  col_delta <- c(head(colorspace::sequential_hcl(palette = "purple", n = length(unique(df_delta$name))), n = -1), "black")
+  p3 <- df_delta %>%
+    ggplot(aes(x = Time, y = value, color = name)) +
+    scale_x_reverse() +
+    theme_classic() +
+    geom_line(data=subset(df_delta, name == "reference"), linetype=1) +
+    geom_line(data=subset(df_delta, name != "reference"), linetype="longdash") +
+    ggtitle("Net-diversification") +
+    theme(legend.position = "NA",
+    ) +
+    ylab("rate") +
+    xlab("time before present") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    scale_color_manual(values = col_delta)
   
-  lambda = x[[1]][["lambda"]]
-  mu     = x[[1]][["mu"]]
-  eps    = function(t) mu(t) / lambda(t)
-  Y_MIN <- min( sapply(times, eps) )
-  Y_MAX <- max( sapply(times, eps) )
-  for (i in 2:num.x) {
-    lambda = x[[i]][["lambda"]]
-    mu     = x[[i]][["mu"]]
-    eps    = function(t) mu(t) / lambda(t)
-    Y_MIN <- min(Y_MIN, sapply(times, eps))
-    Y_MAX <- max(Y_MAX, sapply(times, eps))
-  }
-  lambda = x[[1]][["lambda"]]
-  mu     = x[[1]][["mu"]]
-  eps    = function(t) mu(t) / lambda(t)
-  curve(eps, xlim=rev(c(0,max.t)), ylim=c(Y_MIN,Y_MAX), lwd=this.lwd, col="black", lty=1, ylab="", xlab="", main="")
-  for (i in 2:num.x) {
-    lambda = x[[i]][["lambda"]]
-    mu     = x[[i]][["mu"]]
-    eps    = function(t) mu(t) / lambda(t)
-    lines(times,eps(times),lwd=this.lwd,col=col_epsilon[i],lty=2)
-  }
-  mtext(side=1, text="time before present", line=2.5, cex=1.25)
-  #mtext(side=2, text="rate", line=2.25, cex=1.25)
-  mtext(side=3, text="Relative extinction", line=0.75, cex=1.5)
+  ## Relative-extinction rate
+  col_relext <- c(head(colorspace::sequential_hcl(palette = "green", n = length(unique(df_relext$name))), n = -1), "black")
+  p4 <- df_delta %>%
+    ggplot(aes(x = Time, y = value, color = name)) +
+    scale_x_reverse() +
+    theme_classic() +
+    geom_line(data=subset(df_relext, name == "reference"), linetype=1) +
+    geom_line(data=subset(df_relext, name != "reference"), linetype="longdash") +
+    ggtitle("Relative extinction") +
+    theme(legend.position = "NA",
+          axis.title.y = element_blank(),
+    ) +
+    xlab("time before present") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    scale_color_manual(values = col_relext)
   
-  graphics::par(op)
+  p <- p1 + p2 + 
+    p3 + p4 +
+    plot_layout(ncol = 2)
+  
+  return(p)
 }
 
 #' Print method for ACDCset object
@@ -154,7 +240,8 @@ print.ACDCset <- function(x, ...){
   cat("Delta-tau:", x[[1]]$delta_t, "\n")
   cat("n_models: ", length(x), "\n")
   if (length(x) <= 50){
-    plot.ACDCset(x)  
+    p <- plot.ACDCset(x)  
+    plot(p)
   }else{
     cat("Your set is too large (>50), and won't be plotted.")
   }
