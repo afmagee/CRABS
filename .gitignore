@@ -25,7 +25,9 @@
 
 # produced vignettes
 vignette/output/*
+!vignette/output/.gitkeep
 vignette/primates_comet/*
+!vignette/primates_comet/.gitkeep
 vignette/cache
 vignette/RnwFigs
 vignette/*.aux
