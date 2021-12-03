@@ -20,9 +20,12 @@
 # RStudio files
 .Rproj.user/
 
+# Swap files
+*/**/*.swp
+
 # produced vignettes
-vignettes/*.html
-vignettes/*.pdf
+vignette/output/*
+vignette/primates_comet/*
 vignette/cache
 vignette/RnwFigs
 vignette/*.aux
