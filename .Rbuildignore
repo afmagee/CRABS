@@ -1,0 +1,5 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+vignette/cache
+vignette
+primates_comet

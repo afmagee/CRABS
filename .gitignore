@@ -23,17 +23,17 @@
 # produced vignettes
 vignettes/*.html
 vignettes/*.pdf
-package/vignette/cache
-package/vignette/RnwFigs
-package/vignette/*.aux
-package/vignette/*.bbl
-package/vignette/*.blg
-package/vignette/*.log
-package/vignette/*.out
-package/vignette/*.tex
-package/vignette/*.toc
-package/vignette/*.pdf
-package/vignette/*.html
+vignette/cache
+vignette/RnwFigs
+vignette/*.aux
+vignette/*.bbl
+vignette/*.blg
+vignette/*.log
+vignette/*.out
+vignette/*.tex
+vignette/*.toc
+vignette/*.pdf
+vignette/*.html
 
 # OAuth2 token, see https://github.com/hadley/httr/releases/tag/v0.3
 .httr-oauth
