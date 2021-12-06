@@ -105,7 +105,7 @@ install_github("afmagee/ACDC")
 @
 % Sebastian: This is only for now until we have the package properly on GitHub.
 <<local-install-ACDC, echo=FALSE>>=
-install.packages("../../package/",type="source",repos=NULL)
+install.packages("..",type="source",repos=NULL)
 @
 
 Note about dependency:
