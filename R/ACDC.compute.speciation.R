@@ -98,6 +98,7 @@ compute.speciation <- function( lambda0, v_p_div, v_ext1, delta_t ) {
     
     # Finite backward difference
   	tmp <- 4*v_lambda1[j-1]*delta_t + (v_p_div[j]*delta_t+v_ext1[j]*delta_t-1)^2
+    #tmp <- 4*v_lambda1[j-1]*delta_t + (1 - v_p_div[j]*delta_t - v_ext1[j]*delta_t)^2
   	v_lambda1[j] <- (sqrt(tmp) + v_p_div[j]*delta_t+v_ext1[j]*delta_t-1) / (2*delta_t)
 
   }

@@ -56,6 +56,7 @@ plotdata <- function(model_set, threshold, rate_name, relative_deltas, gmap){
               function(name) create_heatmatrix(model_set[[name]], name, rate_name, threshold, relative_deltas, gmap))
   df <- do.call(rbind, l)
   #df$name <- factor(df$name, levels = names(model_set))
+  #browser()
   df$direction <- factor(df$direction, levels = sort(levels(df$direction)))
   return(df)
 }
@@ -69,6 +70,7 @@ plotdata <- function(model_set, threshold, rate_name, relative_deltas, gmap){
 #' @param return_data instead of plots, return the plotting dataframes
 #' @param rm_singleton whether or not to remove singeltons. Pass starting at present, going towards ancient
 #' @param relative_deltas whether to divide \eqn{\Delta\lambdai} by the local lambda value
+#' @param group_names a vector of prefixes, if you want to group the models in a facet. For example 'c("reference", "model")'
 #'
 #' @return a patchwork object
 #' @export
@@ -91,7 +93,13 @@ plotdata <- function(model_set, threshold, rate_name, relative_deltas, gmap){
 #' 
 #' p <- summary_trends(model_set, 0.01)
 #' 
-summary_trends <- function(model_set, threshold = 0.005, rate_name = "lambda", return_data = FALSE, rm_singleton = TRUE, relative_deltas = FALSE, group_names = NULL){
+summary_trends <- function(model_set, 
+                           threshold = 0.005, 
+                           rate_name = "lambda", 
+                           return_data = FALSE, 
+                           rm_singleton = FALSE, 
+                           relative_deltas = FALSE, 
+                           group_names = NULL){
   ##
   if(!is.null(group_names)){
     gmap <- list()
@@ -118,109 +126,116 @@ summary_trends <- function(model_set, threshold = 0.005, rate_name = "lambda", r
     df <- do.call(rbind, l)
   }
   
-  cbPalette <- c(head(colorspace::sequential_hcl(palette = "blues", n = length(model_set)), n = -1), "black")
-  
-  # Replot rates
-  df2_ <- data.frame(lapply(model_set, function(model) model[[rate_name]](model$times)), times = model_set[[1]]$times)
-  df2 <- tidyr::pivot_longer(df2_, cols = -times, names_to = "name", values_to = "rate")
-
-  # plot rates
-  p1 <- ggplot(df2, aes_string("times", "rate", color = "name")) +
-    geom_line() + 
-    scale_x_reverse(limits = rev(range(rate_times))) +
-    scale_color_manual(values = cbPalette) +
-    theme_bw() +
-    theme(axis.title.x=element_blank(),
-          axis.text.x=element_blank(),
-          plot.margin = grid::unit(c(t = 1,r = 1,b = 0,l = 1), "pt"))
   
   
+  # # Replot rates
+  # df2_ <- data.frame(lapply(model_set, function(model) model[[rate_name]](model$times)), times = model_set[[1]]$times)
+  # df2 <- tidyr::pivot_longer(df2_, cols = -times, names_to = "name", values_to = "rate")
+  # 
+  # # plot rates
+  # p1 <- ggplot(df2, aes_string("times", "rate", color = "name")) +
+  #   geom_line() + 
+  #   scale_x_reverse(limits = rev(range(rate_times))) +
+  #   scale_color_manual(values = cbPalette) +
+  #   theme_bw() +
+  #   theme(axis.title.x=element_blank(),
+  #         axis.text.x=element_blank(),
+  #         plot.margin = grid::unit(c(t = 1,r = 1,b = 0,l = 1), "pt"))
   
   # plot finite-difference derivative
   if(rate_name == "lambda"){
-    p1 <- p1 + ylab(latex2exp::TeX("$\\lambda$"))
+    #p1 <- p1 + ylab(latex2exp::TeX("$\\lambda$"))
     if(relative_deltas){
       ylabel <- latex2exp::TeX("$\\Delta\\lambda = \\frac{\\lambda_{i+1} - \\lambda_i}{\\lambda_i}$")
     }else{
       ylabel <- latex2exp::TeX("$\\Delta\\lambda = \\lambda_{i+1} - \\lambda_i$")
     }
   }else if(rate_name == "mu"){
-    p1 <- p1 + ylab(latex2exp::TeX("$\\mu$"))
+    #p1 <- p1 + ylab(latex2exp::TeX("$\\mu$"))
     if(relative_deltas){
       ylabel <- latex2exp::TeX("$\\Delta\\mu = \\frac{\\mu_{i+1} - \\mu}{\\mu_i}$")
     }else{
       ylabel <- latex2exp::TeX("$\\Delta\\mu = \\mu_{i+1} - \\mu$")
     }
   }else if(rate_name == "delta"){
-    p1 <- p1 + ylab(latex2exp::TeX("$\\delta$"))
+    #p1 <- p1 + ylab(latex2exp::TeX("$\\delta$"))
       if(relative_deltas){
         ylabel <- latex2exp::TeX("$\\Delta \\delta = \\frac{\\delta_{i+1} - \\delta}{\\delta_i}$")
       }else{
         ylabel <- latex2exp::TeX("$\\Delta \\delta = \\delta_{i+1} - \\delta_i$")
       }
-    }else{
+  }else{
     stop("rate_name must either be 'lambda' or 'mu' or 'delta'.")
   }
-
   
-  p2 <- ggplot(df, aes(time, delta_rate, color = name)) + 
+  col1 <- list("mu" = "orange",
+               "lambda" = "blue",
+               "delta" = "purple")[[rate_name]]
+  cbPalette <- c(head(sequential_hcl(palette = col1, 
+                                     n = length(model_set)), 
+                      n = -1), "black")
+  #browser()
+  
+  p1 <- ggplot(df, aes(time, delta_rate, color = name)) + 
     geom_line() +
     geom_hline(yintercept = threshold, linetype = "dashed", color = "red") +
     geom_hline(yintercept = -threshold, linetype = "dashed", color = "red") +
     scale_x_reverse(limits = rev(range(rate_times))) +
     scale_color_manual(values = cbPalette) +
-    theme_bw() +
+    theme_classic() +
     ylab(ylabel) +
     theme(axis.title.x=element_blank(),
           axis.text.x=element_blank(),
           plot.margin = unit(c(t = 0,r = 1,b = 0,l = 1), "pt"))
 
   # plot directions
-  p3 <- ggplot(df, aes(time, name, fill = direction)) + 
+  p2 <- ggplot(df, aes(time, name, fill = direction)) + 
     geom_tile() +
     scale_x_reverse(limits = rev(range(rate_times))) +
     scale_fill_manual(values = c("purple","white", "#7fbf7b"), labels = direction_labels) +
-    theme_bw() +
+    theme_classic() +
     theme(plot.margin = unit(c(t = 0,r = 0,b = 1,l = 1), "pt"),
           panel.grid.major = element_blank(), 
           panel.grid.minor = element_blank()) +
-    ylab("Direction") +
-    xlab("Time before present")
+    ylab("Models") +
+    xlab("time before present")
   
   if(!is.null(gmap)){
-    p3 <- p3 +
+    p2 <- p2 +
       facet_grid(group_name~., scales="free_y", space="free_y", switch = "y") +
       theme(panel.spacing = unit(c(0), "lines"),
-            strip.background = element_rect(fill=NA))
-    #ggforce::facet_col(vars(group_name), ,scales = "free_y", space = "free_y") +
+            strip.background = element_rect(fill=NA),
+            axis.text.y = element_blank())
       
   }
 
-  freq_agree <- df %>% 
-    group_split(time) %>% 
-    sapply(agreement)
+  # freq_agree <- df %>% 
+  #   group_split(time) %>% 
+  #   sapply(agreement)
   
-  delta_times <- df %>% 
-    dplyr::filter(name == df$name[1]) %>% 
-    (function(e) e$time)
+  # delta_times <- df %>% 
+  #   dplyr::filter(name == df$name[1]) %>% 
+  #   (function(e) e$time)
   
-  df_agree <- tibble::tibble(time = delta_times, freq_agree = freq_agree)
-  
-  p4 <- df_agree %>%
-    ggplot(aes(x = time, y = freq_agree)) +
-    geom_col(color = "gray", fill = "gray") +
-    scale_x_reverse(limits = rev(range(rate_times))) +
-    theme_bw() +
-    theme(plot.margin = unit(c(t = 0,r = 0,b = 1,l = 1), "pt"),
-          axis.title.x=element_blank(),
-          axis.text.x=element_blank()) +
-    ylab("Accord") +
-    ylim(c(0, 1))
+  #df_agree <- tibble::tibble(time = delta_times, freq_agree = freq_agree)
+  #
+  # p4 <- df_agree %>%
+  #   ggplot(aes(x = time, y = freq_agree)) +
+  #   geom_col(color = "gray", fill = "gray") +
+  #   scale_x_reverse(limits = rev(range(rate_times))) +
+  #   theme_bw() +
+  #   theme(plot.margin = unit(c(t = 0,r = 0,b = 1,l = 1), "pt"),
+  #         axis.title.x=element_blank(),
+  #         axis.text.x=element_blank()) +
+  #   ylab("Accord") +
+  #   ylim(c(0, 1))
 
   if(return_data){
     return(list(heatmap_data = df, rate_data = df2, df_agree = df_agree))
   }else{
-    p <- p1 + p2 + p4 + p3 + plot_layout(ncol = 1, guides = "collect", heights = c(0.3, 0.3, 0.08, 0.32))
+    p <- p1 + p2 + plot_layout(ncol = 1, 
+                               #guides = "collect", 
+                               heights = c(0.5, 0.5))
     return(p)  
   }
 }

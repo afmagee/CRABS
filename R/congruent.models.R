@@ -50,7 +50,7 @@ congruent.models <- function(model, mus = NULL, lambdas = NULL, keep_ref = TRUE)
   
   models1 <- list()
   # Use mus to generate model
-  if (!is.null(mus)){
+  if (!is.null(mus) && length(mus) > 0){
     
     if(length(mus) == 1 ){
       mus <- list(mus)
@@ -65,7 +65,7 @@ congruent.models <- function(model, mus = NULL, lambdas = NULL, keep_ref = TRUE)
   
   models2 <- list()
   # use lambdas to generate model
-  if (!is.null(lambdas)){
+  if (!is.null(lambdas) && length(lambdas) > 0){
     if(length(lambdas) == 1){
       lambdas <- list(lambdas)
     }

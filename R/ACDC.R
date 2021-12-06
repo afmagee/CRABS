@@ -15,8 +15,9 @@
 #'@importFrom ape branching.times node.depth.edgelength
 #'@importFrom TESS tess.likelihood
 #'@importFrom grDevices adjustcolor
-#'@importFrom dplyr group_map group_split
-#' @importFrom patchwork plot_layout
+#'@importFrom dplyr group_map group_split bind_rows
+#'@importFrom patchwork plot_layout
+#'@importFrom colorspace sequential_hcl
 #' 
 #' 
 #' @section References:

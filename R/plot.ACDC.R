@@ -95,7 +95,7 @@ plot.ACDC <- function( x, ... ) {
   p2 <- df_mu %>%
     ggplot(aes(x = Time, y = value)) +
     theme_classic() +
-    geom_line(color = "red3") +
+    geom_line(color = "orange") +
     scale_x_reverse() +
     theme(legend.position = "NA",
           plot.title = element_text(hjust = 0.5),
@@ -109,7 +109,7 @@ plot.ACDC <- function( x, ... ) {
   p3 <- df_delta %>%
     ggplot(aes(x = Time, y = value, linetype = rate)) +
     theme_classic() +
-    geom_line(color = "darkorchid4") +
+    geom_line(color = "purple") +
     scale_x_reverse() +
     theme(legend.position = c(0.5, 0.5),
           plot.title = element_text(hjust = 0.5),
