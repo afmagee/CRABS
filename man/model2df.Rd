@@ -4,7 +4,7 @@
 \alias{model2df}
 \title{model2df}
 \usage{
-model2df(model, gather = TRUE)
+model2df(model, gather = TRUE, rho = 1)
 }
 \arguments{
 \item{model}{an object of class "ACDC"}

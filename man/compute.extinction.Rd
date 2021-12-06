@@ -4,7 +4,7 @@
 \alias{compute.extinction}
 \title{Create the piecewise-constant extinction rate}
 \usage{
-compute.extinction(v_p_div, v_spec1, delta_t)
+\method{compute}{extinction}(v_p_div, v_spec1, delta_t)
 }
 \arguments{
 \item{v_p_div}{The pulled diversification rate at all change-points}

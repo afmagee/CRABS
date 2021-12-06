@@ -9,8 +9,9 @@ summary_trends(
   threshold = 0.005,
   rate_name = "lambda",
   return_data = FALSE,
-  rm_singleton = TRUE,
-  relative_deltas = FALSE
+  rm_singleton = FALSE,
+  relative_deltas = FALSE,
+  group_names = NULL
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ summary_trends(
 \item{rm_singleton}{whether or not to remove singeltons. Pass starting at present, going towards ancient}
 
 \item{relative_deltas}{whether to divide \eqn{\Delta\lambdai} by the local lambda value}
+
+\item{group_names}{a vector of prefixes, if you want to group the models in a facet. For example 'c("reference", "model")'}
 }
 \value{
 a patchwork object

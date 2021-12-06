@@ -4,7 +4,7 @@
 \alias{compute.speciation}
 \title{Create the piecewise-constant speciation rate}
 \usage{
-compute.speciation(lambda0, v_p_div, v_ext1, delta_t)
+\method{compute}{speciation}(lambda0, v_p_div, v_ext1, delta_t)
 }
 \arguments{
 \item{lambda0}{The rate at present}

@@ -5,11 +5,7 @@
 \title{Stochastic exploration of congruent models.}
 \usage{
 sample.congruence.class(
-  func_spec0 = NULL,
-  func_ext0 = NULL,
-  func_p_div = NULL,
-  max.t,
-  num.epochs,
+  model,
   num.samples,
   rate.type = "both",
   sample.speciation.rates = NULL,
@@ -17,23 +13,15 @@ sample.congruence.class(
 )
 }
 \arguments{
-\item{func_spec0}{The speciation rate function (measured in time before present).}
+\item{model}{the reference model, an object of class "ACDC"}
 
-\item{func_ext0}{The extinction rate function (measured in time before present).}
+\item{num.samples}{The pulled diversification rate function (measured in time before present).}
 
-\item{func_p_div}{The pulled diversification rate function (measured in time before present).}
+\item{rate.type}{either "extinction", "speciation", or "both"}
 
-\item{max.t}{The maximum time (before present) to consider rates.}
+\item{sample.speciation.rates}{a function that when called returns a vector representing the speciation rate trajectory}
 
-\item{num.epochs}{DESCRIPTION NEEDED}
-
-\item{num.samples}{DESCRIPTION NEEDED}
-
-\item{rate.type}{DESCRIPTION NEEDED}
-
-\item{sample.speciation.rates}{DESCRIPTION NEEDED}
-
-\item{sample.extinction.rates}{DESCRIPTION NEEDED}
+\item{sample.extinction.rates}{a function that when called returns a vector representing the extinction rate trajectory}
 }
 \value{
 A named list with congruent rates.
