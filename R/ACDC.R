@@ -13,7 +13,6 @@
 #'@importFrom ggplot2 ggplot aes geom_raster scale_fill_gradient2 theme_classic ggtitle theme element_text scale_x_continuous stat_function geom_line scale_x_reverse scale_color_manual element_blank geom_col geom_hline geom_tile theme_bw xlab ylim aes_string scale_fill_manual ylab
 #'@importFrom gridExtra grid.arrange
 #'@importFrom ape branching.times node.depth.edgelength
-#'@importFrom TESS tess.likelihood
 #'@importFrom grDevices adjustcolor
 #'@importFrom dplyr group_map group_split bind_rows
 #'@importFrom patchwork plot_layout

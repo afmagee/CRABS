@@ -13,24 +13,22 @@
 #' @examples
 #' 
 #' \dontrun{
-#' #model <- ACDC.read.RevBayes("path/to/HSMRFBDP_primates.log", max_t = 73, )
+#' #model <- read.RevBayes("path/to/HSMRFBDP_primates.log", max_t = 73, )
 #' }
-ACDC.read.RevBayes <- function(path,
-                               max_t = 100,
-                               first_n = 100,
-                               randomize = FALSE,
-                               summary_type = "none",
-                               extinction_prefix = "extinction_rate.",
-                               speciation_prefix = "speciation_rate."){
-  samples <- read.table(file=path, ## "output/HSMRFBDP_primates.log"
+read.RevBayes <- function(path,
+                          max_t = 100,
+                          first_n = 100,
+                          randomize = FALSE,
+                          summary_type = "none",
+                          extinction_prefix = "extinction_rate.",
+                          speciation_prefix = "speciation_rate."){
+  samples <- read.table(file=path,
                         stringsAsFactors=FALSE,
                         header=TRUE)
-  
-  #max_t = max(times)
-  
+
   ## Assume episodes are sorted, i.e. [1] the most recent one comes first, then [2], then [3] etc.
-  speciation <- samples[, startsWith(names(samples), extinction_prefix)]
-  extinction <- samples[, startsWith(names(samples), speciation_prefix)]
+  speciation <- samples[, startsWith(names(samples), speciation_prefix)]
+  extinction <- samples[, startsWith(names(samples), extinction_prefix)]
   
   n_epochs <- ncol(speciation)
   n_samples <- nrow(speciation)
