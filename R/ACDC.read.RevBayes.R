@@ -2,6 +2,7 @@
 #'
 #' @param path path to log
 #' @param max_t tree height
+#' @param first_n first n posterior samples
 #' @param summary_type either "none" for all the posterior samples, or "mean" or "median" for the posterior mean/median
 #' @param speciation_prefix the prefix string for the speciation rate column names. Must be unique
 #' @param extinction_prefix the prefix string for the extinction rate column names. Must be unique
@@ -16,6 +17,8 @@
 #' }
 ACDC.read.RevBayes <- function(path,
                                max_t = 100,
+                               first_n = 100,
+                               randomize = FALSE,
                                summary_type = "none",
                                extinction_prefix = "extinction_rate.",
                                speciation_prefix = "speciation_rate."){
@@ -36,11 +39,18 @@ ACDC.read.RevBayes <- function(path,
   
   
   if (summary_type == "none"){
-    pb <- txtProgressBar(min = 0, max = n_samples, style = 3)
+    iter <- 1:n_samples
+    if(randomize){
+      iter <- sample(iter, replace = FALSE, size = length(iter))
+    }
+    iter <- head(iter, n = first_n)
+    
+    pb <- txtProgressBar(min = 0, max = max(iter), style = 3)
     setTxtProgressBar(pb, 0)
     
     models <- list()
-    for (i in 1:n_samples){
+
+    for (i in iter){
       setTxtProgressBar(pb, i)
 
       lambda <- approxfun(times_rb, speciation[i,])

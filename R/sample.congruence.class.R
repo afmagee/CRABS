@@ -17,12 +17,11 @@ sample.congruence.class <- function(model,
                                     sample.extinction.rates=NULL) {
   
     times <- model$times
-    v_p_div <- my_model$p.delta(times)
+    v_p_div <- model$p.delta(times)
   
     mus <- list()
     lambdas <- list()
     
-    n_rates_drawn <- 0
     pb <- txtProgressBar(min = 0, max = num.samples, style = 3)
     setTxtProgressBar(pb, 0)
 
@@ -37,8 +36,6 @@ sample.congruence.class <- function(model,
         mus[[idx_mu]] <- func_ext1
         idx_mu <- idx_mu +1
       } else {
-        n_rates_drawn <- n_rates_drawn + 1  
-        
         this_lambda <- sample.speciation.rates()
         func_spec1  <- approxfun(times,this_lambda)
         

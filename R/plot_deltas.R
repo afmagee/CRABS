@@ -231,7 +231,10 @@ summary_trends <- function(model_set,
   #   ylim(c(0, 1))
 
   if(return_data){
-    return(list(heatmap_data = df, rate_data = df2, df_agree = df_agree))
+    return(list(heatmap_data = df
+                #rate_data = df2, 
+                #df_agree = df_agree
+           ))
   }else{
     p <- p1 + p2 + plot_layout(ncol = 1, 
                                #guides = "collect", 
