@@ -91,9 +91,9 @@ plotdata <- function(model_set, threshold, rate_name, relative_deltas, gmap){
 #' 
 #' model_set <- congruent.models(reference, mus = mu1)
 #' 
-#' p <- summary_trends(model_set, 0.01)
+#' p <- summarize.trends(model_set, 0.01)
 #' 
-summary_trends <- function(model_set, 
+summarize.trends <- function(model_set, 
                            threshold = 0.005, 
                            rate_name = "lambda", 
                            return_data = FALSE, 
