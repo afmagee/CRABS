@@ -8,8 +8,27 @@
 #' @return A named list with congruent rates.
 #' @export
 #' @examples
-#' #TODO
-
+#' data("primates_ebd")
+#' 
+#' l <- approxfun(primates_ebd[["time"]], primates_ebd[["lambda"]])
+#' mu <- approxfun(primates_ebd[["time"]], primates_ebd[["mu"]])
+#' model <- create.model(l, mu, primates_ebd[["time"]])
+#' 
+#' extinction_rate_samples <- function(){
+#'    res <- sample.basic.models(num.epochs = 100, 
+#'                               rate0 = 0.05, 
+#'                               model = "MRF", 
+#'                               MRF.type = "HSMRF", 
+#'                               fc.mean = 2.0, 
+#'                               min.rate = 0.0, 
+#'                               max.rate = 1.0)
+#'    return(res)
+#' } 
+#' 
+#' samples <- sample.congruence.class(model, 
+#'                                    num.samples = 8,
+#'                                    rate.type = "extinction",
+#'                                    sample.extinction.rates = extinction_rate_samples)
 sample.congruence.class <- function(model,
                                     num.samples, 
                                     rate.type="both", 
@@ -45,9 +64,6 @@ sample.congruence.class <- function(model,
       
     }
     models <- congruent.models(model, mus = mus, lambdas = lambdas)
-    
-    #cat("Sampled ",n_rates_drawn," rate trajectories to get ",num.samples," valid extinction rates (",round(100*num.samples/n_rates_drawn,2),"%)\n",sep="")
-    #cat("Sampled ", num.samples, " rate trajectories.\n")
-    
+
     return (models)
 }

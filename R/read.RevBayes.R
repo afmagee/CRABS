@@ -36,7 +36,8 @@ read.RevBayes <- function(x,
   
   times_rb <- seq(0, max_t, length.out = n_epochs)
   
-  iter <- (1:n_samples) * (n_total / n_samples)
+  #iter <- (1:n_samples) * (n_total / n_samples)
+  iter <- floor(seq(1, nrow(samples), length.out = n_samples))
   i <- 1
   
   if (summary_type == "none"){
@@ -57,6 +58,7 @@ read.RevBayes <- function(x,
     }
     cat("\n")
 
+    names(models) <- paste0("posterior", seq_along(models))
     class(models) <- c("list", "ACDCposterior")
     return(models)
   }else{
