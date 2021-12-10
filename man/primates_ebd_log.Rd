@@ -5,7 +5,7 @@
 \alias{primates_ebd_log}
 \title{Primates birth-death model}
 \format{
-An object of class \code{data.frame} with 501 rows and 603 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 251 rows and 604 columns.
 }
 \usage{
 data(primates_ebd_log)
