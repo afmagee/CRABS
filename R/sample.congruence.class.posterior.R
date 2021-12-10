@@ -28,10 +28,9 @@
 #' print(samples)
 sample.congruence.class.posterior <- function(posterior,
                                               num.samples, 
-                                              rate.type="both", 
-                                              sample.speciation.rates=NULL, 
+                                              rate.type="extinction", 
                                               sample.extinction.rates=NULL){
-  if(!is.null(sample.speciation.rates)){
+  if(rate.type == "speciation" || rate.type == "both"){
     stop("speciation rate samples not currently implemented")
   }
   
@@ -42,8 +41,7 @@ sample.congruence.class.posterior <- function(posterior,
     cg <- sample.congruence.class(posterior[[i]],
                                   num.samples = num.samples,
                                   rate.type = "extinction",
-                                  sample.extinction.rates = sample.extinction.rates,
-                                  sample.speciation.rates = sample.speciation.rates)
+                                  sample.extinction.rates = sample.extinction.rates)
     res[[i]] <- cg
     setTxtProgressBar(pb, i)
   }
@@ -56,19 +54,39 @@ sample.congruence.class.posterior <- function(posterior,
 
 #' Title
 #'
+#' @param posterior a list of ACDC objects, each one representing a sample from the posterior
 #' @inheritParams summarize.trends
 #' 
-#' @return
+#' @return a ggplot object
 #' @export
 #'
 #' @examples
+#' data(primates_ebd_log)
+#' 
+#' posterior <- read.RevBayes(primates_ebd_log, max_t = 65, n_samples = 20)
+#' 
+#' extinction_rate_samples <- function(){
+#' res <- sample.basic.models(
+#'     num.epochs = 100,
+#'     rate0.median = 0.1,
+#'     model = "MRF",
+#'     max.rate = 1.0)
+#'   return(res)
+#' }
+#' 
+#' samples <- sample.congruence.class.posterior(posterior, 
+#'                                              num.samples = 20,
+#'                                              rate.type = "extinction",
+#'                                              sample.extinction.rates = extinction_rate_samples)
+#' 
+#' 
+#' summarize.posterior(samples, threshold = 0.05)
 summarize.posterior <- function(posterior,
                                 threshold = 0.01,
                                 rate_name = "lambda",
                                 return_data = FALSE,
                                 rm_singleton = FALSE,
-                                relative_deltas = FALSE,
-                                ...){
+                                relative_deltas = FALSE){
   times <- posterior[[1]][[1]]$times
   max_t <- max(times)
   n_epochs <- length(times)
@@ -97,27 +115,43 @@ summarize.posterior <- function(posterior,
     theme(legend.position = c(0.3, 0.3),
           legend.title = element_blank()) +
     scale_x_reverse() +
-    labs(y = "model coverage", x = "time before present") +
-    scale_y_continuous(breaks = scales::pretty_breaks(n = 4))
+    labs(y = "model coverage", x = "time before present")
   return(p1)
 }
 
 
 
-#' Title
+#' print.ACDCsets
 #'
-#' @param x 
-#' @param ... 
+#' @param x a list of (congruent) ACDC sets
+#' @param ... additional parameters
 #'
-#' @return
+#' @return nothing
 #' @export
 #'
 #' @examples
+#' data(primates_ebd_log)
+#' 
+#' posterior <- read.RevBayes(primates_ebd_log, max_t = 65, n_samples = 20)
+#' 
+#' extinction_rate_samples <- function(){
+#' res <- sample.basic.models(
+#'     num.epochs = 100,
+#'     rate0.median = 0.1,
+#'     model = "MRF",
+#'     max.rate = 1.0)
+#'   return(res)
+#' }
+#' 
+#' samples <- sample.congruence.class.posterior(posterior, 
+#'                                              num.samples = 20,
+#'                                              rate.type = "extinction",
+#'                                              sample.extinction.rates = extinction_rate_samples)
+#'                                              
+#' print(samples)
 print.ACDCsets <- function(x, ...){
   cat("A group of ", length(x), "ACDC sets.\n")
   cat("Knots:", length(x[[1]][[1]]$times), "\n")
   cat("Delta-tau:", x[[1]][[1]]$delta_t, "\n")
-  #p <- plot.ACDC(x, ...)
-  #plot(p)
   invisible()
 }

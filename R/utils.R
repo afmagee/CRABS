@@ -30,6 +30,7 @@ get.gmrf.global.scale <- approxfun(x=c(2,10,20,50,100,200,500,1000,2000,5000,100
 #'
 #' @param model an object of class "ACDC"
 #' @param gather boolean. Whether to return wide or long data frame
+#' @param rho the sampling fraction at the present. Used to calculate the pulled speciation rate
 #'
 #' @return a data frame
 #' @export

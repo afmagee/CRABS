@@ -72,6 +72,8 @@ plotdata <- function(model_set, threshold, rate_name, relative_deltas, gmap){
 #' @param rm_singleton whether or not to remove singeltons. Pass starting at present, going towards ancient
 #' @param relative_deltas whether to divide \eqn{\Delta\lambdai} by the local lambda value
 #' @param group_names a vector of prefixes, if you want to group the models in a facet. For example 'c("reference", "model")'
+#' 
+#' @importFrom ggplot2 facet_grid stat
 #'
 #' @return a patchwork object
 #' @export

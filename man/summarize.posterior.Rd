@@ -10,11 +10,12 @@ summarize.posterior(
   rate_name = "lambda",
   return_data = FALSE,
   rm_singleton = FALSE,
-  relative_deltas = FALSE,
-  ...
+  relative_deltas = FALSE
 )
 }
 \arguments{
+\item{posterior}{a list of ACDC objects, each one representing a sample from the posterior}
+
 \item{threshold}{a threshold for when \eqn{\Delta\lambdai} should be interpreted as decreasing, flat, or increasing}
 
 \item{rate_name}{either "lambda" or "mu"}
@@ -26,8 +27,30 @@ summarize.posterior(
 \item{relative_deltas}{whether to divide \eqn{\Delta\lambdai} by the local lambda value}
 }
 \value{
-
+a ggplot object
 }
 \description{
 Title
+}
+\examples{
+data(primates_ebd_log)
+
+posterior <- read.RevBayes(primates_ebd_log, max_t = 65, n_samples = 20)
+
+extinction_rate_samples <- function(){
+res <- sample.basic.models(
+    num.epochs = 100,
+    rate0.median = 0.1,
+    model = "MRF",
+    max.rate = 1.0)
+  return(res)
+}
+
+samples <- sample.congruence.class.posterior(posterior, 
+                                             num.samples = 20,
+                                             rate.type = "extinction",
+                                             sample.extinction.rates = extinction_rate_samples)
+
+
+summarize.posterior(samples, threshold = 0.05)
 }

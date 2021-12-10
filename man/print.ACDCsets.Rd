@@ -2,18 +2,39 @@
 % Please edit documentation in R/sample.congruence.class.posterior.R
 \name{print.ACDCsets}
 \alias{print.ACDCsets}
-\title{Title}
+\title{print.ACDCsets}
 \usage{
 \method{print}{ACDCsets}(x, ...)
 }
 \arguments{
-\item{x}{}
+\item{x}{a list of (congruent) ACDC sets}
 
-\item{...}{}
+\item{...}{additional parameters}
 }
 \value{
-
+nothing
 }
 \description{
-Title
+print.ACDCsets
+}
+\examples{
+data(primates_ebd_log)
+
+posterior <- read.RevBayes(primates_ebd_log, max_t = 65, n_samples = 20)
+
+extinction_rate_samples <- function(){
+res <- sample.basic.models(
+    num.epochs = 100,
+    rate0.median = 0.1,
+    model = "MRF",
+    max.rate = 1.0)
+  return(res)
+}
+
+samples <- sample.congruence.class.posterior(posterior, 
+                                             num.samples = 20,
+                                             rate.type = "extinction",
+                                             sample.extinction.rates = extinction_rate_samples)
+                                             
+print(samples)
 }

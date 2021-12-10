@@ -7,13 +7,18 @@
 \method{print}{ACDCposterior}(x, ...)
 }
 \arguments{
-\item{x}{}
+\item{x}{a list of ACDC objects}
 
-\item{...}{}
+\item{...}{additional parameters}
 }
 \value{
-
+nothing
 }
 \description{
 Title
+}
+\examples{
+data(primates_ebd_log)
+posterior <- read.RevBayes(primates_ebd_log, max_t = 65, n_samples = 20)
+print(posterior)
 }

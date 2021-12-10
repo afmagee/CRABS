@@ -69,17 +69,30 @@ sample.rates <- function(num.epochs, lambda0=NULL, rsample=NULL, rsample0=NULL, 
 #' mu <- approxfun(primates_ebd[["time"]], primates_ebd[["mu"]])
 #' model <- create.model(l, mu, primates_ebd[["time"]])
 #' 
-#' mu_vals <- sample.basic.models(num.epochs = 100, rate0 = 0.05, "MRF", noisy = TRUE, MRF.type = "HSMRF", fc.mean = 2.0, min.rate = 0.0, max.rate = 1.0)
+#' mu_vals <- sample.basic.models(num.epochs = 100, 
+#'                                rate0 = 0.05, 
+#'                                "MRF", 
+#'                                MRF.type = "HSMRF", 
+#'                                fc.mean = 2.0, 
+#'                                min.rate = 0.0, 
+#'                                max.rate = 1.0)
 #' mu <- approxfun(model$times, mu_vals)
 #' 
 #' model_set <- congruent.models(model, mus = mu)
 #' 
 #' model_set
-sample.basic.models <- function(num.epochs=100, rate0=NULL, 
-                                model="exponential", direction="decrease", 
-                                noisy=TRUE, MRF.type="HSMRF", monotonic=FALSE, 
-                                fc.mean=3, rate0.median=0.1, rate0.logsd=1.17481, 
-                                min.rate=0, max.rate=10) {
+sample.basic.models <- function(num.epochs=100, 
+                                rate0=NULL, 
+                                model="exponential", 
+                                direction="decrease", 
+                                noisy=TRUE, 
+                                MRF.type="HSMRF", 
+                                monotonic=FALSE, 
+                                fc.mean=3, 
+                                rate0.median=0.1, 
+                                rate0.logsd=1.17481, 
+                                min.rate=0, 
+                                max.rate=10) {
   # recover()
   
   # We use rejection sampling to find a model that fits within minimum and maximum rates

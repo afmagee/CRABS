@@ -1,8 +1,8 @@
-#' Title
+#' read RevBayes log file
 #'
 #' @param x path to log, or data frame
 #' @param max_t tree height
-#' @param first_n first n posterior samples
+#' @param n_samples first n posterior samples
 #' @param summary_type either "none" for all the posterior samples, or "mean" or "median" for the posterior mean/median
 #' @param speciation_prefix the prefix string for the speciation rate column names. Must be unique
 #' @param extinction_prefix the prefix string for the extinction rate column names. Must be unique
@@ -11,14 +11,11 @@
 #' @export
 #'
 #' @examples
-#' 
-#' \dontrun{
-#' #model <- read.RevBayes("path/to/HSMRFBDP_primates.log", max_t = 73, )
-#' }
+#' data(primates_ebd_log)
+#' posterior <- read.RevBayes(primates_ebd_log, max_t = 65, n_samples = 20)
 read.RevBayes <- function(x,
                           max_t = 100,
                           n_samples = 20,
-                          randomize = FALSE,
                           summary_type = "none",
                           extinction_prefix = "extinction_rate.",
                           speciation_prefix = "speciation_rate."){
@@ -79,13 +76,16 @@ read.RevBayes <- function(x,
 
 #' Title
 #'
-#' @param x 
-#' @param ... 
+#' @param x a list of ACDC objects
+#' @param ... additional parameters
 #'
-#' @return
+#' @return nothing
 #' @export
 #'
 #' @examples
+#' data(primates_ebd_log)
+#' posterior <- read.RevBayes(primates_ebd_log, max_t = 65, n_samples = 20)
+#' print(posterior)
 print.ACDCposterior <- function(x, ...){
   cat("Posterior sample\n")
   cat("Knots:", length(x[[1]]$times), "\n")

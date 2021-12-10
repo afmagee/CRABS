@@ -10,7 +10,9 @@
 #'@importFrom tidyr gather
 #'@importFrom stats approxfun rlnorm rgamma rcauchy filter rnorm time
 #'@importFrom utils txtProgressBar setTxtProgressBar head tail read.table
-#'@importFrom ggplot2 ggplot aes geom_raster scale_fill_gradient2 theme_classic ggtitle theme element_text scale_x_continuous stat_function geom_line scale_x_reverse scale_color_manual element_blank geom_col geom_hline geom_tile theme_bw xlab ylim aes_string scale_fill_manual ylab
+#'@importFrom ggplot2 ggplot aes geom_raster scale_fill_gradient2 theme_classic ggtitle theme element_text scale_x_continuous stat_function 
+#'@importFrom ggplot2 geom_line scale_x_reverse scale_color_manual element_blank geom_col geom_hline geom_tile theme_bw xlab ylim aes_string 
+#'@importFrom ggplot2 scale_fill_manual ylab labs element_rect facet_grid scale_linetype_manual geom_histogram scale_y_continuous
 #'@importFrom gridExtra grid.arrange
 #'@importFrom ape branching.times node.depth.edgelength
 #'@importFrom grDevices adjustcolor

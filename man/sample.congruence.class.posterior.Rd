@@ -7,8 +7,7 @@
 sample.congruence.class.posterior(
   posterior,
   num.samples,
-  rate.type = "both",
-  sample.speciation.rates = NULL,
+  rate.type = "extinction",
   sample.extinction.rates = NULL
 )
 }
@@ -18,8 +17,6 @@ sample.congruence.class.posterior(
 \item{num.samples}{The pulled diversification rate function (measured in time before present).}
 
 \item{rate.type}{either "extinction", "speciation", or "both"}
-
-\item{sample.speciation.rates}{a function that when called returns a vector representing the speciation rate trajectory}
 
 \item{sample.extinction.rates}{a function that when called returns a vector representing the extinction rate trajectory}
 }

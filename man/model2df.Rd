@@ -10,6 +10,8 @@ model2df(model, gather = TRUE, rho = 1)
 \item{model}{an object of class "ACDC"}
 
 \item{gather}{boolean. Whether to return wide or long data frame}
+
+\item{rho}{the sampling fraction at the present. Used to calculate the pulled speciation rate}
 }
 \value{
 a data frame

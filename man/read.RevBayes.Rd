@@ -2,13 +2,12 @@
 % Please edit documentation in R/read.RevBayes.R
 \name{read.RevBayes}
 \alias{read.RevBayes}
-\title{Title}
+\title{read RevBayes log file}
 \usage{
 read.RevBayes(
   x,
   max_t = 100,
   n_samples = 20,
-  randomize = FALSE,
   summary_type = "none",
   extinction_prefix = "extinction_rate.",
   speciation_prefix = "speciation_rate."
@@ -19,23 +18,21 @@ read.RevBayes(
 
 \item{max_t}{tree height}
 
+\item{n_samples}{first n posterior samples}
+
 \item{summary_type}{either "none" for all the posterior samples, or "mean" or "median" for the posterior mean/median}
 
 \item{extinction_prefix}{the prefix string for the extinction rate column names. Must be unique}
 
 \item{speciation_prefix}{the prefix string for the speciation rate column names. Must be unique}
-
-\item{first_n}{first n posterior samples}
 }
 \value{
 a set of ACDC models, each being a sample in the posterior
 }
 \description{
-Title
+read RevBayes log file
 }
 \examples{
-
-\dontrun{
-#model <- read.RevBayes("path/to/HSMRFBDP_primates.log", max_t = 73, )
-}
+data(primates_ebd_log)
+posterior <- read.RevBayes(primates_ebd_log, max_t = 65, n_samples = 20)
 }

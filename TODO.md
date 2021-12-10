@@ -9,15 +9,12 @@ We may not need examples, but we do have primate data in the package now so it s
 
 ## Reading in empirical results
 
-- **ACDC.read.RevBayes:** a single function to read in RevBayes HSMRF output and produce rate functions, to simplify user interaction.
-- **ACDC.read.TreePar:** a single function to read in TreePar code and produce rate functions, to simplify user interaction. This function could possibly also perform the TreePar analysis, but I think that having at least one separate function that takes a TreePar result and then creates the functions would be ideal.
-- **ACDC.read.TESS:** a single function to read in TESS output and produce rate functions, to simplify user interaction.
+- **read.TreePar:** a single function to read in TreePar code and produce rate functions, to simplify user interaction. This function could possibly also perform the TreePar analysis, but I think that having at least one separate function that takes a TreePar result and then creates the functions would be ideal.
+- **read.TESS:** a single function to read in TESS output and produce rate functions, to simplify user interaction.
 
 ## Posterior samples instead of singe point estimate
 
-- Update **ACDC.read.RevBayes** to construct a list of rate functions (one function per posterior sample) instead of using the mean/median rate.
-- Update **ACDC.read.TESS** to construct a list of rate functions (one function per posterior sample) instead of using the mean/median rate.
-- Update **congruence.class** to take a list of rate functions as an alternative. Then, the output should also be a list.
+- Update **read.TESS** to construct a list of rate functions (one function per posterior sample) instead of using the mean/median rate.
 - Update **sample.congruence.class** to take a list of rate functions as an alternative. Then, we should both sample the reference rate as well as a congruent rate.
 - When updating **sample.congruence.class**, **sample.rates** and **sample.basic.models** need adjusting to allow speciation rates to be set to more than one value. This probably means that instead of making a function of the form `sample_speciation_rates()` that is called by `sample.congruence.class` we make a function of the form `sample_speciation_rates(index)` that uses the index internally to figure out which starting speciation rate is needed. This should require only minimal changes to `sample.congruence.class`
 
