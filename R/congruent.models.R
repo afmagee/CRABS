@@ -32,7 +32,6 @@
 congruent.models <- function(model, mus = NULL, lambdas = NULL, keep_ref = TRUE){
   lambda0 <- model$lambda(0)
   times   <- model$times
-  v_p_div <- model$p.delta( times )
   delta_t <- model$delta_t
   
   models <- list()
