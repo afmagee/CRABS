@@ -1,16 +1,18 @@
 create_heatmatrix <- function(model, name, rate_name, threshold, relative_deltas = FALSE, gmap = NULL){
   times <- model$times
+  delta_t <- model$times[2] - model$times[1]
   
   ## \Delta \lambda_{i+1} = \lambda_{i+1} - \lambda_i
   rate <- model[[rate_name]](times)
-  rate_i_plus_one <- tail(rate, n = -1)
-  rate_i <- head(rate, n = -1)
+  rate_i <- tail(rate, n = -1)
+  rate_i_minus_one <- head(rate, n = -1)
   
   if (relative_deltas){
-    delta_rate <- (rate_i - rate_i_plus_one) / rate_i_plus_one
+    delta_rate <- (rate_i_minus_one - rate_i) / rate_i
   }else{
-    delta_rate <- rate_i - rate_i_plus_one
+    delta_rate <- (rate_i_minus_one - rate_i)
   }
+  delta_rate <- delta_rate / delta_t
   
   xtimes <- (head(times, n = -1) + tail(times, n = -1))/2
   
@@ -55,8 +57,7 @@ plotdata <- function(model_set, threshold, rate_name, relative_deltas, gmap){
   l <- lapply(model_names, 
               function(name) create_heatmatrix(model_set[[name]], name, rate_name, threshold, relative_deltas, gmap))
   df <- do.call(rbind, l)
-  #df$name <- factor(df$name, levels = names(model_set))
-  #browser()
+  
   df$direction <- factor(df$direction, levels = sort(levels(df$direction)))
   return(df)
 }
@@ -126,44 +127,14 @@ summarize.trends <- function(model_set,
     df <- do.call(rbind, l)
   }
   
-  
-  
-  # # Replot rates
-  # df2_ <- data.frame(lapply(model_set, function(model) model[[rate_name]](model$times)), times = model_set[[1]]$times)
-  # df2 <- tidyr::pivot_longer(df2_, cols = -times, names_to = "name", values_to = "rate")
-  # 
-  # # plot rates
-  # p1 <- ggplot(df2, aes_string("times", "rate", color = "name")) +
-  #   geom_line() + 
-  #   scale_x_reverse(limits = rev(range(rate_times))) +
-  #   scale_color_manual(values = cbPalette) +
-  #   theme_bw() +
-  #   theme(axis.title.x=element_blank(),
-  #         axis.text.x=element_blank(),
-  #         plot.margin = grid::unit(c(t = 1,r = 1,b = 0,l = 1), "pt"))
-  
   # plot finite-difference derivative
-  if(rate_name == "lambda"){
-    #p1 <- p1 + ylab(latex2exp::TeX("$\\lambda$"))
+  if(rate_name %in% c("lambda", "mu", "delta")){
     if(relative_deltas){
-      ylabel <- latex2exp::TeX("$\\Delta\\lambda = \\frac{\\lambda_{i+1} - \\lambda_i}{\\lambda_i}$")
+      lab <- paste0("$\\Delta\\", rate_name, " = \\frac{\\", rate_name, "_{i-1} - \\", rate_name, "_i}{\\Delta t\\", rate_name, "_i}$")
     }else{
-      ylabel <- latex2exp::TeX("$\\Delta\\lambda = \\lambda_{i+1} - \\lambda_i$")
+      lab <- paste0("$\\Delta\\", rate_name, " = \\frac{\\", rate_name, "_{i-1} - \\", rate_name, "_i}{\\Delta t}$")
     }
-  }else if(rate_name == "mu"){
-    #p1 <- p1 + ylab(latex2exp::TeX("$\\mu$"))
-    if(relative_deltas){
-      ylabel <- latex2exp::TeX("$\\Delta\\mu = \\frac{\\mu_{i+1} - \\mu}{\\mu_i}$")
-    }else{
-      ylabel <- latex2exp::TeX("$\\Delta\\mu = \\mu_{i+1} - \\mu$")
-    }
-  }else if(rate_name == "delta"){
-    #p1 <- p1 + ylab(latex2exp::TeX("$\\delta$"))
-      if(relative_deltas){
-        ylabel <- latex2exp::TeX("$\\Delta \\delta = \\frac{\\delta_{i+1} - \\delta}{\\delta_i}$")
-      }else{
-        ylabel <- latex2exp::TeX("$\\Delta \\delta = \\delta_{i+1} - \\delta_i$")
-      }
+    ylabel <- latex2exp::TeX(lab)
   }else{
     stop("rate_name must either be 'lambda' or 'mu' or 'delta'.")
   }
@@ -174,7 +145,6 @@ summarize.trends <- function(model_set,
   cbPalette <- c(head(sequential_hcl(palette = col1, 
                                      n = length(model_set)), 
                       n = -1), "black")
-  #browser()
   
   p1 <- ggplot(df, aes(time, delta_rate, color = name)) + 
     geom_line() +
