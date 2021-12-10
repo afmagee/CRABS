@@ -22,8 +22,8 @@ sample.congruence.class <- function(model,
     mus <- list()
     lambdas <- list()
     
-    pb <- txtProgressBar(min = 0, max = num.samples, style = 3)
-    setTxtProgressBar(pb, 0)
+ 
+    
 
     idx_lambda <- 1
     idx_mu <- 1
@@ -43,13 +43,11 @@ sample.congruence.class <- function(model,
         idx_lambda <- idx_lambda + 1
       }
       
-      setTxtProgressBar(pb, i)
     }
-    close(pb)
     models <- congruent.models(model, mus = mus, lambdas = lambdas)
     
     #cat("Sampled ",n_rates_drawn," rate trajectories to get ",num.samples," valid extinction rates (",round(100*num.samples/n_rates_drawn,2),"%)\n",sep="")
-    cat("Sampled ", num.samples, " rate trajectories.\n")
+    #cat("Sampled ", num.samples, " rate trajectories.\n")
     
     return (models)
 }
