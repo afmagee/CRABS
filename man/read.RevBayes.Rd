@@ -5,9 +5,9 @@
 \title{Title}
 \usage{
 read.RevBayes(
-  path,
+  x,
   max_t = 100,
-  first_n = 100,
+  n_samples = 20,
   randomize = FALSE,
   summary_type = "none",
   extinction_prefix = "extinction_rate.",
@@ -15,17 +15,17 @@ read.RevBayes(
 )
 }
 \arguments{
-\item{path}{path to log}
+\item{x}{path to log, or data frame}
 
 \item{max_t}{tree height}
-
-\item{first_n}{first n posterior samples}
 
 \item{summary_type}{either "none" for all the posterior samples, or "mean" or "median" for the posterior mean/median}
 
 \item{extinction_prefix}{the prefix string for the extinction rate column names. Must be unique}
 
 \item{speciation_prefix}{the prefix string for the speciation rate column names. Must be unique}
+
+\item{first_n}{first n posterior samples}
 }
 \value{
 a set of ACDC models, each being a sample in the posterior
