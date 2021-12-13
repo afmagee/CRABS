@@ -1,7 +1,14 @@
-#' Title
+#' Sample the congruence class of a posterior sample
+#' 
+#' @description 
+#' This function takes a posterior sample as input: a list of ACDC objects. 
+#' It will then iterate over the samples, and for each posterior sample it will
+#' sample from the posterior class. It will sample using the \code{\link{sample.basic.models}}
+#' function, and all additional parameters are passed to \code{\link{sample.basic.models}}.
 #'
 #' @param posterior a list of ACDC model objects
 #' @inheritParams sample.congruence.class
+#' @inheritDotParams sample.basic.models
 #'
 #' @inherit sample.congruence.class return
 #' @export
@@ -11,37 +18,47 @@
 #' 
 #' posterior <- read.RevBayes(primates_ebd_log, max_t = 65, n_samples = 20)
 #' 
-#' extinction_rate_samples <- function(){
-#' res <- sample.basic.models(
-#'     num.epochs = 100,
-#'     rate0.median = 0.1,
-#'     model = "MRF",
-#'     max.rate = 1.0)
-#'   return(res)
-#' }
-#' 
 #' samples <- sample.congruence.class.posterior(posterior, 
 #'                                              num.samples = 20,
 #'                                              rate.type = "extinction",
-#'                                              sample.extinction.rates = extinction_rate_samples)
+#'                                              rate0.median = 0.1,
+#'                                              model = "MRF",
+#'                                              max.rate = 1.0)
 #' 
 #' print(samples)
 sample.congruence.class.posterior <- function(posterior,
                                               num.samples, 
                                               rate.type="extinction", 
-                                              sample.extinction.rates=NULL){
-  if(rate.type == "speciation" || rate.type == "both"){
-    stop("speciation rate samples not currently implemented")
-  }
-  
+                                              ...){
+  num.epochs <- length(posterior[[1]]$times)
+
   pb <- txtProgressBar(min = 1, max = length(posterior), style = 3)  
   res <- list()
   
   for(i in seq_along(posterior)){
+    if(rate.type == "speciation"){
+      sample.extinction.rates <- NULL
+      sample.speciation.rates <- function () {sample.basic.models(rate0 = posterior[[i]]$lambda(0.0), ...)}
+      
+    }else if(rate.type == "extinction"){
+      sample.extinction.rates <- function() {sample.basic.models(...)}
+      sample.speciation.rates <- NULL
+      
+    }else if(rate.type == "both"){
+      sample.extinction.rates <- function() {sample.basic.models(...)}
+      sample.speciation.rates <- function() {sample.basic.models(rate0 = posterior[[i]]$lambda(0.0), ...)}
+      
+    }else{
+      stop("rate.type must be either \"speciation\", \"extinction\", or \"both\".")
+    }
+
     cg <- sample.congruence.class(posterior[[i]],
                                   num.samples = num.samples,
-                                  rate.type = "extinction",
+                                  rate.type = rate.type,
+                                  sample.speciation.rates = sample.speciation.rates,
                                   sample.extinction.rates = sample.extinction.rates)
+    
+    
     res[[i]] <- cg
     setTxtProgressBar(pb, i)
   }

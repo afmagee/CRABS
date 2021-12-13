@@ -52,5 +52,4 @@ function(t) 1.5 - 0.28*t)
 model_set <- congruent.models(reference, mus = mu1)
 
 p <- summarize.trends(model_set, 0.01)
-
 }

@@ -1,9 +1,3 @@
-#' Create the congruent model from extinction rate
-#'
-#' @param model The reference model
-#' @param func.mu An extinction rate function
-#' @return An object with a list of speciation and extinction rate functions.
-#' @export
 congruent.speciation <- function( model, func.mu ) {
   
   lambda0 = model$lambda(0)

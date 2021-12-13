@@ -11,19 +11,12 @@
 #' 
 #' posterior <- read.RevBayes(primates_ebd_log, max_t = 65, n_samples = 20)
 #' 
-#' extinction_rate_samples <- function(){
-#' res <- sample.basic.models(
-#'     num.epochs = 100,
-#'     rate0.median = 0.1,
-#'     model = "MRF",
-#'     max.rate = 1.0)
-#'   return(res)
-#' }
-#' 
 #' samples <- sample.congruence.class.posterior(posterior, 
 #'                                              num.samples = 20,
 #'                                              rate.type = "extinction",
-#'                                              sample.extinction.rates = extinction_rate_samples)
+#'                                              rate0.median = 0.1,
+#'                                              model = "MRF",
+#'                                              max.rate = 1.0)
 #'                                              
 #' print(samples)
 print.ACDCsets <- function(x, ...){
