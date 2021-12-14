@@ -157,7 +157,8 @@ summarize.trends <- function(model_set,
     ylab(ylabel) +
     theme(axis.title.x=element_blank(),
           axis.text.x=element_blank(),
-          plot.margin = unit(c(t = 0,r = 1,b = 0,l = 1), "pt"))
+          plot.margin = unit(c(t = 0,r = 1,b = 0,l = 1), "pt"),
+          legend.position = "none")
 
   # plot directions
   p2 <- ggplot(df, aes(time, name, fill = direction)) + 
