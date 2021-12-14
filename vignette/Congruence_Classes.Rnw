@@ -6,7 +6,8 @@
 
 \documentclass[12pt]{article}
 
-\usepackage[usenames, dvipsnames]{xcolor}
+\usepackage[usenames,dvipsnames]{xcolor}
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
 \usepackage{times}
 \usepackage{hyperref}
 \hypersetup{pdfpagemode=UseNone} % don't show bookmarks on initial view
@@ -228,240 +229,14 @@ tree <- read.tree(file=paste0("data/primates.tre"))
 Next, read the software examples to convert the estimated diversification rates into rate functions.
 
 
-\subsection{Reading \TESS output}\label{sec:TESS_data}
-
-Needs to be written ...
-
-First, load the \TESS package.
-<<load-TESS>>=
-library(TESS)
+<<TESS-analysis, child = "tess_analysis.Rnw">>=
 @
 
-For some of our plotting, we need the speciation times.
-So we extract these from the tree.
-<<TESS-read-times>>=
-btimes <- sort( as.numeric( branching.times( tree ) ) )
-max_t <- max(btimes)
+<<treepar-analysis, child = "treepar.Rnw">>=
 @
 
-<<TESS-analysis, echo=TRUE, cache=TRUE>>=
-tess.analysis(tree,
-              empiricalHyperPriors = TRUE,
-              samplingProbability = 1.0,
-              numExpectedRateChanges = 2,
-              MAX_ITERATIONS = 100000,
-              MAX_TIME = 2*60*60,
-              MIN_ESS = 625,
-              dir = "primates_comet")
+<<RevBayes-analysis, child = "RevBayes.Rnw">>=
 @
-
-<<TESS-output, echo=TRUE, cache=TRUE>>=
-tess.output <- tess.process.output("primates_comet",
-                              numExpectedRateChanges = 2)
-@
-
-<<TESS-compute-median, cache=TRUE>>=
-est_speciation <- apply(tess.output[["speciation rates"]],
-                        2,quantile,prob=0.5)
-est_extinction <- apply(tess.output[["extinction rates"]],
-                        2,quantile,prob=0.5)
-@
-
-<<TESS-functions, cache=TRUE>>=
-lambda <- approxfun( tess.output[["intervals"]],
-                     c(est_speciation[1],est_speciation) )
-mu <- approxfun(     tess.output[["intervals"]],
-                     c(est_extinction[1],est_extinction) )
-@
-Finally, let's have a look at the estimated rate functions.
-<<TESS-plot-functions, fig.height=4, fig.width=4, fig.align="center", fig.cap="Estimated speciation and extinction rates using TESS on the primates phylogeny of Springer et al. (2012).">>=
-ylim <- c( min(0,est_speciation,est_extinction),
-           max(est_speciation,est_extinction))
-
-curve( lambda, xlim=c(max_t, 0), lwd=2, lty=1, col="blue",
-       ylim=ylim, main="Primates", xlab="time", ylab="rate",
-       cex.main=1.5, cex.lab=1.5 )
-curve( mu, add=TRUE, lwd=2, lty=1, col="red" )
-legend("bottomleft",legend=c("speciation","extinction"),
-       col=c("blue","red"), lty=c(1,1), cex=1.2)
-@
-
-For a later use in the tutorial where we want to compare the estimates between different software, we are going to store the rate functions.
-<<TESS-rates, cache=TRUE>>=
-lambda.TESS <- lambda
-mu.TESS     <- mu
-@
-You could now skip over the next software section and estimate the entire congruence class for these estimated speciation and extinction rates.
-
-
-
-
-\subsection{\TreePar}\label{sec:TreePar_data}
-
-Let us walk here through a very simple \TreePar analysis \citep{Stadler2011}.
-For a real publication worthy analysis, you may want to do a more thorough analysis by allowing more possible shifts and a finer grid for the search space.
-
-First, load the \TreePar package.
-<<load-TreePar>>=
-library(TreePar)
-@
-
-\TreePar needs the ages of the phylogeny to perform it's likelihood computation.
-We use the \TreePar builtin functionality for this.
-<<extract-ages, cache=TRUE>>=
-x     <- sort(getx(tree),decreasing=TRUE)
-max_t <- max(x)
-@
-For our toy analysis, we setup some simpler than normal search values.
-We specify that there are at most three rate shifts, and that there are ten possible shift points.
-For your own analysis, you should most likely increase these values.
-We also specify an interval offset of 0.05, which means that in the most recent 5% of the tree age there was no rate shift event.
-This is simply for improving the parameter estimation.
-<<TreePar-settings>>=
-MAX.NUM.SHIFTS  = 4
-NUM.INTERVALS   = 20
-INTERVAL.OFFSET = 0.05
-@
-Now we run the full \TreePar maximum likelihood search.
-<<TreePar-ML, echo=TRUE, cache=TRUE, results='hide'>>=
-res   <- bd.shifts.optim(x,
-                         sampling=rep(1,MAX.NUM.SHIFTS+1),
-                         grid=max_t/NUM.INTERVALS,
-                         start=INTERVAL.OFFSET*max_t,
-                         end=max_t,
-                         survival=1,
-                         posdiv=TRUE)[[2]]
-@
-Now we have the maximum likelihood estimates for the different number of shifts.
-We want to test if $i$ shifts explain the tree significantly better than $i-1$ shifts.
-<<TreePar-MLE>>=
-best <- 0
-for (i in 1:(length(res)-1)) {
-    test <- pchisq(2*(res[[i]][1]-res[[i+1]][1]),3)
-    #if test>0.95 then i shifts is significantly
-    # better than i-1 shifts at a 5% error
-    if ( test > 0.95 ) {
-        best <- i
-    } else {
-        break
-    }
-}
-@
-
-<<TreePar-rate-functions>>=
-best_result <- res[[best+1]]
-speciation <- c()
-extinction <- c()
-for (i in 1:(best+1)) {
-    speciation[i] <- best_result[1+i+(best+1)] /
-                     (1-best_result[1+i])
-    extinction[i] <- best_result[1+i+(best+1)] /
-                     (1/best_result[1+i]-1)
-}
-
-if ( best > 0 ) {
-    shift_times <- best_result[ (length(best_result)-best+1) :
-                                length(best_result)]
-    tmp_lambda <- function(x) {
-       index <- findInterval(x, shift_times);
-       return ( speciation[index+1] )
-    }
-    tmp_mu     <- function(x) {
-       index <- findInterval(x, shift_times);
-       return ( extinction[index+1] )
-    }
-    lambda <- Vectorize(tmp_lambda)
-    mu     <- Vectorize(tmp_mu)
-} else {
-    lambda <- function(x) { return ( rep(speciation[1],length(x)) ) }
-    mu     <- function(x) { return ( rep(extinction[1],length(x)) ) }
-}
-@
-Finally, let us have a look at the estimated rate function:
-<<TreePar-plot-rate-functions, fig.height=4, fig.width=4, fig.align="center", fig.cap="Estimated speciation and extinction rates using TreePar on the primates phylogeny of Springer et al. (2012).">>=
-ylim <- c(min(0,speciation,extinction),max(speciation,extinction))
-
-curve( lambda, xlim=c(max_t, 0), lwd=2, lty=1, col="blue", ylim=ylim, main="primates", xlab="time", ylab="rate", cex.main=1.5, cex.lab=1.5 )
-curve( mu, add=TRUE, lwd=2, lty=1, col="red" )
-legend("bottomleft",legend=c("speciation","extinction"),
-       col=c("blue","red"), lty=c(1,1), cex=1.2)
-@
-
-For a later use in the tutorial where we want to compare the estimates between different software, we are going to store the rate functions.
-<<TreePar-rates, cache=TRUE>>=
-lambda.TreePar <- lambda
-mu.TreePar     <- mu
-@
-You could now skip over the next software section and estimate the entire congruence class for these estimated speciation and extinction rates.
-
-
-
-
-
-
-
-\subsection{The HSMRF model in \RevBayes}
-
-\RevBayes \citep{Hoehna2016b} provides several methods to estimate diversification rates through time.
-Here we used the \href{https://revbayes.github.io/tutorials/divrate/ebd.html}{\RevBayes tutorial} using the episodic-birth-death model with a Horseshoe-Markov-Random-Field (HSMRF) prior distribution to estimate diversification rates \citep{Magee2020}.
-We assume here that you followed the \RevBayes tutorial and have the output stored as a log-file in the \textit{output} folder.
-If you have not run a \RevBayes analysis and wish to explore functionality of the package, we have provided a thinned output file, accessible with \code{data(``HSMRFBDP\_primates'')}.
-
-For some of our plotting, we need the speciation times.
-So we extract these from the tree.
-<<RevBayes-read-times>>=
-btimes <- sort( as.numeric( branching.times( tree ) ) )
-max_t <- max(btimes)
-@
-
-Then we read in the \RevBayes log-file as a simple tab-delimited file.
-<<read-RevBayes-output, cache=TRUE>>=
-samples <- read.table(file="output/HSMRFBDP_primates.log",
-                      stringsAsFactors=FALSE,
-                      header=TRUE)
-@
-Then, from this log-file we want to automatically extract the speciation and extinction rates.
-Be careful that you used the same names as we did.
-Otherwise you need to modify this code-snippet accordingly.
-<<RevBayes-extract-output, cache=TRUE>>=
-par_speciation <- samples[, startsWith(names(samples), "speciation_rate.")]
-par_extinction <- samples[, startsWith(names(samples), "extinction_rate.")]
-@
-In principle we can use now the full posterior estimates.
-However, in this example we are only interested in the posterior median.
-We strongly encourage to use the medians and not the means because the posterior median is a more robust estimate for rates, see \cite{Magee2020}.
-<<RevBayes-compute-median, cache=TRUE>>=
-est_speciation <- apply(par_speciation, 2, median)
-est_extinction <- apply(par_extinction, 2, median)
-@
-Since we assumed in the tutorial epochs of equal size, we can simply use the \code{approxfun} to create the speciation and extinction rate functions.
-<<RevBayes-functions, cache=TRUE>>=
-lambda <- approxfun(seq(0, max_t, length.out = length(est_speciation)),
-                    est_speciation)
-mu <- approxfun(seq(0, max_t, length.out = length(est_extinction)),
-                est_extinction)
-@
-Finally, let's have a look at the estimated rate functions.
-<<RevBayes-plot-functions, fig.height=4, fig.width=4, fig.align="center", fig.cap="Estimated speciation and extinction rates using RevBayes on the primates phylogeny of Springer et al. (2012).">>=
-ylim <- c( min(0,est_speciation,est_extinction),
-           max(est_speciation,est_extinction))
-
-curve( lambda, xlim=c(max_t, 0), lwd=2, lty=1, col="blue",
-       ylim=ylim, main="Primates", xlab="time", ylab="rate",
-       cex.main=1.5, cex.lab=1.5 )
-curve( mu, add=TRUE, lwd=2, lty=1, col="red" )
-legend("topleft",legend=c("speciation","extinction"),
-       col=c("blue","red"), lty=c(1,1), cex=1.2)
-@
-
-
-For a later use in the tutorial where we want to compare the estimates between different software, we are going to store the rate functions.
-<<RevBayes-rates, cache=TRUE>>=
-lambda.RevBayes <- lambda
-mu.RevBayes     <- mu
-@
-
-
 
 \section{General background on congruent classes in \ACDC}
 
@@ -517,24 +292,12 @@ Then, we turn the approach around and specify some alternative speciation rate f
 
 We first create a congruence class object which contains all the transformed rate functions (i.e., the net-diversification rate and relative extinction rate) as well as the pulled rates (i.e., the pulled net-diversification and the pulled speciation rate).
 <<>>=
-my_model <- create.model( lambda, mu, times = seq(0, max_t, length.out = 100) )
+my_model <- create.model(lambda, 
+                         mu, 
+                         times = seq(0, max_t, length.out = 100))
 @
 The \code{my\_model} includes all the rate functions.
 You could plot these yourself, or you can use our simple plotting function.
-%<<eval=FALSE>>=
-%ACDC.plot.rates( my_model )
-%@
-%<<include=FALSE>>=
-%pdf(file="RnwFigs/Primates_ACDC_Congruence_Class.pdf", width=8,height=8)
-%ACDC.plot.rates( my_model )
-%dev.off()
-%@
-%\begin{figure}[h!]
-%\centering
-%\includegraphics[width=0.7\textwidth,angle=0]{RnwFigs/Primates_ACDC_Congruence_Class.pdf}
-%\caption{Diversification rate function describing the congruence class. The solid lines show the traditional rates and the dashed lines show the pulled versions of the same rates. We observe that the pulled net-diversification rate has a very steep dip exactly at the time of the increase in the estimated speciation rate. This dip originates from the derivate of the speciation, so it is not surprising that at the time of a steep speciation rate increase, we obtain a steep drop in pulled diversification rate.}
-%\label{fig:congruence_class}
-%\end{figure}
 
 Now that we have our reference model and congruence class functions, we can explore alternative rate functions within the congruence class.
 
@@ -1097,53 +860,29 @@ extinction_rate_samples <- function() {
 @
 
 <<sample-extinction-HSMRF, cache=TRUE, results='hide'>>=
-samples <- sample.congruence.class(func_spec0=lambda,
-                                   func_ext0=mu,
-                                   max.t=max_t,
-                                   num.epochs=100,
-                                   num.samples=1000,
+samples <- sample.congruence.class(my_model,
+                                   num.samples=20,
                                    rate.type="extinction",
                                    sample.extinction.rates=extinction_rate_samples)
 print(".")
 @
 <<eval=FALSE>>=
-p <- ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
-                               func_ext0=mu,
-                               max.t=max_t,
-                               sample.grid=samples )
+p <- summarize.trends(samples,
+                      threshold = 0.02)
 @
 <<congruence-class-extinction-HSMRF, chache=TRUE, results='hide', include=FALSE>>=
-p <- ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
-                               func_ext0=mu,
-                               max.t=max_t,
-                               sample.grid=samples )
+p <- summarize.trends(samples,
+                      threshold = 0.02)
 
-ggsave(p,file="RnwFigs/Primates_HSMRF_ACDC_extinction_HSMRF.pdf", width=5,height=10)
+ggsave(p,file="RnwFigs/Primates_HSMRF_ACDC_extinction_HSMRF.pdf", width=160,height=80, units = "mm")
 @
-<<eval=FALSE>>=
-ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
-                                     func_ext0=mu,
-                                     max.t=max_t,
-                                     sample.grid=samples,
-                                     max.curves=100 )
-@
-<<congruence-class-extinction-HSMRF-spaghetti, chache=TRUE, results='hide', include=FALSE>>=
-pdf(file="RnwFigs/Primates_HSMRF_ACDC_extinction_HSMRF_speghetti.pdf",width=5,height=10)
-ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
-                                     func_ext0=mu,
-                                     max.t=max_t,
-                                     sample.grid=samples,
-                                     max.curves=100 )
-dev.off()
-@
+
 \begin{figure}[h!]
 \centering
-\includegraphics[width=0.48\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_HSMRF.pdf}
-\includegraphics[width=0.48\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_HSMRF_speghetti.pdf}
-\caption{Congruence class assuming HSMRF-distributed extinction rates.}
-\label{fig:extinction_HSMRF_spaghetti}
+\includegraphics[width=0.98\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_HSMRF.pdf}
+\caption{Congruence class assuming linearly changing extinction rates.}
+\label{fig:extinction_linear_spaghetti}
 \end{figure}
-
 
 \subsection{Exponentially decreasing extinction rates}\label{sec:extinction_exponential}
 
@@ -1161,52 +900,26 @@ extinction_rate_samples <- function() {
 @
 
 <<sample-extinction-exponential, cache=TRUE, results='hide'>>=
-samples <- sample.congruence.class(func_spec0=lambda,
-                                   func_ext0=mu,
-                                   max.t=max_t,
-                                   num.epochs=100,
-                                   num.samples=1000,
+samples <- sample.congruence.class(my_model,
+                                   num.samples=20,
                                    rate.type="extinction",
                                    sample.extinction.rates=extinction_rate_samples)
 @
 <<eval=FALSE>>=
-p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
-                               func_ext0=mu,
-                               max.t=max_t,
-                               sample.grid=samples )
+p <- summarize.trends(samples, threshold = 0.02)
 @
 <<congruence-class-extinction-exponential, chache=TRUE, results='hide', include=FALSE>>=
-p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
-                               func_ext0=mu,
-                               max.t=max_t,
-                               sample.grid=samples )
+p <- summarize.trends(samples, threshold = 0.02)
 
-ggsave(p,file="RnwFigs/Primates_HSMRF_ACDC_extinction_exponential.pdf", width=5,height=10)
+ggsave(p,file="RnwFigs/Primates_HSMRF_ACDC_extinction_exponential.pdf", width=160,height=80, units = "mm")
 @
-<<eval=FALSE>>=
-ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
-                                     func_ext0=mu,
-                                     max.t=max_t,
-                                     sample.grid=samples,
-                                     max.curves=100 )
-@
-<<congruence-class-extinction-exponential-spaghetti, chache=TRUE, results='hide', include=FALSE>>=
-pdf(file="RnwFigs/Primates_HSMRF_ACDC_extinction_exponential_speghetti.pdf",width=5,height=10)
-ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
-                                     func_ext0=mu,
-                                     max.t=max_t,
-                                     sample.grid=samples,
-                                     max.curves=100 )
-dev.off()
-@
+
 \begin{figure}[h!]
 \centering
-\includegraphics[width=0.48\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_exponential.pdf}
-\includegraphics[width=0.48\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_exponential_speghetti.pdf}
-\caption{Congruence class assuming exponentially changing extinction rates.}
-\label{fig:extinction_exponential_spaghetti}
+\includegraphics[width=0.98\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_exponential.pdf}
+\caption{Congruence class assuming linearly changing extinction rates.}
+\label{fig:extinction_linear_spaghetti}
 \end{figure}
-
 
 \subsection{Linearly increasing extinction rates}\label{sec:extinction_linear}
 
@@ -1227,48 +940,23 @@ extinction_rate_samples <- function() {
 @
 
 <<sample-extinction-linear, cache=TRUE, results='hide'>>=
-samples <- sample.congruence.class(func_spec0=lambda,
-                                   func_ext0=mu,
-                                   max.t=max_t,
-                                   num.epochs=100,
-                                   num.samples=1000,
+samples <- sample.congruence.class(my_model,
+                                   num.samples=20,
                                    rate.type="extinction",
                                    sample.extinction.rates=extinction_rate_samples)
 @
 <<eval=FALSE>>=
-p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
-                               func_ext0=mu,
-                               max.t=max_t,
-                               sample.grid=samples )
+p <- summarize.trends(samples, threshold = 0.02)
 @
 <<congruence-class-extinction-linear, chache=TRUE, results='hide', include=FALSE>>=
-p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
-                               func_ext0=mu,
-                               max.t=max_t,
-                               sample.grid=samples )
+p <- summarize.trends(samples, threshold = 0.02)
 
-ggsave(p,file="RnwFigs/Primates_HSMRF_ACDC_extinction_linear.pdf", width=5,height=10)
+ggsave(p,file="RnwFigs/Primates_HSMRF_ACDC_extinction_linear.pdf", width=160,height=80, units = "mm")
 @
-<<eval=FALSE>>=
-ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
-                                     func_ext0=mu,
-                                     max.t=max_t,
-                                     sample.grid=samples,
-                                     max.curves=100 )
-@
-<<congruence-class-extinction-linear-spaghetti, chache=TRUE, results='hide', include=FALSE>>=
-pdf(file="RnwFigs/Primates_HSMRF_ACDC_extinction_linear_speghetti.pdf",width=5,height=10)
-ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
-                                     func_ext0=mu,
-                                     max.t=max_t,
-                                     sample.grid=samples,
-                                     max.curves=100 )
-dev.off()
-@
+
 \begin{figure}[h!]
 \centering
-\includegraphics[width=0.48\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_linear.pdf}
-\includegraphics[width=0.48\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_linear_speghetti.pdf}
+\includegraphics[width=0.98\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_linear.pdf}
 \caption{Congruence class assuming linearly changing extinction rates.}
 \label{fig:extinction_linear_spaghetti}
 \end{figure}
@@ -1295,48 +983,23 @@ extinction_rate_samples <- function() {
 @
 
 <<sample-extinction-episodic, cache=TRUE, results='hide'>>=
-samples <- sample.congruence.class(func_spec0=lambda,
-                                   func_ext0=mu,
-                                   max.t=max_t,
-                                   num.epochs=100,
-                                   num.samples=1000,
+samples <- sample.congruence.class(my_model,
+                                   num.samples=20,
                                    rate.type="extinction",
                                    sample.extinction.rates=extinction_rate_samples)
 @
 <<eval=FALSE>>=
-p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
-                               func_ext0=mu,
-                               max.t=max_t,
-                               sample.grid=samples )
+p <- summarize.trends(samples, threshold = 0.02)
 @
 <<congruence-class-extinction-episodic, chache=TRUE, results='hide', include=FALSE>>=
-p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
-                               func_ext0=mu,
-                               max.t=max_t,
-                               sample.grid=samples )
+p <- summarize.trends(samples, threshold = 0.02)
 
-ggsave(p,file="RnwFigs/Primates_HSMRF_ACDC_extinction_episodic.pdf", width=5,height=10)
+ggsave(p,file="RnwFigs/Primates_HSMRF_ACDC_extinction_episodic.pdf", width=160,height=80, units = "mm")
 @
-<<eval=FALSE>>=
-ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
-                                     func_ext0=mu,
-                                     max.t=max_t,
-                                     sample.grid=samples,
-                                     max.curves=100 )
-@
-<<congruence-class-extinction-episodic-spaghetti, chache=TRUE, results='hide', include=FALSE>>=
-pdf(file="RnwFigs/Primates_HSMRF_ACDC_extinction_episodic_speghetti.pdf",width=5,height=10)
-ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
-                                     func_ext0=mu,
-                                     max.t=max_t,
-                                     sample.grid=samples,
-                                     max.curves=100 )
-dev.off()
-@
+
 \begin{figure}[h!]
 \centering
-\includegraphics[width=0.48\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_episodic.pdf}
-\includegraphics[width=0.48\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_episodic_speghetti.pdf}
+\includegraphics[width=0.98\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_episodic.pdf}
 \caption{Congruence class assuming episodicly changing extinction rates.}
 \label{fig:extinction_episodic_spaghetti}
 \end{figure}
@@ -1357,7 +1020,7 @@ We furthermore assume that each extinction rate is independent of the previous t
 That means that we can model any rate function, even completely crazy zig-zagging functions.
 
 <<sample-function-extinction-uniform>>=
-rsample_extinction = function(n) runif(n,0,1)
+rsample_extinction <- function(n) runif(n,0,1)
 extinction_rate_samples <- function() {
    sample.rates( num.epochs=100,
                  rsample=rsample_extinction,
@@ -1367,62 +1030,27 @@ extinction_rate_samples <- function() {
 @
 
 <<sample-extinction-uniform, cache=TRUE, results='hide'>>=
-samples <- sample.congruence.class(func_spec0=lambda,
-                                   func_ext0=mu,
-                                   max.t=max_t,
-                                   num.epochs=100,
-                                   num.samples=1000,
+samples <- sample.congruence.class(my_model,
+                                   num.samples=20,
                                    rate.type="extinction",
                                    sample.extinction.rates=extinction_rate_samples)
 @
 <<eval=FALSE>>=
-p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
-                               func_ext0=mu,
-                               max.t=max_t,
-                               sample.grid=samples )
+p <- summarize.trends(samples, threshold = 0.02)
 @
 <<congruence-class-extinction-uniform, chache=TRUE, results='hide', include=FALSE>>=
-p = ACDC.plot.congruence.class.heatmap(func_spec0=lambda,
-                               func_ext0=mu,
-                               max.t=max_t,
-                               sample.grid=samples )
+p <- summarize.trends(samples, threshold = 0.02)
 
-ggsave(p,file="RnwFigs/Primates_HSMRF_ACDC_extinction_uniform.pdf", width=5,height=10)
+ggsave(p,file="RnwFigs/Primates_HSMRF_ACDC_extinction_uniform.pdf", width=160,height=80, units = "mm")
 @
-<<eval=FALSE>>=
-ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
-                                     func_ext0=mu,
-                                     max.t=max_t,
-                                     sample.grid=samples,
-                                     max.curves=100 )
-@
-<<congruence-class-extinction-uniform-spaghetti, chache=TRUE, results='hide', include=FALSE>>=
-pdf(file="RnwFigs/Primates_HSMRF_ACDC_extinction_uniform_speghetti.pdf",width=5,height=10)
-ACDC.plot.congruence.class.spaghetti(func_spec0=lambda,
-                                     func_ext0=mu,
-                                     max.t=max_t,
-                                     sample.grid=samples,
-                                     max.curves=100 )
-dev.off()
-@
+
 \begin{figure}[h!]
 \centering
-\includegraphics[width=0.48\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_uniform.pdf}
-\includegraphics[width=0.48\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_uniform_speghetti.pdf}
+\includegraphics[width=0.98\textwidth,angle=0]{RnwFigs/Primates_HSMRF_ACDC_extinction_uniform.pdf}
 \caption{Congruence class assuming independent and uniformly distributed extinction rates.}
 \label{fig:extinction_uniform_spaghetti}
 \end{figure}
 
-
-
-
-
-
-%\section{R and package versions used}
-%
-%<<sessionInfo, include=TRUE, echo=TRUE, results='markup'>>=
-%sessionInfo()
-%@
 
 
 \clearpage
