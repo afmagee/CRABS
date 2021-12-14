@@ -14,10 +14,10 @@
 plot.ACDC <- function( x, ... ) {
   df <- model2df(x)
   
-  df_lambda <- df %>% dplyr::filter(grepl("speciation", rate, ignore.case = TRUE))
-  df_mu     <- df %>% dplyr::filter(rate == "Extinction")
-  df_delta  <- df %>% dplyr::filter(grepl("net-diversification", rate, ignore.case = TRUE))
-  df_relext <- df %>% dplyr::filter(rate == "Relative extinction")
+  df_lambda <- df %>% filter(grepl("speciation", rate, ignore.case = TRUE))
+  df_mu     <- df %>% filter(rate == "Extinction")
+  df_delta  <- df %>% filter(grepl("net-diversification", rate, ignore.case = TRUE))
+  df_relext <- df %>% filter(rate == "Relative extinction")
   
   ylim <- range(bind_rows(df_lambda, df_mu)[["value"]])
   

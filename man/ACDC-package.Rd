@@ -18,3 +18,13 @@ ACDC includes tools for exploring congruent phylogenetic birth-death models. ACD
 }
 }
 
+\author{
+\strong{Maintainer}: Sebastian Höhna \email{Sebastian.Hoehna@gmail.com}
+
+Authors:
+\itemize{
+  \item Bjørn Tore Kopperud
+  \item Andrew F. Magee
+}
+
+}

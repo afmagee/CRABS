@@ -28,10 +28,10 @@ plot.ACDCset <- function( x, ... ) {
   }
   df <- bind_rows(dfs)
   
-  df_lambda <- df %>% dplyr::filter(rate == "Speciation")
-  df_mu     <- df %>% dplyr::filter(rate == "Extinction")
-  df_delta  <- df %>% dplyr::filter(rate == "Net-diversification")
-  df_relext <- df %>% dplyr::filter(rate == "Relative extinction")
+  df_lambda <- df %>% filter(rate == "Speciation")
+  df_mu     <- df %>% filter(rate == "Extinction")
+  df_delta  <- df %>% filter(rate == "Net-diversification")
+  df_relext <- df %>% filter(rate == "Relative extinction")
   
   ylim <- range(bind_rows(df_lambda, df_mu)[["value"]])
   

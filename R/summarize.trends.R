@@ -181,27 +181,6 @@ summarize.trends <- function(model_set,
       
   }
 
-  # freq_agree <- df %>% 
-  #   group_split(time) %>% 
-  #   sapply(agreement)
-  
-  # delta_times <- df %>% 
-  #   dplyr::filter(name == df$name[1]) %>% 
-  #   (function(e) e$time)
-  
-  #df_agree <- tibble::tibble(time = delta_times, freq_agree = freq_agree)
-  #
-  # p4 <- df_agree %>%
-  #   ggplot(aes(x = time, y = freq_agree)) +
-  #   geom_col(color = "gray", fill = "gray") +
-  #   scale_x_reverse(limits = rev(range(rate_times))) +
-  #   theme_bw() +
-  #   theme(plot.margin = unit(c(t = 0,r = 0,b = 1,l = 1), "pt"),
-  #         axis.title.x=element_blank(),
-  #         axis.text.x=element_blank()) +
-  #   ylab("Accord") +
-  #   ylim(c(0, 1))
-
   if(return_data){
     return(list(heatmap_data = df
                 #rate_data = df2, 
