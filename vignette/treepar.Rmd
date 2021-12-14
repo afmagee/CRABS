@@ -1,31 +1,31 @@
-\subsection{\TreePar}\label{sec:TreePar_data}
+## TreePar
 
-Let us walk here through a very simple \TreePar analysis \citep{Stadler2011}.
+Let us walk here through a very simple TreePar analysis [@Stadler2011].
 For a real publication worthy analysis, you may want to do a more thorough analysis by allowing more possible shifts and a finer grid for the search space.
 
-First, load the \TreePar package.
-<<load-TreePar>>=
+First, load the TreePar package.
+```{r load-TreePar}
   library(TreePar)
-@
+```
   
-  \TreePar needs the ages of the phylogeny to perform it's likelihood computation.
-We use the \TreePar builtin functionality for this.
-<<extract-ages, cache=TRUE>>=
+  TreePar needs the ages of the phylogeny to perform it's likelihood computation.
+We use the TreePar builtin functionality for this.
+```{r extract-ages, cache=TRUE}
 x     <- sort(getx(tree),decreasing=TRUE)
 max_t <- max(x)
-@
+```
 For our toy analysis, we setup some simpler than normal search values.
 We specify that there are at most three rate shifts, and that there are ten possible shift points.
 For your own analysis, you should most likely increase these values.
-We also specify an interval offset of 0.05, which means that in the most recent 5\% of the tree age there was no rate shift event.
+We also specify an interval offset of 0.05, which means that in the most recent 5% of the tree age there was no rate shift event.
 This is simply for improving the parameter estimation.
-<<TreePar-settings>>=
+```{r TreePar-settings}
 MAX.NUM.SHIFTS  = 4
 NUM.INTERVALS   = 20
 INTERVAL.OFFSET = 0.05
-@
-Now we run the full \TreePar maximum likelihood search.
-<<TreePar-ML, echo=TRUE, cache=TRUE, results='hide'>>=
+```
+Now we run the full TreePar maximum likelihood search.
+```{r TreePar-ML, echo=TRUE, cache=TRUE, results='hide'}
 res   <- bd.shifts.optim(x,
                          sampling=rep(1,MAX.NUM.SHIFTS+1),
                          grid=max_t/NUM.INTERVALS,
@@ -33,10 +33,10 @@ res   <- bd.shifts.optim(x,
                          end=max_t,
                          survival=1,
                          posdiv=TRUE)[[2]]
-@
+```
 Now we have the maximum likelihood estimates for the different number of shifts.
 We want to test if $i$ shifts explain the tree significantly better than $i-1$ shifts.
-<<TreePar-MLE>>=
+```{r TreePar-MLE}
 best <- 0
 for (i in 1:(length(res)-1)) {
     test <- pchisq(2*(res[[i]][1]-res[[i+1]][1]),3)
@@ -48,9 +48,9 @@ for (i in 1:(length(res)-1)) {
         break
     }
 }
-@
+```
 
-<<TreePar-rate-functions>>=
+```{r TreePar-rate-functions}
 best_result <- res[[best+1]]
 speciation <- c()
 extinction <- c()
@@ -78,20 +78,20 @@ if ( best > 0 ) {
     lambda <- function(x) { return ( rep(speciation[1],length(x)) ) }
     mu     <- function(x) { return ( rep(extinction[1],length(x)) ) }
 }
-@
+```
 Finally, let us have a look at the estimated rate function:
-<<TreePar-plot-rate-functions, fig.height=4, fig.width=4, fig.align="center", fig.cap="Estimated speciation and extinction rates using TreePar on the primates phylogeny of Springer et al. (2012).">>=
+```{r TreePar-plot-rate-functions, fig.height=4, fig.width=4, fig.align="center", fig.cap="Estimated speciation and extinction rates using TreePar on the primates phylogeny of Springer et al. (2012)."}
 ylim <- c(min(0,speciation,extinction),max(speciation,extinction))
 
 curve( lambda, xlim=c(max_t, 0), lwd=2, lty=1, col="blue", ylim=ylim, main="primates", xlab="time", ylab="rate", cex.main=1.5, cex.lab=1.5 )
 curve( mu, add=TRUE, lwd=2, lty=1, col="red" )
 legend("bottomleft",legend=c("speciation","extinction"),
        col=c("blue","red"), lty=c(1,1), cex=1.2)
-@
+```
 
 For a later use in the tutorial where we want to compare the estimates between different software, we are going to store the rate functions.
-<<TreePar-rates, cache=TRUE>>=
+```{r TreePar-rates, cache=TRUE}
 lambda.TreePar <- lambda
 mu.TreePar     <- mu
-@
+```
 You could now skip over the next software section and estimate the entire congruence class for these estimated speciation and extinction rates.

@@ -1,0 +1,61 @@
+## The HSMRF model in RevBayes
+
+RevBayes [@Hoehna2016b] provides several methods to estimate diversification rates through time.
+Here we used the [https://revbayes.github.io/tutorials/divrate/ebd.html][RevBayes tutorial] using the episodic-birth-death model with a Horseshoe-Markov-Random-Field (HSMRF) prior distribution to estimate diversification rates [@Magee2020].
+We assume here that you followed the RevBayes tutorial and have the output stored as a log-file in the *output* folder.
+If you have not run a RevBayes analysis and wish to explore functionality of the package, we have provided a thinned output file, accessible with `data("HSMRFBDP_primates")`.
+
+For some of our plotting, we need the speciation times.
+So we extract these from the tree.
+```{r RevBayes-read-times}
+btimes <- sort( as.numeric( branching.times( tree ) ) )
+max_t <- max(btimes)
+```
+
+Then we read in the RevBayes log-file as a simple tab-delimited file.
+```{r read-RevBayes-output, cache=TRUE}
+samples <- read.table(file="output/HSMRFBDP_primates.log",
+                      stringsAsFactors=FALSE,
+                      header=TRUE)
+```
+Then, from this log-file we want to automatically extract the speciation and extinction rates.
+Be careful that you used the same names as we did.
+Otherwise you need to modify this code-snippet accordingly.
+```{r RevBayes-extract-output, cache=TRUE}
+par_speciation <- samples[, startsWith(names(samples), "speciation_rate.")]
+par_extinction <- samples[, startsWith(names(samples), "extinction_rate.")]
+```
+In principle we can use now the full posterior estimates.
+However, in this example we are only interested in the posterior median.
+We strongly encourage to use the medians and not the means because the posterior median is a more robust estimate for rates, see @Magee2020.
+```{r RevBayes-compute-median, cache=TRUE}
+est_speciation <- apply(par_speciation, 2, median)
+est_extinction <- apply(par_extinction, 2, median)
+```
+Since we assumed in the tutorial epochs of equal size, we can simply use the `approxfun` to create the speciation and extinction rate functions.
+```{r RevBayes-functions, cache=TRUE}
+lambda <- approxfun(seq(0, max_t, length.out = length(est_speciation)),
+                    est_speciation)
+mu <- approxfun(seq(0, max_t, length.out = length(est_extinction)),
+                est_extinction)
+```
+Finally, let's have a look at the estimated rate functions.
+```{r RevBayes-plot-functions, fig.height=4, fig.width=4, fig.align="center", fig.cap="Estimated speciation and extinction rates using RevBayes on the primates phylogeny of Springer et al. (2012)."}
+ylim <- c( min(0,est_speciation,est_extinction),
+           max(est_speciation,est_extinction))
+
+curve( lambda, xlim=c(max_t, 0), lwd=2, lty=1, col="blue",
+       ylim=ylim, main="Primates", xlab="time", ylab="rate",
+       cex.main=1.5, cex.lab=1.5 )
+curve( mu, add=TRUE, lwd=2, lty=1, col="red" )
+legend("topleft",legend=c("speciation","extinction"),
+       col=c("blue","red"), lty=c(1,1), cex=1.2)
+```
+
+
+For a later use in the tutorial where we want to compare the estimates between different software, we are going to store the rate functions.
+```{r RevBayes-rates, cache=TRUE}
+lambda.RevBayes <- lambda
+mu.RevBayes     <- mu
+```
+

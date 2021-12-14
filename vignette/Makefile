@@ -9,7 +9,7 @@ Congruence_Classes.html: Congruence_Classes.Rnw
 	R ${R_OPTS} -e "rmarkdown::render('Congruence_Classes.Rnw')"
 
 Congruence_Classes.pdf: Congruence_Classes.Rnw
-	R ${R_OPTS} -e "library(knitr);knit('Congruence_Classes.Rnw')"
+	R ${R_OPTS} -e "library(knitr);rmarkdown::render('Congruence_Classes.Rmd', output_format = 'bookdown::pdf_document2', encoding = 'UTF-8')"
 	pdflatex Congruence_Classes.tex
 	bibtex Congruence_Classes
 	pdflatex Congruence_Classes.tex
