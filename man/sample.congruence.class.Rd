@@ -34,10 +34,12 @@ data("primates_ebd")
 
 l <- approxfun(primates_ebd[["time"]], primates_ebd[["lambda"]])
 mu <- approxfun(primates_ebd[["time"]], primates_ebd[["mu"]])
+times <- primates_ebd[["time"]]
+
 model <- create.model(l, mu, primates_ebd[["time"]])
 
 extinction_rate_samples <- function(){
-   res <- sample.basic.models(num.epochs = 100, 
+   res <- sample.basic.models(times = times, 
                               rate0 = 0.05, 
                               model = "MRF", 
                               MRF.type = "HSMRF", 

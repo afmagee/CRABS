@@ -21,7 +21,7 @@ sample.congruence.class.posterior(
 \item{...}{
   Arguments passed on to \code{\link[=sample.basic.models]{sample.basic.models}}
   \describe{
-    \item{\code{num.epochs}}{The number of rates to draw}
+    \item{\code{times}}{the time knots}
     \item{\code{rate0}}{The rate at present, otherwise drawn randomly.}
     \item{\code{model}}{"MRF" for pure MRF model, otherwise MRF has a trend of type "exponential","linear", or "episodic<n>"}
     \item{\code{direction}}{"increase" or "decrease" (measured in past to present)}

@@ -1,6 +1,6 @@
 #' Sample custom functions through time.
 #'
-#' @param num.epochs The number of rates to draw
+#' @param times the time knots
 #' @param lambda0 The rate at present
 #' @param rsample Function to sample next rate
 #' @param rsample0 Function to sample rate at present
@@ -12,16 +12,23 @@
 #' 
 #' l <- approxfun(primates_ebd[["time"]], primates_ebd[["lambda"]])
 #' mu <- approxfun(primates_ebd[["time"]], primates_ebd[["mu"]])
-#' model <- create.model(l, mu, primates_ebd[["time"]])
+#' times <- primates_ebd[["time"]]
+#' 
+#' model <- create.model(l, mu, times)
 #' 
 #' rsample <- function(n) runif(n, min = 0.0, max = 0.9)
-#' mu_vals <- sample.rates(100, 0.5, rsample = rsample)
-#' mu <- approxfun(model$times, mu_vals)
+#' mu <- sample.rates(times, 0.5, rsample = rsample)
+#' 
 #' 
 #' model_set <- congruent.models(model, mus = mu)
 #' 
 #' model_set
-sample.rates <- function(num.epochs, lambda0=NULL, rsample=NULL, rsample0=NULL, autocorrelated=FALSE) {
+sample.rates <- function(times, 
+                         lambda0=NULL, 
+                         rsample=NULL, 
+                         rsample0=NULL,
+                         autocorrelated=FALSE) {
+  num.epochs <- length(times)
   
   N_SAMPLES = ifelse( is.null(lambda0), num.epochs, num.epochs -1)
   if ( autocorrelated == FALSE ) {
@@ -41,14 +48,15 @@ sample.rates <- function(num.epochs, lambda0=NULL, rsample=NULL, rsample0=NULL, 
       new_rates[i+1] = rsample(new_rates[i])
     }
   }
+  func_rates <- approxfun(times, new_rates)
   
-  return (new_rates)
+  return (func_rates)
 }
 
 
 #' Samples simple increase/decrease models through time with noise.
 #'
-#' @param num.epochs The number of rates to draw
+#' @param times the time knots
 #' @param rate0 The rate at present, otherwise drawn randomly.
 #' @param model "MRF" for pure MRF model, otherwise MRF has a trend of type "exponential","linear", or "episodic<n>"
 #' @param direction "increase" or "decrease" (measured in past to present)
@@ -67,21 +75,22 @@ sample.rates <- function(num.epochs, lambda0=NULL, rsample=NULL, rsample0=NULL, 
 #' 
 #' l <- approxfun(primates_ebd[["time"]], primates_ebd[["lambda"]])
 #' mu <- approxfun(primates_ebd[["time"]], primates_ebd[["mu"]])
-#' model <- create.model(l, mu, primates_ebd[["time"]])
+#' times <- primates_ebd[["time"]]
 #' 
-#' mu_vals <- sample.basic.models(num.epochs = 100, 
+#' model <- create.model(l, mu, times)
+#' 
+#' mus <- sample.basic.models(times = times, 
 #'                                rate0 = 0.05, 
 #'                                "MRF", 
 #'                                MRF.type = "HSMRF", 
 #'                                fc.mean = 2.0, 
 #'                                min.rate = 0.0, 
 #'                                max.rate = 1.0)
-#' mu <- approxfun(model$times, mu_vals)
 #' 
-#' model_set <- congruent.models(model, mus = mu)
+#' model_set <- congruent.models(model, mus = mus)
 #' 
 #' model_set
-sample.basic.models <- function(num.epochs=100, 
+sample.basic.models <- function(times, 
                                 rate0=NULL, 
                                 model="exponential", 
                                 direction="decrease", 
@@ -93,6 +102,7 @@ sample.basic.models <- function(num.epochs=100,
                                 rate0.logsd=1.17481, 
                                 min.rate=0, 
                                 max.rate=10) {
+  num.epochs <- length(times)
   # recover()
   
   # We use rejection sampling to find a model that fits within minimum and maximum rates
@@ -203,6 +213,8 @@ sample.basic.models <- function(num.epochs=100,
       }
     }
   }
+  
+  func_rates <- approxfun(times, rates)
 
-  return (rates)
+  return (func_rates)
 }

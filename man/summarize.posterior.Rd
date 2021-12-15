@@ -44,6 +44,5 @@ samples <- sample.congruence.class.posterior(posterior,
                                              model = "MRF",
                                              max.rate = 1.0)
 
-
-summarize.posterior(samples, threshold = 0.05)
+p <- summarize.posterior(samples, threshold = 0.05)
 }

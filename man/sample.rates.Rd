@@ -5,7 +5,7 @@
 \title{Sample custom functions through time.}
 \usage{
 sample.rates(
-  num.epochs,
+  times,
   lambda0 = NULL,
   rsample = NULL,
   rsample0 = NULL,
@@ -13,7 +13,7 @@ sample.rates(
 )
 }
 \arguments{
-\item{num.epochs}{The number of rates to draw}
+\item{times}{the time knots}
 
 \item{lambda0}{The rate at present}
 
@@ -34,11 +34,13 @@ data("primates_ebd")
 
 l <- approxfun(primates_ebd[["time"]], primates_ebd[["lambda"]])
 mu <- approxfun(primates_ebd[["time"]], primates_ebd[["mu"]])
-model <- create.model(l, mu, primates_ebd[["time"]])
+times <- primates_ebd[["time"]]
+
+model <- create.model(l, mu, times)
 
 rsample <- function(n) runif(n, min = 0.0, max = 0.9)
-mu_vals <- sample.rates(100, 0.5, rsample = rsample)
-mu <- approxfun(model$times, mu_vals)
+mu <- sample.rates(times, 0.5, rsample = rsample)
+
 
 model_set <- congruent.models(model, mus = mu)
 

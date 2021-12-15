@@ -12,10 +12,12 @@
 #' 
 #' l <- approxfun(primates_ebd[["time"]], primates_ebd[["lambda"]])
 #' mu <- approxfun(primates_ebd[["time"]], primates_ebd[["mu"]])
+#' times <- primates_ebd[["time"]]
+#' 
 #' model <- create.model(l, mu, primates_ebd[["time"]])
 #' 
 #' extinction_rate_samples <- function(){
-#'    res <- sample.basic.models(num.epochs = 100, 
+#'    res <- sample.basic.models(times = times, 
 #'                               rate0 = 0.05, 
 #'                               model = "MRF", 
 #'                               MRF.type = "HSMRF", 
@@ -34,31 +36,22 @@ sample.congruence.class <- function(model,
                                     rate.type="both", 
                                     sample.speciation.rates=NULL, 
                                     sample.extinction.rates=NULL) {
-  
+
     times <- model$times
-    v_p_div <- model$p.delta(times)
+    v_p_div <- model$p.delta(model$times)
   
     mus <- list()
     lambdas <- list()
     
- 
-    
-
     idx_lambda <- 1
     idx_mu <- 1
     
     for (i in 1:num.samples) {
       if (rate.type == "extinction" || (rate.type == "both" && (i <= num.samples/2))) {
-        this_mu     <- sample.extinction.rates()
-        func_ext1   <- approxfun(times, this_mu)
-        
-        mus[[idx_mu]] <- func_ext1
+        mus[[idx_mu]] <- sample.extinction.rates()
         idx_mu <- idx_mu +1
       } else {
-        this_lambda <- sample.speciation.rates()
-        func_spec1  <- approxfun(times,this_lambda)
-        
-        lambdas[[idx_lambda]] <- func_spec1
+        lambdas[[idx_lambda]] <- sample.speciation.rates()
         idx_lambda <- idx_lambda + 1
       }
       

@@ -30,23 +30,26 @@ sample.congruence.class.posterior <- function(posterior,
                                               num.samples, 
                                               rate.type="extinction", 
                                               ...){
-  num.epochs <- length(posterior[[1]]$times)
+  
 
   pb <- txtProgressBar(min = 1, max = length(posterior), style = 3)  
   res <- list()
   
   for(i in seq_along(posterior)){
+    times <- posterior[[i]]$times
+    num.epochs <- length(posterior[[i]]$times)
+    
     if(rate.type == "speciation"){
       sample.extinction.rates <- NULL
-      sample.speciation.rates <- function () {sample.basic.models(rate0 = posterior[[i]]$lambda(0.0), ...)}
+      sample.speciation.rates <- function () {sample.basic.models(times = times, rate0 = posterior[[i]]$lambda(0.0), ...)}
       
     }else if(rate.type == "extinction"){
-      sample.extinction.rates <- function() {sample.basic.models(...)}
+      sample.extinction.rates <- function() {sample.basic.models(times = times, ...)}
       sample.speciation.rates <- NULL
       
     }else if(rate.type == "both"){
-      sample.extinction.rates <- function() {sample.basic.models(...)}
-      sample.speciation.rates <- function() {sample.basic.models(rate0 = posterior[[i]]$lambda(0.0), ...)}
+      sample.extinction.rates <- function() {sample.basic.models(times = times, ...)}
+      sample.speciation.rates <- function() {sample.basic.models(times = times, rate0 = posterior[[i]]$lambda(0.0), ...)}
       
     }else{
       stop("rate.type must be either \"speciation\", \"extinction\", or \"both\".")

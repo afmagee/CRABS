@@ -18,8 +18,7 @@
 #'                                              model = "MRF",
 #'                                              max.rate = 1.0)
 #' 
-#' 
-#' summarize.posterior(samples, threshold = 0.05)
+#' p <- summarize.posterior(samples, threshold = 0.05)
 summarize.posterior <- function(posterior,
                                 threshold = 0.01,
                                 rate_name = "lambda",
@@ -45,7 +44,6 @@ summarize.posterior <- function(posterior,
   }
   
   k <- sum(sapply(posterior, length))
-  #scaleyformat <- function(x) sprintf("%.1f", x/k)
   
   p1 <- ggplot(plotdata, aes(x = time, fill = direction)) +
     geom_histogram(aes(y = stat(count / sum(count)*n_epochs)), binwidth = max_t/n_epochs) +

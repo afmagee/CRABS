@@ -5,7 +5,7 @@
 \title{Samples simple increase/decrease models through time with noise.}
 \usage{
 sample.basic.models(
-  num.epochs = 100,
+  times,
   rate0 = NULL,
   model = "exponential",
   direction = "decrease",
@@ -20,7 +20,7 @@ sample.basic.models(
 )
 }
 \arguments{
-\item{num.epochs}{The number of rates to draw}
+\item{times}{the time knots}
 
 \item{rate0}{The rate at present, otherwise drawn randomly.}
 
@@ -55,18 +55,19 @@ data("primates_ebd")
 
 l <- approxfun(primates_ebd[["time"]], primates_ebd[["lambda"]])
 mu <- approxfun(primates_ebd[["time"]], primates_ebd[["mu"]])
-model <- create.model(l, mu, primates_ebd[["time"]])
+times <- primates_ebd[["time"]]
 
-mu_vals <- sample.basic.models(num.epochs = 100, 
+model <- create.model(l, mu, times)
+
+mus <- sample.basic.models(times = times, 
                                rate0 = 0.05, 
                                "MRF", 
                                MRF.type = "HSMRF", 
                                fc.mean = 2.0, 
                                min.rate = 0.0, 
                                max.rate = 1.0)
-mu <- approxfun(model$times, mu_vals)
 
-model_set <- congruent.models(model, mus = mu)
+model_set <- congruent.models(model, mus = mus)
 
 model_set
 }
