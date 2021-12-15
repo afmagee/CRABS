@@ -6,6 +6,9 @@ author:
   - Bjørn T. Kopperud
   - Andrew F. Magee
 output:
+  bookdown::bs4_book:
+    fig_caption: yes
+    toc_depth: 3
   bookdown::gitbook:
     fig_caption: yes
     toc_depth: 2
@@ -15,6 +18,7 @@ output:
     toc_float: true
   bookdown::pdf_document2:
     fig_caption: yes
+    keep_tex: yes
     toc: yes
     toc_depth: 2
     includes:
@@ -75,20 +79,23 @@ set.seed(53079239)
 #if(!require("ACDC")) install.packages("ACDC", repos="https://cran.us.r-project.org")
 ```
 
-\newpage
+# Overview
 
 This is a brief tutorial about how to explore congruence classes of macroevolutionary diversification rates.
 Specifically, this tutorial has two main aims/applications:
 (1) for a given speciation and extinction rate, you can compute the alternative speciation and extinction rates via the pulled net-diversification rates;
 and (2) for some given speciation and extinction rates, which might have been estimated from a phylogenetic tree or provided simply for exploration purposes, you can explore the entire congruence class given some rate limitations (e.g., type of change or min and max rates; see more below).
 
-# Getting Started
+# Installation
 
 To get started with exploring congruence classes, you need to have our package `ACDC` installed.
-Currently, we host the package on GitHub and you need to install it directly from there.
-
 First, make sure that you have a recent version of R installed.
-Then, install the `devtools` R-package, if you don't already have it:
+You can install the stable version of `ACDC` from CRAN:
+```{r inst-cran, eval=FALSE}
+install.packages("ACDC")
+```
+
+We host the developmental version of `ACDC` on github. If you don't already have it, the `devtools` R-package makes it easy to install directly from github.
 ```{r inst-devtools, eval=FALSE}
 install.packages("devtools")
 ```
@@ -96,7 +103,6 @@ Then, make sure that you load the `devtools` package:
 ```{r load-devtools, eval=FALSE}
 library(devtools)
 ```
-
 Now you can install `ACDC` directly from GitHub:
 ```{r inst-ACDC, eval=FALSE}
 install_github("afmagee/ACDC")
@@ -106,27 +112,31 @@ install_github("afmagee/ACDC")
 install.packages("..",type="source",repos=NULL)
 ```
 
-Note about dependency:
+Notes about dependencies:
 ```{r load-dependencies, eval=TRUE}
 library(ape)
 library(ggplot2)
+library(magrittr)
+library(deSolve)
+library(dplyr)
+library(tibble)
+library(colorspace)
+library(patchwork)
+library(latex2exp)
+library(tidyr)
 ```
 
-
-You then load the `ACDC` package using the `library` function:
+You can then load the `ACDC` package using the `library` function:
 ```{r load-ACDC}
 library(ACDC)
 ```
 Now you are ready to use `ACDC` to explore congruence classes in macroevolutionary diversification rates.
 
-
-
-
 # Overview of functions in `ACDC`
 
 Before we are going to provide some example on how to explore the congruence class, we give you here an overview of the function available in ACDC.
 
-```{r echo = FALSE}
+```{r echo = FALSE, eval = FALSE}
 library(kableExtra)
 library(tibble)
 df <- tibble("Function" = c("sample.basic.models", "sample.congruence.class", "sample.rates"),
@@ -145,6 +155,13 @@ kbl(df, booktabs = TRUE, escape = FALSE,
 Below we explain these major functions of ACDC in detail.
 You may want to skip over these discussion if you want to see the examples first.
 Nevertheless, we recommend to make yourself familiar with these available functions to get a better idea of how we explore the congruence class.
+
+* `create.model`
+* `congruent.models`
+* `sample.congruence.class`
+* `sample.basic.models`
+
+
 
 
 ## `sample.basic.models`
@@ -181,18 +198,13 @@ The default is rates with median 0.1 and a 95% range covering [0.01,1].
 Note that the argument `rate0` overrides drawing random starting values if it is set.
 This allows sampling speciation rates, as the initial speciation rate must be the same in all replicates.
 
-## `sample.congruence.class`
-
-
-## `sample.rates`
-
-
 # Obtaining speciation and extinction rate functions from empirical phylogenies
 
 One of the main features and aims of `ACDC` is to explore the congruence class for the diversification rates that you estimated using another software or R package.
 Here we provide you some examples using standard software for estimating diversification rates through time, but if your preferred software is not included then you can either specify the diversification rate functions manually, or try to follow our examples in loading the output.
 
 You can jump to the relevant software example and then jump over to the congruence class exploration.
+
 
 
 
@@ -213,7 +225,7 @@ tree <- read.tree(file=paste0("data/primates.tre"))
 Next, read the software examples to convert the estimated diversification rates into rate functions.
 
 
-```{r TESS-analysis, child = "tess_analysis.Rmd"}
+```{r TESS-analysis2, child = "tess_analysis.Rmd"}
 ```
 
 ```{r treepar-analysis, child = "treepar.Rmd"}
@@ -271,17 +283,18 @@ Then you can either specify alternative speciation or extinction rate functions,
 We will walk through example of these below.
 
 
-# Exploring alternative rate functions
+# Creating the congruence class
 
 The first part of our congruence class exploration focuses on specific alternative models.
 That is, we first start by providing a set of alternative extinction rate functions and compute the matching speciation rate functions.
 Then, we turn the approach around and specify some alternative speciation rate functions for which we compute the matching extinction rate functions.
 
 We first create a congruence class object which contains all the transformed rate functions (i.e., the net-diversification rate and relative extinction rate) as well as the pulled rates (i.e., the pulled net-diversification and the pulled speciation rate).
-```{r }
+```{r fig.cap="The diversification rates in the reference model.", fig.width = 6, fig.height = 6}
 my_model <- create.model(lambda, 
                          mu, 
-                         times = seq(0, max_t, length.out = 100))
+                         times = seq(0, max_t, length.out = 1000))
+plot(my_model)
 ```
 The `my_model` includes all the rate functions.
 You could plot these yourself, or you can use our simple plotting function.
@@ -349,36 +362,10 @@ Let's have a look at these *alternative models*.
 plot(alt_models)
 ```
 
-## Linear increasing extinction rates
-
-As in our previous example, we want to explore linear extinction rates but this time we choose linear **increasing** extinction rates.
-Specifically, let's assume that the slope was $\alpha=\{0.0,-0.00025, \ldots, -0.0001\}$.
-We follow the same approach to define the linear extinction rate functions.
-As before, since in `ACDC`, rate functions are defined in backwards time, while these look like increasing extinction rates, they are in fact decreasing extinction rates from past to present.
-```{r }
-mu_max = 0.1
-mu_vals <- seq(0,0.001,0.00025)
-mu1 <- list()
-for (i in 1:length(mu_vals)) {
-  mu1[[i]] = local({
-    mu_slope = mu_vals[i]
-    function(t) { mu_max - mu_slope * (max_t-t) }
-  })
-}
-```
-Now we compute the new speciation rate given the extinction rates.
-```{r eval=TRUE}
-alt_models <- congruent.models( my_model, mus = mu1 )
-```
-Let's have a look at these *alternative models*.
-```{r congruent-models-mu-linear-dec, fig.cap = "Diversification rate function for linear decreasing extinction rates within the congruence class. The dashed lines show the different alternatives that we explored here, and the solid lines represent our reference model. The results are qualitatively the same to the previous results.", fig.height = 4, fig.width = 4}
-plot( alt_models )
-```
-
-## Exponential decreasing extinction rates
+## Exponential increasing extinction rates
 
 Next, similar to the linear rate functions we explore some exponential rate functions.
-We start here with the exponentially decreasing rates.
+We start here with the exponentially increasing rates.
 Recall that the extinction rate is a function of time such that $\mu(0)$ is the rate at the present and $\mu(1)$ is the rate 1 time unit previously, thus what appear to be exponential increases are in fact decreases.
 Specifically, let's assume that the slope was $\alpha=\{0.0,0.005, \ldots, 0.02\}$.
 Then, we define the extinction rate function as
@@ -399,32 +386,6 @@ alt_models <- congruent.models( my_model, mus = mu1 )
 ```
 Let's have a look at these *alternative models*.
 ```{r congruent-models-mu-exp-inc, fig.cap = "Diversification rate functions for exponentially increasing extinction rates within the congruence class. The dashed lines show the different alternatives that we explored here, and the solid lines represent our reference model. As in our previous example, the speciation rate and net-diversification rate are robust to the difference choices of extinction rates", fig.height = 4, fig.width = 4}
-plot( alt_models )
-```
-
-## Exponential increasing extinction rates
-
-Finally, we explore exponentially increasing extinction rates.
-Specifically, let's assume that the slope was $\alpha=\{0.0,-0.005, \ldots, -0.02\}$.
-Recall that the extinction rate is defined backwards in time such that these negative exponents correspond to rates that increase from past to present.
-The extinction rate functions are defined as before.
-```{r }
-mu_max = 0.04
-mu_vals <- seq(0,0.02,0.005)
-mu1 <- list()
-for (i in 1:length(mu_vals)) {
-  mu1[[i]] = local({
-    mu_factor = mu_vals[i]
-    function(t) { mu_max * exp(-mu_factor*(max_t-t)) }
-  })
-}
-```
-Now we compute the new speciation rate given the extinction rates.
-```{r eval=TRUE}
-alt_models <- congruent.models( my_model, mus = mu1 )
-```
-Let's have a look at these *alternative models*.
-```{r congruent-models-mu-exp-dec, fig.cap = "Diversification rate functions for exponentially decreasing extinction rates within the congruence class. The dashed lines show the different alternatives that we explored here, and the solid lines represent our reference model. Again, as in all our previous examples, the speciation and net-diversification rates are robust to our relatively minor variations in extinction rates.", fig.height = 4, fig.width = 4}
 plot( alt_models )
 ```
 
@@ -498,7 +459,7 @@ Specifically, the observed pattern of a sharp increase of the speciation rate to
 Only if we would change the extinction rates in extreme and biologically unrealistic ways, e.g., by allowing the extinction rate to become implausible large, then the extinction rates can overwhelm our observed diversification rate pattern.
 
 
-## Testing alternative speciation rates
+# Testing alternative speciation rates
 
 Let us now look at the congruence class from the angle of the speciation rates.
 Can we also specify different speciation rate function and obtain valid extinction rates?
@@ -560,68 +521,6 @@ Our results here for the exponentially increasing speciation functions show agai
 Because of the initial condition that all speciation rate functions within the congruence class must have the same value at time $t=0$ (the present), it is very challenging to find other speciation rate functions that have valid extinction rates (i.e., $\mu(t)\leq 0$).
 This indicates that the congruence class is much more restrictive for the space of valid speciation rates.
 
-
-## Comparing rate estimates from different software
-
-### RevBayes as the reference model
-
-```{r RevBayes-reference-congruence-class, cache=TRUE}
-my_model <- create.model( lambda.RevBayes, mu.RevBayes, times = seq(0, max_t, length.out = 100) )
-```
-```{r }
-mu1 <- list()
-mu1[[1]] = mu.TESS
-mu1[[2]] = mu.TreePar
-```
-Now we compute the new speciation rate given the extinction rates.
-```{r eval=TRUE}
-alt_models <- congruent.models( my_model, mus =mu1 )
-```
-Let's have a look at these *alternative models*.
-```{r congruent-models-software, fig.cap = "Diversification rate functions of TESS and TreePar with RevBayes providing the reference model.", fig.height = 4, fig.width = 4}
-plot( alt_models )
-```
-
-### TESS as the reference model
-
-```{r TESS-reference-congruence-class, cache=TRUE}
-my_model <- create.model( lambda.TESS, mu.TESS, 
-                         times = seq(0, max_t, length.out = 100) )
-```
-```{r }
-mu1 <- list()
-mu1[[1]] = mu.RevBayes
-mu1[[2]] = mu.TreePar
-```
-Now we compute the new speciation rate given the extinction rates.
-```{r eval=TRUE}
-alt_models <- congruent.models( my_model, mus = mu1 )
-```
-Let's have a look at these *alternative models*.
-```{r congruent-models-software-TESS, fig.cap = "Diversification rate functions of RevBayes and TreePar with TESS providing the reference model.", fig.height = 4, fig.width = 4}
-plot( alt_models )
-```
-
-
-### TreePar as the reference model
-
-```{r TreePar-reference-congruence-class, cache=TRUE}
-my_model <- create.model( lambda.TreePar, mu.TreePar, times = seq(0, max_t, length.out = 100) )
-```
-```{r }
-mu1 <- list()
-mu1[[1]] <- mu.TESS
-mu1[[2]] <- mu.RevBayes
-```
-Now we compute the new speciation rate given the extinction rates.
-```{r eval=TRUE}
-alt_models <- congruent.models(my_model, mus = mu1)
-```
-Let's have a look at these *alternative models*.
-```{r congruent-models-software-TreePar, fig.cap = "Diversification rate functions of RevBayes and TESS with TreePar providing the reference model.", fig.height = 4, fig.width = 4}
-plot(alt_models)
-```
-
 # Exploring a congruence class
 
 In theory there are infinitely many speciation and extinction rate functions that are within a congruence class, i.e., all rate functions that have exactly the same likelihood.
@@ -632,11 +531,6 @@ For example, a posterior distribution with a 95\% credible interval between 0.01
 
 
 In `ACDC` we provide several helper functions to sample speciation and extinction rates.
-
-```{r rates-at-present}
-est_lambda0 <- lambda(0)
-est_mu0     <- mu(0)
-```
 
 
 
@@ -678,8 +572,9 @@ We use the function `sample.basic.models` to construct these rates, which by def
 Our motivation for these values was, that (i) having a maximal expected extinction time per lineage of 1.0 million years seems reasonable from the fossil record, and (ii) we estimated a maximal speciation rate of 0.4, which is clearly smaller than 1.0.
 
 ```{r sample-function-extinction-HSMRF}
+times <- seq(0, max(my_model$time), length.out = 100)
 extinction_rate_samples <- function() {
-   sample.basic.models( num.epochs=100,
+   sample.basic.models( times = times,
                         model="MRF",
                         max.rate=1)
 }
@@ -688,7 +583,7 @@ extinction_rate_samples <- function() {
 ```{r sample-extinction-HSMRF, cache=TRUE, results='hide'}
 samples <- sample.congruence.class(
   my_model,
-  num.samples=20,
+  num.samples=10,
   rate.type="extinction",
   sample.extinction.rates=extinction_rate_samples)
 print(".")
@@ -710,8 +605,9 @@ We otherwise make the same assumptions as above.
 To help the rates we simulate fit within 0 and 1, we set the fold change average to be 2 instead of the default 3.
 
 ```{r sample-function-extinction-exponential}
+times <- seq(0, max(my_model$time), length.out = 100)
 extinction_rate_samples <- function() {
-   sample.basic.models( num.epochs=100,
+   sample.basic.models( times = times,
                         model="exponential",
                         max.rate=1,
                         fc.mean=2)
@@ -721,7 +617,7 @@ extinction_rate_samples <- function() {
 ```{r sample-extinction-exponential, cache=TRUE, results='hide'}
 samples <- sample.congruence.class(
   my_model,
-  num.samples=20,
+  num.samples=10,
   rate.type="extinction",
   sample.extinction.rates=extinction_rate_samples)
 ```
@@ -741,8 +637,9 @@ Unlike the exponential section, we here assume that rates have increased, that t
 We otherwise make the same assumptions as above.
 
 ```{r sample-function-extinction-linear}
+times <- seq(0, max(my_model$time), length.out = 100)
 extinction_rate_samples <- function() {
-   sample.basic.models( num.epochs=100,
+   sample.basic.models( times = times,
                         direction="increase",
                         model="linear",
                         monotonic=TRUE,
@@ -755,7 +652,7 @@ extinction_rate_samples <- function() {
 ```{r sample-extinction-linear, cache=TRUE, results='hide'}
 samples <- sample.congruence.class(
   my_model,
-  num.samples=20,
+  num.samples=10,
   rate.type="extinction",
   sample.extinction.rates=extinction_rate_samples)
 ```
@@ -777,8 +674,9 @@ Here, we consider decreasing rates with larger changes from past to present than
 To help rates stay within the [0,1] bounds we have chosen, we set the rate median at present to be slightly smaller than the default 0.1.
 
 ```{r sample-function-extinction-episodic}
+times <- seq(0, max(my_model$time), length.out = 100)
 extinction_rate_samples <- function() {
-   sample.basic.models( num.epochs=100,
+   sample.basic.models( times = times,
                         direction="decrease",
                         model="episodic5",
                         noisy=FALSE,
@@ -791,7 +689,7 @@ extinction_rate_samples <- function() {
 ```{r sample-extinction-episodic, cache=TRUE, results='hide'}
 samples <- sample.congruence.class(
   my_model,
-  num.samples=20,
+  num.samples=10,
   rate.type="extinction",
   sample.extinction.rates=extinction_rate_samples)
 ```
@@ -817,9 +715,10 @@ We furthermore assume that each extinction rate is independent of the previous t
 That means that we can model any rate function, even completely crazy zig-zagging functions.
 
 ```{r sample-function-extinction-uniform}
+times <- seq(0, max(my_model$time), length.out = 100)
 rsample_extinction <- function(n) runif(n,0,1)
 extinction_rate_samples <- function() {
-   sample.rates( num.epochs=100,
+   sample.rates( times = times,
                  rsample=rsample_extinction,
                  rsample0=NULL,
                  autocorrelated=FALSE)
@@ -827,15 +726,20 @@ extinction_rate_samples <- function() {
 ```
 
 ```{r sample-extinction-uniform, cache=TRUE, results='hide'}
-samples <- sample.congruence.class(my_model,
-                                   num.samples=20,
-                                   rate.type="extinction",
-                                   sample.extinction.rates=extinction_rate_samples)
+samples <- sample.congruence.class(
+  my_model,
+  num.samples=10,
+  rate.type="extinction",
+  sample.extinction.rates=extinction_rate_samples)
 ```
+
+Next we can plot the directional trends
 ```{r extinction-uniform-spaghetti, fig.cap = "Congruence class assuming independent and uniformly distributed extinction rates.", fig.width = 5, fig.height = 3}
 p <- summarize.trends(samples, threshold = 0.02)
 plot(p)
 ```
+
+## Samples for speciation rates
 
 # References
 
@@ -849,8 +753,3 @@ plot(p)
 \setlength{\parindent}{1em}
 \setlength{\leftskip}{0in}
 \setlength{\parskip}{0pt}
-
-<!-- \clearpage -->
-<!-- \bibliographystyle{apalike} -->
-<!-- \bibliography{literature} -->
-

@@ -1,0 +1,60 @@
+# Comparing rate estimates from different software
+
+## RevBayes as the reference model
+
+```{r RevBayes-reference-congruence-class, cache=TRUE}
+my_model <- create.model( lambda.RevBayes, mu.RevBayes, times = seq(0, max_t, length.out = 100) )
+```
+```{r }
+mu1 <- list()
+mu1[[1]] = mu.TESS
+mu1[[2]] = mu.TreePar
+```
+Now we compute the new speciation rate given the extinction rates.
+```{r eval=TRUE}
+alt_models <- congruent.models( my_model, mus =mu1 )
+```
+Let's have a look at these *alternative models*.
+```{r congruent-models-software, fig.cap = "Diversification rate functions of TESS and TreePar with RevBayes providing the reference model.", fig.height = 4, fig.width = 4}
+plot( alt_models )
+```
+
+## TESS as the reference model
+
+```{r TESS-reference-congruence-class, cache=TRUE}
+my_model <- create.model( lambda.TESS, mu.TESS, 
+                         times = seq(0, max_t, length.out = 100) )
+```
+```{r }
+mu1 <- list()
+mu1[[1]] = mu.RevBayes
+mu1[[2]] = mu.TreePar
+```
+Now we compute the new speciation rate given the extinction rates.
+```{r eval=TRUE}
+alt_models <- congruent.models( my_model, mus = mu1 )
+```
+Let's have a look at these *alternative models*.
+```{r congruent-models-software-TESS, fig.cap = "Diversification rate functions of RevBayes and TreePar with TESS providing the reference model.", fig.height = 4, fig.width = 4}
+plot( alt_models )
+```
+
+
+## TreePar as the reference model
+
+```{r TreePar-reference-congruence-class, cache=TRUE}
+my_model <- create.model( lambda.TreePar, mu.TreePar, times = seq(0, max_t, length.out = 100) )
+```
+```{r }
+mu1 <- list()
+mu1[[1]] <- mu.TESS
+mu1[[2]] <- mu.RevBayes
+```
+Now we compute the new speciation rate given the extinction rates.
+```{r eval=TRUE}
+alt_models <- congruent.models(my_model, mus = mu1)
+```
+Let's have a look at these *alternative models*.
+```{r congruent-models-software-TreePar, fig.cap = "Diversification rate functions of RevBayes and TESS with TreePar providing the reference model.", fig.height = 4, fig.width = 4}
+plot(alt_models)
+```
