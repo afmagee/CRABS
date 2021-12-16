@@ -1,10 +1,10 @@
-#' Title
+#' Summarize trends in the posterior
 #'
 #' @param posterior a list of ACDC objects, each one representing a sample from the posterior
 #' @inheritParams summarize.trends
 #' 
 #' @return a ggplot object
-#' @export
+#' @export summarize.posterior
 #'
 #' @examples
 #' data(primates_ebd_log)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/summarize.trends.R
 \name{summarize.trends}
 \alias{summarize.trends}
-\title{Title}
+\title{Summarize trends in the congruence class}
 \usage{
 summarize.trends(
   model_set,
@@ -33,7 +33,7 @@ summarize.trends(
 a patchwork object
 }
 \description{
-Title
+Summarize trends in the congruence class
 }
 \examples{
 

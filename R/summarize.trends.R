@@ -63,7 +63,7 @@ plotdata <- function(model_set, threshold, rate_name, relative_deltas, gmap){
 }
 
 
-#' Title
+#' Summarize trends in the congruence class
 #'
 #' @param model_set an object of type "ACDCset"
 #' @param threshold a threshold for when \eqn{\Delta\lambdai} should be interpreted as decreasing, flat, or increasing
@@ -76,7 +76,7 @@ plotdata <- function(model_set, threshold, rate_name, relative_deltas, gmap){
 #' @importFrom ggplot2 facet_grid stat
 #'
 #' @return a patchwork object
-#' @export
+#' @export summarize.trends
 #'
 #' @examples
 #' 

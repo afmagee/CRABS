@@ -1,4 +1,4 @@
-#' Sample the congruence class of a posterior sample
+#' Stochastic exploration of congruent models for all samples in the posterior
 #' 
 #' @description 
 #' This function takes a posterior sample as input: a list of ACDC objects. 

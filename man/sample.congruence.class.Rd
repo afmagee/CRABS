@@ -19,9 +19,9 @@ sample.congruence.class(
 
 \item{rate.type}{either "extinction", "speciation", or "both"}
 
-\item{sample.speciation.rates}{a function that when called returns a vector representing the speciation rate trajectory}
+\item{sample.speciation.rates}{a function that when called returns a speciation rate function}
 
-\item{sample.extinction.rates}{a function that when called returns a vector representing the extinction rate trajectory}
+\item{sample.extinction.rates}{a function that when called returns a extinction rate function}
 }
 \value{
 A named list with congruent rates.

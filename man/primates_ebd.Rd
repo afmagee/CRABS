@@ -3,7 +3,7 @@
 \docType{data}
 \name{primates_ebd}
 \alias{primates_ebd}
-\title{Primates birth-death model}
+\title{RevBayes Primates birth-death model}
 \format{
 An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 100 rows and 3 columns.
 }

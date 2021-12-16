@@ -3,8 +3,8 @@
 #' @param model the reference model, an object of class "ACDC"
 #' @param num.samples The pulled diversification rate function (measured in time before present).
 #' @param rate.type either "extinction", "speciation", or "both"
-#' @param sample.speciation.rates a function that when called returns a vector representing the speciation rate trajectory
-#' @param sample.extinction.rates a function that when called returns a vector representing the extinction rate trajectory
+#' @param sample.speciation.rates a function that when called returns a speciation rate function
+#' @param sample.extinction.rates a function that when called returns a extinction rate function
 #' @return A named list with congruent rates.
 #' @export
 #' @examples

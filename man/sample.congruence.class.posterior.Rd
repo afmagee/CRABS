@@ -2,7 +2,7 @@
 % Please edit documentation in R/sample.congruence.class.posterior.R
 \name{sample.congruence.class.posterior}
 \alias{sample.congruence.class.posterior}
-\title{Sample the congruence class of a posterior sample}
+\title{Stochastic exploration of congruent models for all samples in the posterior}
 \usage{
 sample.congruence.class.posterior(
   posterior,

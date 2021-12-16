@@ -2,7 +2,7 @@
 % Please edit documentation in R/summarize.posterior.R
 \name{summarize.posterior}
 \alias{summarize.posterior}
-\title{Title}
+\title{Summarize trends in the posterior}
 \usage{
 summarize.posterior(
   posterior,
@@ -30,7 +30,7 @@ summarize.posterior(
 a ggplot object
 }
 \description{
-Title
+Summarize trends in the posterior
 }
 \examples{
 data(primates_ebd_log)
