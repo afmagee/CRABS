@@ -6,10 +6,8 @@ author:
   - Bjørn T. Kopperud
   - Andrew F. Magee
 output:
-  bookdown::bs4_book:
-    fig_caption: yes
-    toc_depth: 3
   bookdown::gitbook:
+    lib_dir: docs/lib
     fig_caption: yes
     toc_depth: 3
   bookdown::html_document2: 
@@ -41,6 +39,8 @@ vignette: |
   %\VignetteEngine{knitr::rmarkdown}
 bibliography: literature.bib
 csl: methods-in-ecology-and-evolution.csl
+knit: (function(inputFile, encoding) {
+  rmarkdown::render(inputFile, encoding = encoding, output_dir = "../docs") })
 pandoc_args:
   - --filter=pandoc-eqnos
 ---
@@ -67,7 +67,7 @@ opts_chunk$set(
   concordance=TRUE,
   fig.width=4, 
   fig.height=4, 
-  fig.path='RnwFigs/',
+  fig.path='figures/',
   warning=FALSE,
   message=FALSE,
   tidy=FALSE
@@ -81,10 +81,13 @@ set.seed(53079239)
 
 # Overview
 
-This is a brief tutorial about how to explore congruence classes of macroevolutionary diversification rates.
+This is a vignette, or long-form documentation, accompanying the R-package ACDC: Analysis of Congruent Diversification Classes.
+
+The main purpose of ACDC is to explore congruence classes of macroevolutionary diversification rates.
 Specifically, this tutorial has two main aims/applications:
-(1) for a given speciation and extinction rate, you can compute the alternative speciation and extinction rates via the pulled net-diversification rates;
-and (2) for some given speciation and extinction rates, which might have been estimated from a phylogenetic tree or provided simply for exploration purposes, you can explore the entire congruence class given some rate limitations (e.g., type of change or min and max rates; see more below).
+
+* For a given speciation and extinction rate, you can compute the alternative speciation and extinction rates via the pulled net-diversification rate 
+* For a given speciation and extinction rate, which might have been estimated from a phylogenetic tree or provided simply for exploration purposes, you can explore the entire congruence class given some rate assumptions (e.g., type of change or min and max rates).
 
 # Installation
 
@@ -95,16 +98,10 @@ You can install the stable version of `ACDC` from CRAN:
 install.packages("ACDC")
 ```
 
-We host the developmental version of `ACDC` on github. If you don't already have it, the `devtools` R-package makes it easy to install directly from github.
-```{r inst-devtools, eval=FALSE}
-install.packages("devtools")
-```
-Then, make sure that you load the `devtools` package:
+We host the developmental version of `ACDC` on github. If you don't already have it, the `devtools` R-package makes it easy to install directly from github. Using devtools makes it easy to install `ACDC` directly from GitHub.
 ```{r load-devtools, eval=FALSE}
+install.packages("devtools")
 library(devtools)
-```
-Now you can install `ACDC` directly from GitHub:
-```{r inst-ACDC, eval=FALSE}
 install_github("afmagee/ACDC")
 ```
 <!-- % Sebastian: This is only for now until we have the package properly on GitHub -->
@@ -132,43 +129,36 @@ library(ACDC)
 ```
 Now you are ready to use `ACDC` to explore congruence classes in macroevolutionary diversification rates.
 
-# Overview of functions in `ACDC`
+# Features
 
-Before we are going to provide some example on how to explore the congruence class, we give you here an overview of the function available in ACDC.
+##  Overview of functions in `ACDC`
 
-```{r echo = FALSE, eval = FALSE}
-library(kableExtra)
-library(tibble)
-df <- tibble("Function" = c("sample.basic.models", "sample.congruence.class", "sample.rates"),
-             "Description" = c("", 
-                               "Samples rate functions from the congruence class given a reference speciation and extinction rate function (the true/empirically estimated rate functions).", 
-                               "Helps you to randomly sample either a new speciation or extinction rate function given some constraints and/or expected behavior (e.g., autocorrelated vs independent rates)"),
-             "Section" = c("", "", ""))
-
-kbl(df, booktabs = TRUE, escape = FALSE, 
-    caption = "Functions available in ACDC") %>%
-  kable_styling(latex_options = c("hold_position"))%>%
-  column_spec(2, width = "20em") %>%
-  column_spec(3, width = "5em") 
-```
-
-Below we explain these major functions of ACDC in detail.
-You may want to skip over these discussion if you want to see the examples first.
-Nevertheless, we recommend to make yourself familiar with these available functions to get a better idea of how we explore the congruence class.
-
-* `create.model`
-* `congruent.models`
-* `sample.congruence.class`
-* `sample.basic.models`
+Here we give you an overview of the main functions available in `ACDC`.
 
 
+| Function      | Description  |
+| :---        |    :----    |
+| `create.model`      | Creates a model object        |
+| `congruent.models` | Generates alternative models that are congruent with a provided reference models. The user needs to explicitly supply a list of alternative extinction and/or speciation rate functions. |
+| `sample.basic.model`   |  Samples a rate function. More information in section \@ref(samplebasic)   |
+| `sample.congruence.class`   |  Samples rate functions from the congruence class given a reference speciation and extinction rate function (the true/empirically estimated rate functions).       |
+| `sample.rates`  | Helps you to randomly sample either a new speciation or extinction rate function given some constraints and/or expected behavior (e.g., autocorrelated vs independent rates) |
+| `sample.congruence.class` | Randomly draws a set of samples from the congruence class. The user provides a function that draws extinction rates, and/or a function that draws speciation rates.  | 
+| `sample.congruence.class.posterior` | Uses `sample.basic.models` to samples a set of congruent models for each sample in the posterior distribution | 
+| `summarize.trends` |  Calculates the slope in the rate function, and plots a summary of whether the rate was increasing, decreasing or flat for each episode |
+| `summarize.posterior` | Similar to `summarize.trends`, but instead iterating over all congruent samples for each posterior sample. This plot is also sorted |
 
 
-## `sample.basic.models`
+You can consult the R documentation for each of these by placing a question mark in front of the name. For example, try calling `?create.model` or `?sample.basic.model` in R. 
+We use these functions throughout the sections in the vignette.
+For `sample.basic.models`, we have a separate section explaining the most important flags and use cases.
+
+## `sample.basic.models` {#samplebasic}
 This function is designed to enable easy generation of commonly employed diversification-rate scenarios.
 The basic models are specified by the argument `model` exponentially increasing/decreasing rates, linearly decreasing rates, episodic (or piecewise constant rates), and Markov random field (MRF) models (constant rates are also possible).
 The direction of change (increase or decrease) is controlled by the argument `direction`.
-The function uses a discrete-time approximation to draw rates, the number of episodes is defined using the argument `num.epochs`, which is 100 by default for compatibility with `sample.congruence.class`.
+The function will fit a piecewise linear rate function, using the argument `times` to represent a vector for the discrete time steps. 
+The number of episodes is equal to the length of the `times` vector.
 So, for example, the code `sample.basic.models()`, which uses all defaults, samples exponentially decreasing rates.
 
 By default, the exponential, linear, and episodic models are sampled with an additional random component given by a MRF.
@@ -178,7 +168,7 @@ The alternative, "GMRF" for Gaussian Markov random field, produces smoother chan
 This MRF noise allows rates to go up or down, such that `direction` gives the overall trend across many sampled rates rather than a guarantee for any one rate.
 To change this, and force rates to go one direction while allowing stochastic noise from an MRF, set `monotonic=TRUE`.
 
-To have no trends, and pure MRF models, `model="MRF"`.
+To have no trends, and pure MRF models, specify `model="MRF"`.
 Note that this means that setting `model="MRF"` and `noisy=FALSE` amounts to a constant-rate model (by disabling both trends and stochastic variability).
 
 The argument `fc.mean` dictates (more or less) the average amount of change from first to last rate as a fold change.
@@ -188,7 +178,7 @@ The default is 3, which is biologically plausible but not the universally best o
 Fold changes are drawn from a Gamma distribution with rate 1.25, offset 1, and a shape parameter that gives the desired mean.
 
 All rate curves are sampled by rejection sampling to guarantee that the rates are all between `min.rate` and `max.rate`.
-By default, rates are assumed to be in [0,10] which is probably the extreme end of plausible variation.
+By default, rates are assumed to be in [0,10] which on a million-year time scale is probably the extreme end of plausible variation.
 This rejection sampling means that the actual average change may not quite be what it is set to be.
 For example if one sets the model to be a decrease through time, sets the rate at present to be 0.5, and the maximum rate to be 0.75, clearly the average fold chane could not be a larger than 1.5x increase.
 Be aware, setting rejection limits that make it difficult to sample trajectories can make this function (which is normally quite fast) take a very long time!
@@ -197,42 +187,6 @@ The initial rate is drawn from a lognormal distribution with median `rate0.media
 The default is rates with median 0.1 and a 95% range covering [0.01,1].
 Note that the argument `rate0` overrides drawing random starting values if it is set.
 This allows sampling speciation rates, as the initial speciation rate must be the same in all replicates.
-
-# Obtaining speciation and extinction rate functions from empirical phylogenies
-
-One of the main features and aims of `ACDC` is to explore the congruence class for the diversification rates that you estimated using another software or R package.
-Here we provide you some examples using standard software for estimating diversification rates through time, but if your preferred software is not included then you can either specify the diversification rate functions manually, or try to follow our examples in loading the output.
-
-You can jump to the relevant software example and then jump over to the congruence class exploration.
-
-
-
-
-## Reading in an empirical phylogenetic tree
-
-First, we assume that you have a phylogenetic tree which you can load into R.
-There are several tutorials on how to do so (e.g., [TESS](https://cran.r-project.org/web/packages/TESS/vignettes/Bayesian_Diversification_Rate_Analysis.pdf) or [APE](https://cran.r-project.org/web/packages/ape/ape.pdf), and we simply refer to these tutorials here.
-As an example, we used the *Primates* phylogeny from @Springer2012.
-You can download the data from our [RevBayes tutorial](https://revbayes.github.io/tutorials/divrate/ebd.html).
-First we need to load the APE package [@Paradis2019].
-```{r load-ape}
-library(ape)
-```
-Now we can read our phylogenetic tree
-```{r load-primates}
-tree <- read.tree(file="data/primates.tre")
-```
-Next, read the software examples to convert the estimated diversification rates into rate functions.
-
-
-```{r TESS-analysis2, child = "tess_analysis.Rmd"}
-```
-
-```{r treepar-analysis, child = "treepar.Rmd"}
-```
-
-```{r RevBayes-analysis, child = "RevBayes.Rmd"}
-```
 
 # Creating the congruence class
 
@@ -282,11 +236,29 @@ We will walk through example of these below.
 
 ## The model object
 
-We first create a congruence class object which contains all the transformed rate functions (i.e., the net-diversification rate and relative extinction rate) as well as the pulled rates (i.e., the pulled net-diversification and the pulled speciation rate).
+In order to create a congruence class, we require some information about the extinction and speciation rate functions in at least one of the models in the congruence class. In the following examples we will use the results from an episodic birth-death model fitted in RevBayes (see Section \@ref(revbayes)), but we note that ACDC can work with any rate estimates. We provide the results in a convenient format:
+
+```{r load-revbayes}
+data("primates_ebd")
+head(primates_ebd)
+```
+
+We also provide an example for fitting birth-death models in TreePar (Section \@ref(treepar)) and TESS (Section \@ref(tess)). If you wish to use these results instead, simply call `data("primates_ebd_treepar")` or `data("primates_ebd_tess")`. After we have estimated our birth-death rates, we transform the data into piecewise linear rate functions in R
+```{r revbayes-piecewise-rates}
+times <- primates_ebd[["time"]]
+
+lambda <- approxfun(times, primates_ebd[["lambda"]])
+mu <- approxfun(times, primates_ebd[["mu"]])
+```
+
+Next, we create a congruence class object which contains all the transformed rate functions (i.e., the net-diversification rate and relative extinction rate) as well as the pulled rates (i.e., the pulled net-diversification and the pulled speciation rate).
 ```{r fig.cap="The diversification rates in the reference model.", fig.width = 6, fig.height = 6}
+max_t <- max(primates_ebd[["time"]])
+times_fine <- seq(0, max_t, length.out = 1000)
+
 my_model <- create.model(lambda, 
                          mu, 
-                         times = seq(0, max_t, length.out = 1000))
+                         times_fine)
 plot(my_model)
 ```
 The `my_model` includes all the rate functions.
@@ -331,6 +303,13 @@ Let's have a look at these *alternative models*.
 ```{r congruent-models-mu-constant, fig.cap = "Diversification rate functions within the congruence class assuming different constant extinction rate functions. The dashed lines show the different alternatives that we explored here, and the solid lines represent our reference model. Here we notice that the overall pattern of speciation rates as well as net-diversification rates is fairly robust to alternative constant extinction rates within the congruence class. Only the relative extinction rate changes is value, which is not surprising since we explored different extinction rates.", fig.height = 4, fig.width = 4}
 plot( alt_models )
 ```
+Next, we can inspect the summary of the trends in the speciation rate through time
+```{r summary-mu-constant, fig.cap = "Summary of directional trends in the congruence class."}
+p <- summarize.trends(alt_models, threshold = 0.02)
+plot(p)
+```
+Notice that there isvariation in the slope of the speciation rate ($\Delta\lambda$) throughout the entire time span of the phylogenetic tree. Yet, when we only consider rate changes that are smaller or greater than our threshold of $\epsilon = 0.02 \Delta\lambda$ per million years, it becomes evident that the constructed congruent models are in complete agreement of the two increases in speciation rate, as well as the more recent decline in speciation rate.
+
 
 ### Linearly increasing extinction rates
 
@@ -361,6 +340,12 @@ Let's have a look at these *alternative models*.
 ```{r congruent-models-mu-linear-inc, fig.cap = "Diversification rate function for different linear extinction rates within the same congruence class. The dashed lines show the different alternatives that we explored here, and the solid lines represent our reference model. We observe that the speciation and net-diversification rates are robust to different linear extinction rates within the congruence. As expected, the relative extinction rate changes because we chose different extinction rates.", fig.height = 4, fig.width = 4}
 plot(alt_models)
 ```
+Next, we can inspect the summary of the trends in the speciation rate through time
+```{r summary-mu-linear, fig.cap = "Summary of directional trends in the congruence class."}
+p <- summarize.trends(alt_models, threshold = 0.02)
+plot(p)
+```
+Similar to the example with constant alternative extinctionrate models, there is some variation in the trends, but the same conclusion remains. Namely, for our threshold of $\epsilon = 0.02 \Delta\lambda$ per million years, it is evident that the constructed congruent models are in complete agreement of the two increases in speciation rate, as well as the more recent decline in speciation rate.
 
 ### Exponential increasing extinction rates
 
@@ -388,6 +373,13 @@ Let's have a look at these *alternative models*.
 ```{r congruent-models-mu-exp-inc, fig.cap = "Diversification rate functions for exponentially increasing extinction rates within the congruence class. The dashed lines show the different alternatives that we explored here, and the solid lines represent our reference model. As in our previous example, the speciation rate and net-diversification rate are robust to the difference choices of extinction rates", fig.height = 4, fig.width = 4}
 plot( alt_models )
 ```
+
+Next, we can inspect the summary of the trends in the speciation rate through time
+```{r summary-mu-exponential, fig.cap = "Summary of directional trends in the congruence class."}
+p <- summarize.trends(alt_models, threshold = 0.02)
+plot(p)
+```
+Similar to the two previous examples, there is some variation in the trends, but the same conclusion remains. Namely, for our threshold of $\epsilon = 0.02 \Delta\lambda$ per million years, it is evident that the constructed congruent models are in complete agreement of the two increases in speciation rate, as well as the more recent decline in speciation rate.
 
 
 ### Two-epoch extinction rates
@@ -418,6 +410,12 @@ Let's have a look at these *alternative models*.
 ```{r congruent-models-mu-shift, fig.cap = "Diversification rate functions for 2-epoch extinction rate functions within the congruence class. The solid line shows the reference model and the dashed lines show the alternative models. We observe no noticeable effect on the overall trend of the derived speciation rates.", fig.height = 4, fig.width = 4}
 plot( alt_models )
 ```
+Next, we can inspect the summary of the trends in the speciation rate through time
+```{r summary-mu-twoepoch, fig.cap = "Summary of directional trends in the congruence class."}
+p <- summarize.trends(alt_models, threshold = 0.02)
+plot(p)
+```
+Again, for our threshold of $\epsilon = 0.02 \Delta\lambda$ per million years, it is evident that the constructed congruent models are in complete agreement of the two increases in speciation rate, as well as the more recent decline in speciation rate.
 
 ### Reversed trend extinction rates
 
@@ -442,7 +440,7 @@ In Figure \@ref(fig:congruent-models-mu-rev-trend-add) we used an additive trend
 However, we can also use a multiplicative model by subtracting the log speciation rate and then back-transforming the extinction rate from the log-scale.
 ```{r }
 mu_min = 0.0075
-mu1 <- function(t) exp(log(mu_min) - log(lambda(t)))
+mu1 <- function(t) exp(log(mu_min) - log(my_model$lambda(t)))
 ```
 Now we compute the new speciation rate given the extinction rates.
 ```{r eval=TRUE}
@@ -452,6 +450,7 @@ Let's have a look at these *alternative models*.
 ```{r congruent-models-mu-rev-trend-mult, fig.cap = "Diversification rate functions for our reversed multiplicative trend extinction rate function. The solid line shows the reference model and the dashed lines show the alternative model. Interestingly, the derived speciation rate is qualitatively identical except that the speciation rate first decreases before sharply increasing towards the present.", fig.height = 4, fig.width = 4}
 plot( alt_models )
 ```
+Since there are just two models here, it is not necessary to plot the trend summary. It is obvious that the speciation rate still exhibits a sharp increase followed by a downturn toward the present.
 
 This concludes our brief exploration of different common shapes of extinction rates.
 In summary, the speciation and net-diversification rates are mostly robust to our relatively minor variations in extinction rates.
@@ -469,27 +468,24 @@ Can we also specify different speciation rate function and obtain valid extincti
 Let us assume that the speciation rate was constant.
 However, the congruence class as defined by @Louca2020 dictates that $\lambda(0) = \lambda'(0)$, assuming the same present day sampling fraction for both models.
 Thus, there is only one possible constant rate speciation model within the congruence class with $\lambda'(t) = \lambda(0)$
-Specifically, let's assume that the true extinction rate was $\mu(t)=\{0.1,0.2,0.3,0.4\}$.
-These values represent the magnitude of speciation rates that we estimated.
+Specifically, let's assume that the true speciation rate was $\lambda(t) = \lambda_0$.
 We follow exactly the same approach as with the extinction rates.
-Hence, we start by defining the speciation rate functions.
+Hence, we start by defining the speciation rate function.
 ```{r }
-lambda1 <- function(t) { rep(lambda(0),length(t)) }
+lambda1 <- function(t) my_model$lambda(0.0)
 ```
 Now we compute the new extinction rate given the speciation rates.
 ```{r eval=TRUE}
 alt_models <- congruent.models( my_model, lambda = lambda1)
 ```
 Let's have a look at these *alternative models*.
-```{r congruent-models-lambda-constant, fig.cap = "Diversification rate functions for different constant speciation rates within the congruence class. The solid line shows our reference model and the different dashed lines show alternative rates/model. Most interesting, we observe that for the constant speciation rate function we compute an extinction rate that was negative towards the present.", fig.height = 4, fig.width = 4}
+```{r congruent-models-lambda-constant, fig.cap = "Diversification rate functions for a constant speciation rates within the congruence class. The solid line shows our reference model and the different dashed line shows the alternative model. Most interesting, we observe that for the constant speciation rate function we compute an extinction rate that was negative towards the present.", fig.height = 4, fig.width = 4}
 plot( alt_models )
 ```
 
-In this example we observe that for the constant speciation rate function the derived extinction rate function was negative at the present.
+In this example we observe that for the constant speciation rate function the derived extinction rate function was negative at the near present.
 A negative extinction rate is clearly unrealistic.
 Thus, we can conclude that there is no constant rate speciation rate function within the congruence class.
-
-
 
 ### Exponential increasing/decreasing speciation rates
 
@@ -529,7 +525,7 @@ Instead of trying to explore literally all rate functions, we will sample from t
 This idea is very similar to all sampling based methods.
 For example, a posterior distribution with a 95\% credible interval between 0.01 and 0.02 contains infinitely many values, but we are we comfortable today with simply sampling values proportional to their posterior probability and looking/plotting the distribution.
 
-## General discussion about assumptions on rates
+## Assumptions on rates
 
 There are several plausible assumptions that can be made about diversification rates and how these rates vary.
 First, you could make assumptions about the magnitude of rate variation, and specifically what are plausible minimum and maximum rates.
@@ -549,16 +545,17 @@ This would mean that diversification rates are autocorrelated and do not vary co
 In the next subsections, we explore a few different options of rate variation over time in the next sections, which include:
 
 * HSMRF (autocorrelated) rates
-* exponentially decreasing rates with stochastic variation
-* linearly increasing rates with stochastic variation
-* n-piece episodic models
-* uncorrelated/independent rates
+* Exponentially decreasing rates with stochastic variation
+* Linearly increasing rates with stochastic variation
+* Episodic constant models (with $n$ episodes)
+* Uncorrelated (independent) rates
 
 With the built-in functions `sample.basic.models` and `sample.rates`, users have freedom to explore these, and many other forms of rate variation.
 If these functions are not sufficient, as shown in previous sections, it is easy to customize the sampling to your liking.
 
+## Sample alternative extinction rates
 
-## Temporally autocorrelated extinction rates
+### Temporally autocorrelated
 
 Here, we generate a variety of alternative extinction rates using HSMRF models [@Magee2020].
 When sampling from models, we get random walks, or temporally autocorrelated, extinction rates, and the HSMRF tends to produce random walks that look like piecewise constant functions.
@@ -592,7 +589,7 @@ p <- summarize.trends(samples,
 plot(p)
 ```
 
-## Exponentially decreasing extinction rates
+### Exponentially decreasing
 
 Here, we generate a variety of alternative extinction rates using HSMRF models [@Magee2020] with an exponential trend.
 We otherwise make the same assumptions as above.
@@ -624,7 +621,7 @@ p <- summarize.trends(samples, threshold = 0.02)
 plot(p)
 ```
 
-## Linearly increasing extinction rates
+### Linearly increasing
 
 Here, we generate a variety of alternative extinction rates using GMRF models [@Magee2020] with a linear trend.
 Unlike the exponential section, we here assume that rates have increased, that the increase has been monotonic (there were no decreases, where in the exponential decreases above there were occasional increases), and that the stochastic variability comes from a GMRF.
@@ -654,12 +651,12 @@ We can plot the samples using
 ```{r congruence-class-extinction-linear, fig.cap = "Congruence class assuming linearly changing extinction rates."}
 plot(samples)
 ```
-```{r cg-extinction-linear, fig.cap = "Congruence class assuming linearly changing extinction rates.", fig.width = 5, fig.height = 3}
+```{r cg-extinction-linear, fig.cap = "Congruence class assuming linearly changing extinction rates.", fig.width = 6, fig.height = 3}
 p <- summarize.trends(samples, threshold = 0.02)
 plot(p)
 ```
 
-## Episodic extinction rates
+### Episodic 
 
 Here, we generate a variety of alternative extinction rates without stochastic noise.
 Without noise (`noisy=FALSE`), all changes will be in the same direction, here decreases.
@@ -691,19 +688,18 @@ We can plot the samples using
 ```{r cg-extinction-episodic-plot}
 plot(samples)
 ```
-```{r extinction-episodic, fig.cap = "Congruence class assuming episodicly changing extinction rates.", fig.width = 5, fig.height = 3}
+```{r extinction-episodic, fig.cap = "Congruence class assuming episodicly changing extinction rates.", fig.width = 6, fig.height = 3}
 p <- summarize.trends(samples, threshold = 0.02)
 plot(p)
 ```
 
-## A uniform grid of extinction rates
+### Uniform independent
 
 The previous functions used `sample.basic.models` to construct a variety of pre-defined hypotheses.
 `ACDC` also implements `sample.rates` to allow more flexibility in user-defined rate functions (and of course the user is free to define their own functions as well).
 Here we show this with IID rates.
 We assume that the extinction rates could have had any value between 0 and 1 (you could easily pick different numbers here).
 Our motivation for these values was, that (i) having a maximal expected extinction time per lineage of 1.0 million years seems reasonable from the fossil record, and (ii) we estimated a maximal speciation rate of 0.4, which is clearly smaller than 1.0.
-
 
 We furthermore assume that each extinction rate is independent of the previous time interval.
 That means that we can model any rate function, even completely crazy zig-zagging functions.
@@ -726,16 +722,25 @@ samples <- sample.congruence.class(
   rate.type="extinction",
   sample.extinction.rates=extinction_rate_samples)
 ```
+We can plot the samples to inspect them visually
+```{r uniform-mu-sample, fig.cap = "Rate functions for the congruence class with proposed alternative extinction rates whose values are drawn from an independent uniform distribution for each episode."}
+plot(samples)
+```
+
 
 Next we can plot the directional trends
-```{r extinction-uniform-spaghetti, fig.cap = "Congruence class assuming independent and uniformly distributed extinction rates.", fig.width = 5, fig.height = 3}
+```{r extinction-uniform-spaghetti, fig.cap = "Congruence class assuming independent and uniformly distributed extinction rates.", fig.width = 6, fig.height = 3}
 p <- summarize.trends(samples, threshold = 0.02)
 plot(p)
 ```
 
-## Samples for speciation rates
+## Sample alternative speciation rates
 
-It is also possible to sample alternative speciation rates. Here we choose to sample rates according to a horseshoe Markov random field. Since the congruence class requires a shared $\lambda_0$ for all models in the congruence class, we constrain our sampler to always start on the same speciation rate at the present.
+It is also possible to sample alternative speciation rates. Since the congruence class requires a shared $\lambda_0$ for all models in the congruence class, we must constrain our sampler to always start on the same speciation rate at the present.
+
+### Temporally autocorrelated
+
+Here we choose to sample speciation rates according to a horseshoe Markov random field distribution. 
 
 ```{r sample-speciation-hsmrf}
 times <- seq(0, max(my_model$time), length.out = 100)
@@ -763,7 +768,7 @@ plot(samples)
 ```
 
 Notice that all of our congruent models have a negative extinction rate near the present. This becomes more evident if we plot the extinction rates on its own panel and adjust the axis limits.
-```{r sample-speciation-mus, fig.height=5, fig.width=5}
+```{r sample-speciation-mus, fig.height=5, fig.width=5, fig.cap = "Inferred congruent extinction rates, zoomed in for clarity."}
 p <- plot(samples)[[2]] + 
   coord_cartesian(ylim = c(-1, 1)) +
   xlab("time before present") +
@@ -772,12 +777,100 @@ plot(p)
 ```
 
 The models depicted in \@ref(fig:sample-speciation-mus) do not make sense, since rates are only defined on the positive numbers. Similarly to before, we can evaluate the directional changes in the extinction rate
-```{r sample-extinction-trendplot}
+```{r sample-extinction-trendplot, fig.cap = "A summary of directional trends through time across the congruent models.", fig.width = 6, fig.height = 3}
 p <- summarize.trends(samples, threshold = 0.02, rate_name = "mu")
 plot(p)
 ```
 
+# Exploring the posterior
 
+Until this point, we have only considered point estimates for the fitted birth-death models. If we only consider the maximum-likelihood estimates, or the posterior median rates, it is easy to forget that there is often substantial estimation error for speciation and extinction rates. Previously we asked the question, if patterns in the posterior median rates are robust to the congruence class. What happens if we want to take into account the estimation error? Inspecting a series of samples in the posterior distribution is one way to assess this question.
+
+## Reading the posterior
+
+In ACDC, we have included functionality to read RevBayes log outputs.
+
+```{r read-posterior, results = "hide"}
+data(primates_ebd_log)
+
+posterior <- read.RevBayes(primates_ebd_log, max_t = 65, n_samples = 20)
+```
+This yields a list of twenty models that are sampled from the posterior. Each sample is equally spaced on the MCMC iterations, meaning that we minimized the autocorrelation among the posterior samples. In `ACDC` we also included functionality to sample the congruence class, while also taking into account the variation in birth-death models in the posterior distribution. 
+
+## Sampling congruent models in the posterior
+
+The function `sample.congruence.class.posterior` iterates over each sample from the posterior, and draws for each sample another 20 models that are congruent with their respective posterior sample. In this example, we draw 20 alternative extinction rate functions, under an autocorrelated HSMRF distribution starting at a log-normal $\mu_0$ with a median of 0.1. The rejection sampling makes sure that any models with a rate higher than 1.0 is discarded. `sample.congruence.class.posterior` is completely linked to `sample.basic.models`, and any additional parameters are directly passed to `sample.basic.models(...)`.
+
+```{r sample-posterior}
+samples <- sample.congruence.class.posterior(posterior, 
+                                             num.samples = 20,
+                                             rate.type = "extinction",
+                                             rate0.median = 0.1,
+                                             model = "MRF",
+                                             MRF.type = "HSMRF",
+                                             max.rate = 1.0)
+```
+This example yields a list of 20 congruence classes, represented by their 1 reference posterior model, and additional 20 congruent models each, totaling 420 models. First we will plot the rate functions in the posterior:
+
+```{r posterior-rates, figcap = "The speciation rates for twenty MCMC samples in the posterior distribution."}
+## We name each posterior sample for plotting purposes
+l <- list()
+for (i in seq_along(posterior)){
+  df <- model2df(posterior[[i]])  
+  df$name <- paste0("posterior", i)
+  l[[i]] <- df
+}
+df_posterior <- bind_rows(l)
+
+col_lambda <- colorspace::sequential_hcl(palette = "Blues", n = length(posterior))
+
+p <- bind_rows(df_posterior) %>%
+  dplyr::filter(rate == "Speciation") %>%
+  ggplot(aes(x = Time, y = value, color = name)) +
+  geom_line() +
+  scale_x_reverse() +
+  theme_classic() +
+  scale_color_manual(values = col_lambda) +
+  labs(x = "time before present", y = "speciation rate") +
+  theme(legend.position = "none")
+plot(p)
+```
+Evidently, the posterior rates exhibit a lot more rate variation than we saw from the posterior median. What happens if we inspect the twenty congruence classes we just explored, in a visual sense? To do so, we may use the `summarize.posterior` function. Similar to `summarize.trends`, it will plot the directional trends in the speciation rate through time. The only difference is that now, the y-axis is sorted, so that each row no longer represents a model.
+```{r summarize-posterior, fig.cap = "Summary of directional trends in 20 posterior samples, and for each of those 20 samples, 20 additional congruent models.", fig.width = 6, fig.height = 4}
+p <- summarize.posterior(samples, threshold = 0.02)
+plot(p)
+```
+
+
+# Estimating birth-death models
+
+One of the main features and aims of `ACDC` is to explore the congruence class for the diversification rates that you estimated using another software or R package.
+Here we provide you some examples using standard software for estimating diversification rates through time, but if your preferred software is not included then you can either specify the diversification rate functions manually, or try to follow our examples in loading the output.
+
+## Reading the phylogenetic tree
+
+First, we assume that you have a phylogenetic tree which you can load into R.
+There are several tutorials on how to do so (e.g., [TESS](https://cran.r-project.org/web/packages/TESS/vignettes/Bayesian_Diversification_Rate_Analysis.pdf) or [APE](https://cran.r-project.org/web/packages/ape/ape.pdf), and we simply refer to these tutorials here.
+As an example, we used the *Primates* phylogeny from @Springer2012.
+You can download the data from our [RevBayes tutorial](https://revbayes.github.io/tutorials/divrate/ebd.html).
+First we need to load the APE package [@Paradis2019].
+```{r load-ape}
+library(ape)
+```
+Now we can read our phylogenetic tree
+```{r load-primates}
+tree <- read.tree(file="data/primates.tre")
+```
+Next, read the software examples to fit birth-death models to the tree, and estimate diversification rates.
+
+```{r TESS-analysis2, child = "tess_analysis.Rmd"}
+```
+
+```{r treepar-analysis, child = "treepar.Rmd"}
+```
+
+```{r RevBayes-analysis, child = "RevBayes.Rmd"}
+```
 
 # References
 

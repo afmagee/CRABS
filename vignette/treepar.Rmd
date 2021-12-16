@@ -1,4 +1,4 @@
-## TreePar
+## TreePar {#treepar}
 
 Let us walk here through a very simple TreePar analysis [@Stadler2011].
 For a real publication worthy analysis, you may want to do a more thorough analysis by allowing more possible shifts and a finer grid for the search space.
@@ -79,19 +79,23 @@ if ( best > 0 ) {
     mu     <- function(x) { return ( rep(extinction[1],length(x)) ) }
 }
 ```
-Finally, let us have a look at the estimated rate function:
-```{r TreePar-plot-rate-functions, fig.height=4, fig.width=4, fig.align="center", fig.cap="Estimated speciation and extinction rates using TreePar on the primates phylogeny of Springer et al. (2012)."}
-ylim <- c(min(0,speciation,extinction),max(speciation,extinction))
 
-curve( lambda, xlim=c(max_t, 0), lwd=2, lty=1, col="blue", ylim=ylim, main="primates", xlab="time", ylab="rate", cex.main=1.5, cex.lab=1.5 )
-curve( mu, add=TRUE, lwd=2, lty=1, col="red" )
-legend("bottomleft",legend=c("speciation","extinction"),
-       col=c("blue","red"), lty=c(1,1), cex=1.2)
+Let us make a data frame representation of the rate functions
+```{r treepar-rates-dataframe}
+times <- seq(0, max_t, length.out = 100)
+
+primates_ebd_treepar <- tibble(
+  "time" = times,
+  "lambda" = lambda(times),
+  "mu" = mu(times),
+)
+head(primates_ebd_treepar)
 ```
 
-For a later use in the tutorial where we want to compare the estimates between different software, we are going to store the rate functions.
-```{r TreePar-rates, cache=TRUE}
-lambda.TreePar <- lambda
-mu.TreePar     <- mu
+Now let's have a look at the estimated rate functions
+```{r plot-treepar-rates, fig.width=5, fig.height = 5, fig.cap = "The estimated posterior median results from an episodic birth-death model fitted in RevBayes."}
+
 ```
-You could now skip over the next software section and estimate the entire congruence class for these estimated speciation and extinction rates.
+
+The data frame `primates_ebd_treepar` is what we get when we call the `data("primates_ebd_treepar")` function in `ACDC`. We use the RevBayes estimated rates in our vignette examples, but it is easy to substitute those for the two-epoch TreePar results to construct the congruence class.
+

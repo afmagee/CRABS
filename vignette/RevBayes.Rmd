@@ -1,4 +1,4 @@
-## The HSMRF model in RevBayes
+## The HSMRF model in RevBayes {#revbayes}
 
 RevBayes [@Hoehna2016b] provides several methods to estimate diversification rates through time.
 Here we used the [https://revbayes.github.io/tutorials/divrate/ebd.html](RevBayes tutorial) using the episodic-birth-death model with a Horseshoe-Markov-Random-Field (HSMRF) prior distribution to estimate diversification rates [@Magee2020].
@@ -31,31 +31,27 @@ We strongly encourage to use the medians and not the means because the posterior
 ```{r RevBayes-compute-median, cache=TRUE}
 est_speciation <- apply(par_speciation, 2, median)
 est_extinction <- apply(par_extinction, 2, median)
+times <- seq(0, max_t, length.out = length(est_speciation))
 ```
-Since we assumed in the tutorial epochs of equal size, we can simply use the `approxfun` to create the speciation and extinction rate functions.
-```{r RevBayes-functions, cache=TRUE}
-lambda <- approxfun(seq(0, max_t, length.out = length(est_speciation)),
-                    est_speciation)
-mu <- approxfun(seq(0, max_t, length.out = length(est_extinction)),
-                est_extinction)
+We can also reorganize the rates in a data frame
+```{r RevBayes-dataframe, cache=TRUE}
+primates_ebd_revbayes <- tibble(
+  "lambda" = est_speciation,
+  "mu" = est_extinction,
+  "time" = times,
+)
 ```
-Finally, let's have a look at the estimated rate functions.
-```{r RevBayes-plot-functions, fig.height=4, fig.width=4, fig.align="center", fig.cap="Estimated speciation and extinction rates using RevBayes on the primates phylogeny of Springer et al. (2012)."}
-ylim <- c( min(0,est_speciation,est_extinction),
-           max(est_speciation,est_extinction))
-
-curve( lambda, xlim=c(max_t, 0), lwd=2, lty=1, col="blue",
-       ylim=ylim, main="Primates", xlab="time", ylab="rate",
-       cex.main=1.5, cex.lab=1.5 )
-curve( mu, add=TRUE, lwd=2, lty=1, col="red" )
-legend("topleft",legend=c("speciation","extinction"),
-       col=c("blue","red"), lty=c(1,1), cex=1.2)
+Now let's have a look at the estimated rate functions
+```{r plot-revbayes-rates, fig.width=5, fig.height = 5, fig.cap = "The estimated posterior median results from an episodic birth-death model fitted in RevBayes."}
+p <- primates_ebd_revbayes %>%
+  tidyr::gather("rate", "value", -time) %>%
+  ggplot(aes(x = time, y = value, color = rate)) +
+  geom_line() +
+  theme_classic() +
+  scale_x_reverse() +
+  theme(legend.position = c(0.2, 0.6)) +
+  labs(y = "rate", x = "time before present")
+plot(p)
 ```
-
-
-For a later use in the tutorial where we want to compare the estimates between different software, we are going to store the rate functions.
-```{r RevBayes-rates, cache=TRUE}
-lambda.RevBayes <- lambda
-mu.RevBayes     <- mu
-```
+The data frame `primates_ebd_revbayes` is essentially equal to the data frame we get when we call the `data("primates_ebd")` function in `ACDC`. We use these estimated rates in our vignette examples, but we note that it is possible to use any kind of rate functions to construct the congruence class.
 
