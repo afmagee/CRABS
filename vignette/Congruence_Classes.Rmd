@@ -801,7 +801,7 @@ This yields a list of twenty models that are sampled from the posterior. Each sa
 
 The function `sample.congruence.class.posterior` iterates over each sample from the posterior, and draws for each sample another 20 models that are congruent with their respective posterior sample. In this example, we draw 20 alternative extinction rate functions, under an autocorrelated HSMRF distribution starting at a log-normal $\mu_0$ with a median of 0.1. The rejection sampling makes sure that any models with a rate higher than 1.0 is discarded. `sample.congruence.class.posterior` is completely linked to `sample.basic.models`, and any additional parameters are directly passed to `sample.basic.models(...)`.
 
-```{r sample-posterior}
+```{r sample-posterior, results = "hide"}
 samples <- sample.congruence.class.posterior(posterior, 
                                              num.samples = 20,
                                              rate.type = "extinction",
@@ -840,7 +840,7 @@ Evidently, the posterior rates exhibit a lot more rate variation than we saw fro
 p <- summarize.posterior(samples, threshold = 0.02)
 plot(p)
 ```
-
+In contrast to the previous summaries (sections xx), the congruence classes in the posterior samples depict a much more ambiguous patterns of the directional trends. There is still strong support for two sharp increases in speciation rate, followed by a decrease toward the near present, but the signal is not equivocal. In the end, it may seem that non-identifiability (the congruence class) in diversification rate models is not as much of a problem as the estimation error.
 
 # Estimating birth-death models
 
