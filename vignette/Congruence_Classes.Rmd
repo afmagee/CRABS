@@ -275,7 +275,7 @@ The first part of our congruence class exploration focuses on specific alternati
 That is, we first start by providing a set of alternative extinction rate functions and compute the matching speciation rate functions.
 Then, we turn the approach around and specify some alternative speciation rate functions for which we compute the matching extinction rate functions.
 
-## Testing alternative extinction rates
+## Testing alternative extinction rates {#alt-ext}
 
 In this subsection we focus entirely on alternative hypotheses of extinction rates for which we compute the resulting speciation rates.
 
@@ -304,7 +304,7 @@ Let's have a look at these *alternative models*.
 plot( alt_models )
 ```
 Next, we can inspect the summary of the trends in the speciation rate through time
-```{r summary-mu-constant, fig.cap = "Summary of directional trends in the congruence class."}
+```{r summary-mu-constant, fig.cap = "Summary of directional trends in the congruence class.", fig.height = 3, fig.width = 6}
 p <- summarize.trends(alt_models, threshold = 0.02)
 plot(p)
 ```
@@ -341,7 +341,7 @@ Let's have a look at these *alternative models*.
 plot(alt_models)
 ```
 Next, we can inspect the summary of the trends in the speciation rate through time
-```{r summary-mu-linear, fig.cap = "Summary of directional trends in the congruence class."}
+```{r summary-mu-linear, fig.cap = "Summary of directional trends in the congruence class.", fig.height = 3, fig.width = 6}
 p <- summarize.trends(alt_models, threshold = 0.02)
 plot(p)
 ```
@@ -375,7 +375,7 @@ plot( alt_models )
 ```
 
 Next, we can inspect the summary of the trends in the speciation rate through time
-```{r summary-mu-exponential, fig.cap = "Summary of directional trends in the congruence class."}
+```{r summary-mu-exponential, fig.cap = "Summary of directional trends in the congruence class.", fig.height = 3, fig.width = 6}
 p <- summarize.trends(alt_models, threshold = 0.02)
 plot(p)
 ```
@@ -411,7 +411,7 @@ Let's have a look at these *alternative models*.
 plot( alt_models )
 ```
 Next, we can inspect the summary of the trends in the speciation rate through time
-```{r summary-mu-twoepoch, fig.cap = "Summary of directional trends in the congruence class."}
+```{r summary-mu-twoepoch, fig.cap = "Summary of directional trends in the congruence class.", fig.height = 3, fig.width = 6}
 p <- summarize.trends(alt_models, threshold = 0.02)
 plot(p)
 ```
@@ -840,7 +840,7 @@ Evidently, the posterior rates exhibit a lot more rate variation than we saw fro
 p <- summarize.posterior(samples, threshold = 0.02)
 plot(p)
 ```
-In contrast to the previous summaries (sections xx), the congruence classes in the posterior samples depict a much more ambiguous patterns of the directional trends. There is still strong support for two sharp increases in speciation rate, followed by a decrease toward the near present, but the signal is not equivocal. In the end, it may seem that non-identifiability (the congruence class) in diversification rate models is not as much of a problem as the estimation error.
+In contrast to the previous summaries (Section \@ref(alt-ext)), the congruence classes in the posterior samples depict a much more ambiguous patterns of the directional trends. There is still strong support for two sharp increases in speciation rate, followed by a decrease toward the near present, but the signal is not equivocal. In the end, it may seem that non-identifiability (the congruence class) in diversification rate models is not as much of a problem as the estimation error.
 
 # Estimating birth-death models
 
@@ -874,13 +874,4 @@ Next, read the software examples to fit birth-death models to the tree, and esti
 
 # References
 
-\setlength{\parindent}{-1em}
-\setlength{\leftskip}{1em}
-\setlength{\parskip}{8pt}
-\noindent
-
 <div id="refs"></div>
-
-\setlength{\parindent}{1em}
-\setlength{\leftskip}{0in}
-\setlength{\parskip}{0pt}
