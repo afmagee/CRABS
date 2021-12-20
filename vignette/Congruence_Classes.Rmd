@@ -7,7 +7,7 @@ author:
   - Andrew F. Magee
 output:
   bookdown::gitbook:
-    lib_dir: docs/lib
+    lib_dir: lib
     fig_caption: yes
     toc_depth: 3
   bookdown::html_document2: 
@@ -23,12 +23,6 @@ output:
       in_header: preamble.tex
   rmarkdown::html_vignette: 
     toc_depth: 1
-  pdf_document:
-    fig_caption: yes
-    toc: yes
-    toc_depth: 2
-    includes:
-      in_header: preamble.tex
 fontsize: 12pt
 documentclass: article
 classoption:
@@ -39,8 +33,6 @@ vignette: |
   %\VignetteEngine{knitr::rmarkdown}
 bibliography: literature.bib
 csl: methods-in-ecology-and-evolution.csl
-knit: (function(inputFile, encoding) {
-  rmarkdown::render(inputFile, encoding = encoding, output_dir = "../docs") })
 pandoc_args:
   - --filter=pandoc-eqnos
 ---
@@ -121,6 +113,11 @@ library(ACDC)
 ```
 Now you are ready to use `ACDC` to explore congruence classes in macroevolutionary diversification rates.
 
+<!-- Dependencies for the vignette -->
+```{r vignette-dependencies}
+library(dplyr)
+```
+
 
 
 # Features
@@ -192,7 +189,7 @@ Here, we will start with some theoretical background (although quite simplified)
 ## Rate transformations
 
 One important aspect of the congruence class is that if we know the pulled rates, i.e., the pulled speciation or net-diversification rates, then we only need to know additionally either the new speciation or extinction rate to solve for the missing rate function.
-That means, we can compute the pulled diversification rate for our reference model, i.e., using our empirically estimated speciation and extinction rates from the previous sections, and the specify whichever alternative speciation or extinction rate function.
+That means, we can compute the pulled diversification rate for our reference model, i.e., using our empirically estimated speciation and extinction rates from the previous sections, and then specify whichever alternative speciation or extinction rate function.
 Then we solve the pulled diversification rate equation for this new rate function.
 
 The pulled diversification rate is defined as
@@ -231,17 +228,17 @@ Conversely, if we know the speciation rate and the pulled diversification rates,
 These are our fundamental pieces about the congruence classes.
 We have the reference model, from which we compute the pulled diversification rate.
 Then you can either specify alternative speciation or extinction rate functions, for which we then compute the matching extinction or speciation rate function respectively, or you can explore a space of speciation or extinction rate functions.
-We will walk through example of these below.
+We will walk through examples of these in the following sections.
 
 
 ## Slopes and $\Delta t$
 
 Given a congruence class, you may want to either visualize or summarise the models that belong to the congruence class.
 Visualisation of the alternative models is done in a hopefully intuitive way so we explain it later.
-Summarising alternative models is somewhat less established.
+Summarizing alternative models is somewhat less established.
 In our view, the main objective of these diversification functions is to estimate if speciation and/or extinction rates have changed over time.
-A change in rate over time is mathematically represented by the slope of the rate function; a large slope means more/steeper change in less time, while a low value for the slope corresponds to rather constant rates.
-Therefore, we summarise the models by computing the slope of the rate function.
+A change in rate over time is mathematically represented by the slope of the rate function; a large slope means more/steeper change in less time, while a small value for the slope corresponds to rather constant rates.
+Therefore, we summarize the models by computing the slope of the rate function.
 Then, we assess each time interval independently if the slope was larger than a specified threshold.
 The sign of the slope shows the direction of change, either increasing or decreasing.
 
@@ -259,7 +256,7 @@ data("primates_ebd")
 head(primates_ebd)
 ```
 
-We also provide an example for fitting birth-death models in TreePar (Section \@ref(treepar)) and TESS (Section \@ref(tess)). 
+We also provide an example for fitting birth-death models in TESS (Section \@ref(tess)) and TreePar (Section \@ref(treepar)). 
 If you wish to use these results instead, simply call `data("primates_ebd_treepar")` or `data("primates_ebd_tess")`. 
 After we have estimated our birth-death rates, we transform the data into piecewise linear rate functions in R
 ```{r revbayes-piecewise-rates}
@@ -727,7 +724,7 @@ We can plot the samples using
 ```{r cg-extinction-episodic-plot}
 plot(samples)
 ```
-```{r extinction-episodic, fig.cap = "Congruence class assuming episodicly changing extinction rates.", fig.width = 6, fig.height = 3}
+```{r extinction-episodic, fig.cap = "Congruence class assuming episodically changing extinction rates.", fig.width = 6, fig.height = 3}
 p <- summarize.trends(samples, threshold = 0.02)
 plot(p)
 ```
@@ -839,7 +836,8 @@ In ACDC, we have included functionality to read RevBayes log outputs.
 ```{r read-posterior, results = "hide"}
 data(primates_ebd_log)
 
-posterior <- read.RevBayes(primates_ebd_log, max_t = 65, n_samples = 20)
+posterior <- read.RevBayes(primates_ebd_log, n_times = 1000,
+                           max_t = 65, n_samples = 20)
 ```
 This yields a list of twenty models that are sampled from the posterior. Each sample is equally spaced on the MCMC iterations, meaning that we minimized the autocorrelation among the posterior samples. In `ACDC` we also included functionality to sample the congruence class, while also taking into account the variation in birth-death models in the posterior distribution. 
 
@@ -896,7 +894,7 @@ Here we provide you some examples using standard software for estimating diversi
 ## Reading the phylogenetic tree
 
 First, we assume that you have a phylogenetic tree which you can load into R.
-There are several tutorials on how to do so (e.g., [TESS](https://cran.r-project.org/web/packages/TESS/vignettes/Bayesian_Diversification_Rate_Analysis.pdf) or [APE](https://cran.r-project.org/web/packages/ape/ape.pdf), and we simply refer to these tutorials here.
+There are several tutorials on how to do so (e.g., [TESS](https://cran.r-project.org/web/packages/TESS/vignettes/Bayesian_Diversification_Rate_Analysis.pdf) or [APE](https://cran.r-project.org/web/packages/ape/ape.pdf), and we simply refer to these tutorials here).
 As an example, we used the *Primates* phylogeny from @Springer2012.
 You can download the data from our [RevBayes tutorial](https://revbayes.github.io/tutorials/divrate/ebd.html).
 First we need to load the APE package [@Paradis2019].
