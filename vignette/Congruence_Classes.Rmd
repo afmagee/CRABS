@@ -251,14 +251,17 @@ We will come back to the summaries later when we created samples from the congru
 
 ## The model object
 
-In order to create a congruence class, we require some information about the extinction and speciation rate functions in at least one of the models in the congruence class. In the following examples we will use the results from an episodic birth-death model fitted in RevBayes (see Section \@ref(revbayes)), but we note that ACDC can work with any rate estimates. We provide the results in a convenient format:
-
+In order to create a congruence class, we require some information about the extinction and speciation rate functions in at least one of the models in the congruence class. 
+In the following examples we will use the results from an episodic birth-death model fitted in RevBayes (see Section \@ref(revbayes)), but we note that ACDC can work with any rate estimates. 
+To simplify this section, we provide the results in a convenient format:
 ```{r load-revbayes}
 data("primates_ebd")
 head(primates_ebd)
 ```
 
-We also provide an example for fitting birth-death models in TreePar (Section \@ref(treepar)) and TESS (Section \@ref(tess)). If you wish to use these results instead, simply call `data("primates_ebd_treepar")` or `data("primates_ebd_tess")`. After we have estimated our birth-death rates, we transform the data into piecewise linear rate functions in R
+We also provide an example for fitting birth-death models in TreePar (Section \@ref(treepar)) and TESS (Section \@ref(tess)). 
+If you wish to use these results instead, simply call `data("primates_ebd_treepar")` or `data("primates_ebd_tess")`. 
+After we have estimated our birth-death rates, we transform the data into piecewise linear rate functions in R
 ```{r revbayes-piecewise-rates}
 times <- primates_ebd[["time"]]
 
