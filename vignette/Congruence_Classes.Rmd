@@ -89,6 +89,11 @@ Specifically, this tutorial has two main aims/applications:
 * For a given speciation and extinction rate, you can compute the alternative speciation and extinction rates via the pulled net-diversification rate 
 * For a given speciation and extinction rate, which might have been estimated from a phylogenetic tree or provided simply for exploration purposes, you can explore the entire congruence class given some rate assumptions (e.g., type of change or min and max rates).
 
+The first use case corresponds to testing specific hypotheses while the second use case corresponds to exploring the congruence class for general patterns/trends.
+We will explain these in detail below with an empirical example.
+
+
+
 # Installation
 
 To get started with exploring congruence classes, you need to have our package `ACDC` installed.
