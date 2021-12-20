@@ -234,6 +234,8 @@ We have the reference model, from which we compute the pulled diversification ra
 Then you can either specify alternative speciation or extinction rate functions, for which we then compute the matching extinction or speciation rate function respectively, or you can explore a space of speciation or extinction rate functions.
 We will walk through example of these below.
 
+## Slopes and $\Delta t$
+
 ## The model object
 
 In order to create a congruence class, we require some information about the extinction and speciation rate functions in at least one of the models in the congruence class. In the following examples we will use the results from an episodic birth-death model fitted in RevBayes (see Section \@ref(revbayes)), but we note that ACDC can work with any rate estimates. We provide the results in a convenient format:
@@ -423,13 +425,29 @@ As a last example, let us explore the case where the extinction rate had the opp
 That is, if the speciation rate was going up, now we model that the extinction rate goes down.
 This should produce the same pattern in the net-diversification rate.
 We create this reversed/opposite trend extinction rate function by subtracting the observed speciation rate from some arbitrary baseline (which is necessary to make sure that all extinction rates are positive).
+
+
+
+
+
+
+
+
 ```{r }
-mu_min = 0.5
-mu1 <- function(t) mu_min - lambda(t)
+mu_scaling <- c(1.1, 1.2, 1.5, 2.0)
+mu_0s <- max(lambda(my_model$times)) * mu_scaling
+
+mu_prime <- list()
+for (i in seq_along(mu_scaling)){
+  mu_prime[[i]] <- local({
+    mu_0 <- mu_0s[i]
+    function(t) mu_0 - lambda(t)
+  })
+}
 ```
 Now we compute the new speciation rate given the extinction rates.
 ```{r eval=TRUE}
-alt_models <- congruent.models( my_model, mus = mu1 )
+alt_models <- congruent.models(my_model, mus = mu_prime)
 ```
 Let's have a look at these *alternative models*.
 ```{r congruent-models-mu-rev-trend-add, fig.cap = "Diversification rate functions for our reversed trend additive extinction rate function. The solid line shows the reference model and the dashed lines show the alternative model. Interestingly, the reversed model where the extinction rate goes down instead of the speciation rate going up is not exactly in the congruence class, as we see that the net-diversification rates are not identical. Instead, we see that the speciation rate now drops first just to still increase towards the present.", fig.height = 4, fig.width = 4}
@@ -511,6 +529,11 @@ alt_models <- congruent.models( my_model, lambda = lambda1)
 Let's have a look at these *alternative models*.
 ```{r congruent-models-lambda-exp, fig.cap = "Diversification rate functions for exponentially increasing speciation rate functions within the congruence class. The solid line shows the reference model and the dashed lines show the alternative models. Again, we observe that for all speciation rate functions that the derived extinction rate functions are negative towards the present and/or at some other point in time.", fig.height = 4, fig.width = 4}
 plot( alt_models )
+```
+We can also plot the directional trends in the extinction rate through time:
+```{r lambda-exp-trendmu, fig.cap = "asd", fig.width = 5, fig.height = 3}
+p <- summarize.trends(alt_models, threshold = 0.02, rate_name = "mu")
+plot(p)
 ```
 
 Our results here for the exponentially increasing speciation functions show again that the derived extinction rates are negative towards the present and/or at another point in time.
@@ -705,17 +728,17 @@ We furthermore assume that each extinction rate is independent of the previous t
 That means that we can model any rate function, even completely crazy zig-zagging functions.
 
 ```{r sample-function-extinction-uniform}
-times <- seq(0, max(my_model$time), length.out = 100)
+coarse_times <- seq(0, max(my_model$time), length.out = 10)
 rsample_extinction <- function(n) runif(n,0,1)
 extinction_rate_samples <- function() {
-   sample.rates( times = times,
+   sample.rates( times = coarse_times,
                  rsample=rsample_extinction,
                  rsample0=NULL,
                  autocorrelated=FALSE)
 }
 ```
 
-```{r sample-extinction-uniform, cache=TRUE, results='hide'}
+```{r sample-extinction-uniform}
 samples <- sample.congruence.class(
   my_model,
   num.samples=10,
@@ -763,7 +786,7 @@ samples <- sample.congruence.class(
 ```
 
 We can plot the samples using
-```{r sample-extinction-rateplot}
+```{r sample-extinction-rateplot, fig.cap = "Rate functions for the congruence class. The reference model is given in black. The alternative speciation rates are proposed by sampling from a temporally autocorrelated (HSMRF) model."}
 plot(samples)
 ```
 
@@ -779,6 +802,13 @@ plot(p)
 The models depicted in \@ref(fig:sample-speciation-mus) do not make sense, since rates are only defined on the positive numbers. Similarly to before, we can evaluate the directional changes in the extinction rate
 ```{r sample-extinction-trendplot, fig.cap = "A summary of directional trends through time across the congruent models.", fig.width = 6, fig.height = 3}
 p <- summarize.trends(samples, threshold = 0.02, rate_name = "mu")
+plot(p)
+```
+
+Notice how the reference model (top row) is flat throughout the entire time span. Yet, when we propose alternative speciation rates, the inferred (extinction) rates depict a pattern of two decreases and one increase in the near present. We can also inspect the directional trends for the net-diversification rate ($\delta(t) = \lambda(t) - \mu(t)$)
+
+```{r netdiv-trends, fig.cap = "Directional trends in the net-diversification rate. The congruence class was constructed using alternative speciation rates, and all congruent models have negative extinction rates.", fig.width = 5, fig.height = 3}
+p <- summarize.trends(samples, threshold = 0.02, rate_name = "delta")
 plot(p)
 ```
 
