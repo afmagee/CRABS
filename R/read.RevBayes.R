@@ -1,19 +1,22 @@
 #' read RevBayes log file
 #'
 #' @param x path to log, or data frame
+#' @param n_times number of time knots
 #' @param max_t tree height
 #' @param n_samples first n posterior samples
 #' @param summary_type either "none" for all the posterior samples, or "mean" or "median" for the posterior mean/median
 #' @param speciation_prefix the prefix string for the speciation rate column names. Must be unique
 #' @param extinction_prefix the prefix string for the extinction rate column names. Must be unique
+#' @usage read.RevBayes(x, n_times, max_t = 100, n_samples = 20)
 #'
 #' @return a set of ACDC models, each being a sample in the posterior
-#' @export
+#' @export 
 #'
 #' @examples
 #' data(primates_ebd_log)
-#' posterior <- read.RevBayes(primates_ebd_log, max_t = 65, n_samples = 20)
+#' posterior <- read.RevBayes(primates_ebd_log, n_times = 500, max_t = 65, n_samples = 20)
 read.RevBayes <- function(x,
+                          n_times,
                           max_t = 100,
                           n_samples = 20,
                           summary_type = "none",
@@ -35,8 +38,10 @@ read.RevBayes <- function(x,
   n_total <- nrow(speciation)
   
   times_rb <- seq(0, max_t, length.out = n_epochs)
+  if(missing("n_times")){
+    n_times <- length(times_rb)
+  }
   
-  #iter <- (1:n_samples) * (n_total / n_samples)
   iter <- floor(seq(1, nrow(samples), length.out = n_samples))
   i <- 1
   
@@ -51,8 +56,9 @@ read.RevBayes <- function(x,
 
       lambda <- approxfun(times_rb, speciation[it,])
       mu <- approxfun(times_rb, extinction[it,])
+      times <- seq(0, max(times_rb), length.out = n_times)
 
-      model <- create.model( lambda, mu, times = times_rb)
+      model <- create.model( lambda, mu, times = times)
       models[[i]] <- model
       i <- i + 1
     }
@@ -67,8 +73,9 @@ read.RevBayes <- function(x,
     
     lambda <- approxfun(times_rb, speciation_summary)
     mu <- approxfun(times_rb, extinction_summary)
+    times <- seq(0, max(times_rb), length.out = n_times)
     
-    model <- create.model( lambda, mu, times = times_rb)
+    model <- create.model( lambda, mu, times = times)
     return(model)
   }
   

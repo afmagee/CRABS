@@ -4,17 +4,12 @@
 \alias{read.RevBayes}
 \title{read RevBayes log file}
 \usage{
-read.RevBayes(
-  x,
-  max_t = 100,
-  n_samples = 20,
-  summary_type = "none",
-  extinction_prefix = "extinction_rate.",
-  speciation_prefix = "speciation_rate."
-)
+read.RevBayes(x, n_times, max_t = 100, n_samples = 20)
 }
 \arguments{
 \item{x}{path to log, or data frame}
+
+\item{n_times}{number of time knots}
 
 \item{max_t}{tree height}
 
@@ -34,5 +29,5 @@ read RevBayes log file
 }
 \examples{
 data(primates_ebd_log)
-posterior <- read.RevBayes(primates_ebd_log, max_t = 65, n_samples = 20)
+posterior <- read.RevBayes(primates_ebd_log, n_times = 500, max_t = 65, n_samples = 20)
 }
