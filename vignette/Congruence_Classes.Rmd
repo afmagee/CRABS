@@ -186,6 +186,9 @@ This allows sampling speciation rates, as the initial speciation rate must be th
 
 # Creating the congruence class
 
+Here, we will start with some theoretical background (although quite simplified) on congruence class. Our main aim is to motivate, guide and explain our choices for how to explore the congruence class.
+
+
 ## Rate transformations
 
 One important aspect of the congruence class is that if we know the pulled rates, i.e., the pulled speciation or net-diversification rates, then we only need to know additionally either the new speciation or extinction rate to solve for the missing rate function.
@@ -230,7 +233,21 @@ We have the reference model, from which we compute the pulled diversification ra
 Then you can either specify alternative speciation or extinction rate functions, for which we then compute the matching extinction or speciation rate function respectively, or you can explore a space of speciation or extinction rate functions.
 We will walk through example of these below.
 
+
 ## Slopes and $\Delta t$
+
+Given a congruence class, you may want to either visualize or summarise the models that belong to the congruence class.
+Visualisation of the alternative models is done in a hopefully intuitive way so we explain it later.
+Summarising alternative models is somewhat less established.
+In our view, the main objective of these diversification functions is to estimate if speciation and/or extinction rates have changed over time.
+A change in rate over time is mathematically represented by the slope of the rate function; a large slope means more/steeper change in less time, while a low value for the slope corresponds to rather constant rates.
+Therefore, we summarise the models by computing the slope of the rate function.
+Then, we assess each time interval independently if the slope was larger than a specified threshold.
+The sign of the slope shows the direction of change, either increasing or decreasing.
+
+We will come back to the summaries later when we created samples from the congruence class.
+
+
 
 ## The model object
 
