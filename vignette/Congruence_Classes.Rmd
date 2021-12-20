@@ -132,20 +132,19 @@ Here we give you an overview of the main functions available in `ACDC`.
 
 | Function      | Description  |
 | :---        |    :----    |
-| `create.model`      | Creates a model object        |
-| `congruent.models` | Generates alternative models that are congruent with a provided reference models. The user needs to explicitly supply a list of alternative extinction and/or speciation rate functions. |
-| `sample.basic.model`   |  Samples a rate function. More information in section \@ref(samplebasic)   |
-| `sample.congruence.class`   |  Samples rate functions from the congruence class given a reference speciation and extinction rate function (the true/empirically estimated rate functions).       |
+| `create.model`      | Creates a diversification model object, which consists of the so-called reference speciation and extinction rates.        |
+| `congruent.models` | Generates alternative models that are congruent with a provided reference model(s). The user needs to explicitly supply a list of alternative extinction and/or speciation rate functions. |
+| `sample.basic.model`   |  Samples a rate function under specified assumptions. More information in section \@ref(samplebasic)   |
 | `sample.rates`  | Helps you to randomly sample either a new speciation or extinction rate function given some constraints and/or expected behavior (e.g., autocorrelated vs independent rates) |
 | `sample.congruence.class` | Randomly draws a set of samples from the congruence class. The user provides a function that draws extinction rates, and/or a function that draws speciation rates.  | 
 | `sample.congruence.class.posterior` | Uses `sample.basic.models` to samples a set of congruent models for each sample in the posterior distribution | 
 | `summarize.trends` |  Calculates the slope in the rate function, and plots a summary of whether the rate was increasing, decreasing or flat for each episode |
-| `summarize.posterior` | Similar to `summarize.trends`, but instead iterating over all congruent samples for each posterior sample. This plot is also sorted |
+| `summarize.posterior` | Similar to `summarize.trends`, but instead iterating over all congruent samples for each posterior sample. This plot is sorted |
 
 
 You can consult the R documentation for each of these by placing a question mark in front of the name. For example, try calling `?create.model` or `?sample.basic.model` in R. 
 We use these functions throughout the sections in the vignette.
-For `sample.basic.models`, we have a separate section explaining the most important flags and use cases.
+For `sample.basic.models`, we have a separate section explaining the most important flags and use cases because `sample.basic.models` might represent a more complex but important function of `ACDC`.
 
 ## `sample.basic.models` {#samplebasic}
 This function is designed to enable easy generation of commonly employed diversification-rate scenarios.
@@ -170,6 +169,7 @@ Specifically, `fc.mean` must be a value greater than 1 (1.00...01 is allowed), a
 If `direction="increasing"`, then `fc.mean` defines first/last, while if `direction="decreasing"`, `fc.mean` defines last/first.
 The default is 3, which is biologically plausible but not the universally best option.
 Fold changes are drawn from a Gamma distribution with rate 1.25, offset 1, and a shape parameter that gives the desired mean.
+This means, that every drawn single rate function has it's own fold change.
 
 All rate curves are sampled by rejection sampling to guarantee that the rates are all between `min.rate` and `max.rate`.
 By default, rates are assumed to be in [0,10] which on a million-year time scale is probably the extreme end of plausible variation.
@@ -181,6 +181,8 @@ The initial rate is drawn from a lognormal distribution with median `rate0.media
 The default is rates with median 0.1 and a 95% range covering [0.01,1].
 Note that the argument `rate0` overrides drawing random starting values if it is set.
 This allows sampling speciation rates, as the initial speciation rate must be the same in all replicates.
+
+
 
 # Creating the congruence class
 
