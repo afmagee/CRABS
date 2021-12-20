@@ -114,25 +114,14 @@ install_github("afmagee/ACDC")
 install.packages("..",type="source",repos=NULL)
 ```
 
-Notes about dependencies:
-```{r load-dependencies, eval=TRUE}
-library(ape)
-library(ggplot2)
-library(magrittr)
-library(deSolve)
-library(dplyr)
-library(tibble)
-library(colorspace)
-library(patchwork)
-library(latex2exp)
-library(tidyr)
-```
 
 You can then load the `ACDC` package using the `library` function:
 ```{r load-ACDC}
 library(ACDC)
 ```
 Now you are ready to use `ACDC` to explore congruence classes in macroevolutionary diversification rates.
+
+
 
 # Features
 
