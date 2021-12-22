@@ -4,7 +4,8 @@
 \alias{summarize.trends}
 \title{Summarize trends in the congruence class}
 \usage{
-summarize.trends(model_set, threshold = 0.005, rate_name = "lambda", return_data = FALSE, rm_singleton = FALSE, relative_deltas = FALSE, group_names = NULL)
+summarize.trends(model_set, threshold = 0.005, rate_name = "lambda", 
+return_data = FALSE, rm_singleton = FALSE, relative_deltas = FALSE, group_names = NULL)
 }
 \arguments{
 \item{model_set}{an object of type "ACDCset"}
