@@ -522,7 +522,7 @@ Thus, we can conclude that there is no constant rate speciation rate function wi
 
 Let us assume that the speciation rate was exponentially increasing or decreasing.
 Furthermore, let us try a range of different factors of increase/decrease.
-Specifically, let's assume that the rate was $\alpha=\{-0.04,-0.03,\ldots, 0.04\}$.
+Specifically, let's assume that the growth rate was $\alpha=\{-0.04,-0.03,\ldots, 0.04\}$.
 Again, we create the list of speciation rate functions.
 ```{r }
 lambda_present = lambda(0)
@@ -540,7 +540,7 @@ Now we compute the new extinction rate given the speciation rates.
 alt_models <- congruent.models( my_model, lambda = lambda1)
 ```
 Let's have a look at these *alternative models*.
-```{r congruent-models-lambda-exp, fig.cap = "Diversification rate functions for exponentially increasing speciation rate functions within the congruence class. The solid line shows the reference model and the dashed lines show the alternative models. Again, we observe that for all speciation rate functions that the derived extinction rate functions are negative towards the present and/or at some other point in time.", fig.height = 4, fig.width = 4}
+```{r congruent-models-lambda-exp, fig.cap = "Diversification rate functions for exponentially increasing/decreasing speciation rate functions within the congruence class. The solid line shows the reference model and the dashed lines show the alternative models. Again, we observe that for all speciation rate functions that the derived extinction rate functions are negative towards the present and/or at some other point in time.", fig.height = 4, fig.width = 4}
 plot( alt_models )
 ```
 We can also plot the directional trends in the extinction rate through time:
@@ -625,6 +625,9 @@ p <- summarize.trends(samples,
 plot(p)
 ```
 
+As we can see, the alternative models are not in perfect agreement about the entire history of the rates.
+Nonetheless, the increases and decrease near the present are preserved, indicating robustness to this form of extinction-rate variation.
+
 ### Exponentially decreasing
 
 Here, we generate a variety of alternative extinction rates using HSMRF models [@Magee2020] with an exponential trend.
@@ -656,6 +659,8 @@ plot(samples)
 p <- summarize.trends(samples, threshold = 0.02)
 plot(p)
 ```
+As we can see, the alternative models are not in perfect agreement about the entire history of the rates.
+Nonetheless, the increases and decrease near the present are preserved, indicating robustness to this form of extinction-rate variation.
 
 ### Linearly increasing
 
@@ -691,6 +696,9 @@ plot(samples)
 p <- summarize.trends(samples, threshold = 0.02)
 plot(p)
 ```
+
+As we can see, the increases and decrease near the present are preserved, indicating robustness to this form of extinction-rate variation.
+Compared to the exponential and HSMRF models above, there is even better agreement between the alternative models.
 
 ### Episodic 
 
@@ -728,6 +736,9 @@ plot(samples)
 p <- summarize.trends(samples, threshold = 0.02)
 plot(p)
 ```
+
+As we can see, the increases and decrease near the present are preserved, indicating robustness to this form of extinction-rate variation.
+The agreement between the alternative models is comparable to the linear scenarios above, and higher than for the exponential and HSMRF models.
 
 ### Uniform independent
 
@@ -769,6 +780,10 @@ Next we can plot the directional trends
 p <- summarize.trends(samples, threshold = 0.02)
 plot(p)
 ```
+
+As we can see, the alternative models present many distinct histories of the rates through time.
+Nonetheless, even in this extreme scenario, the increases and decrease near the present are preserved.
+
 
 ## Sample alternative speciation rates
 
