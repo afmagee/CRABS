@@ -76,6 +76,7 @@ plotdata <- function(model_set, threshold, rate_name, relative_deltas, gmap){
 #' @importFrom ggplot2 facet_grid stat
 #'
 #' @return a patchwork object
+#' @usage summarize.trends(model_set, threshold = 0.005, rate_name = "lambda", return_data = FALSE, rm_singleton = FALSE, relative_deltas = FALSE, group_names = NULL)
 #' @export summarize.trends
 #'
 #' @examples
@@ -183,8 +184,6 @@ summarize.trends <- function(model_set,
 
   if(return_data){
     return(list(heatmap_data = df
-                #rate_data = df2, 
-                #df_agree = df_agree
            ))
   }else{
     p <- p1 + p2 + plot_layout(ncol = 1, 
@@ -192,12 +191,4 @@ summarize.trends <- function(model_set,
                                heights = c(0.5, 0.5))
     return(p)  
   }
-}
-
-agreement <- function(df){
-  d <- df[["direction"]]
-  #ref <- d[df[["name"]] == "reference"]
-  #n <- sum(d == ref) / length(d) ## Agreement with the reference
-  n <- max(table(d))/length(d) ## Majority consensus
-  return(n)
 }

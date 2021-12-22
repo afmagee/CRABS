@@ -5,6 +5,7 @@
 #' 
 #' @return a ggplot object
 #' @export summarize.posterior
+#' @usage summarize.posterior(posterior, threshold = 0.01, rate_name = "lambda", return_data = FALSE, rm_singleton = FALSE, relative_deltas = FALSE) 
 #'
 #' @examples
 #' data(primates_ebd_log)

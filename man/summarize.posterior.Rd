@@ -4,14 +4,7 @@
 \alias{summarize.posterior}
 \title{Summarize trends in the posterior}
 \usage{
-summarize.posterior(
-  posterior,
-  threshold = 0.01,
-  rate_name = "lambda",
-  return_data = FALSE,
-  rm_singleton = FALSE,
-  relative_deltas = FALSE
-)
+summarize.posterior(posterior, threshold = 0.01, rate_name = "lambda", return_data = FALSE, rm_singleton = FALSE, relative_deltas = FALSE)
 }
 \arguments{
 \item{posterior}{a list of ACDC objects, each one representing a sample from the posterior}

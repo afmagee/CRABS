@@ -4,7 +4,8 @@
 \alias{read.RevBayes}
 \title{read RevBayes log file}
 \usage{
-read.RevBayes(x, n_times, max_t = 100, n_samples = 20)
+read.RevBayes(x, n_times, max_t = 100, n_samples = 20, summary_type = "none", 
+extinction_prefix = "extinction_rate.", speciation_prefix = "speciation_rate.")
 }
 \arguments{
 \item{x}{path to log, or data frame}
