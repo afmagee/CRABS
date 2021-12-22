@@ -2,4 +2,7 @@
 ^\.Rproj\.user$
 vignette/cache
 vignette
+R/deprecated
 primates_comet
+docs
+TODO.md

@@ -34,14 +34,6 @@ congruent.speciation <- function( model, func.mu ) {
 }
 
 
-#' Create the piecewise-constant speciation rate
-#'
-#' @param lambda0 The rate at present
-#' @param v_p_div The pulled diversification rate at all changepioints
-#' @param v_ext1 The extinction rate at all changepoints
-#' @param delta_t The width of each grid cell
-#' @return Speciation rate at all changepoints
-#' @keywords internal
 compute.speciation <- function( lambda0, v_p_div, v_ext1, delta_t ) {
 
   NUM_TIME_DISCRETIZATIONS = length(v_p_div)

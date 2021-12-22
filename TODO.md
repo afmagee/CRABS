@@ -1,20 +1,15 @@
-# congruence-classes
+# ACDC
 An R package to explore congruence classes. Here we list what is still missing to do.
 
 # Package
 
 ## Documentation
 Not all arguments to all functions have explanations, and many functions have TODO as their example.
-We may not need examples, but we do have primate data in the package now so it should be easy to generate these using code from the vignette.
 
 ## Reading in empirical results
 
 - **read.TreePar:** a single function to read in TreePar code and produce rate functions, to simplify user interaction. This function could possibly also perform the TreePar analysis, but I think that having at least one separate function that takes a TreePar result and then creates the functions would be ideal.
 - **read.TESS:** a single function to read in TESS output and produce rate functions, to simplify user interaction.
-
-## Posterior samples instead of singe point estimate
-
-- Update **read.TESS** to construct a list of rate functions (one function per posterior sample) instead of using the mean/median rate.
 
 # Vignette
 
@@ -31,12 +26,3 @@ AFM comment: If we swap chapters 3 (reading in data) and 4 (congruence class bac
 3. Automated exploration of many congruent scenarios.
 
 AFM comment: I think the biggest TODO left in the vignette is documenting the basic functions.
-
-
-## More motivation about generating rate functions
-
-Why do you we have different methods to generate rates functions and not only draw rates uniformly? This needs to be explained more clearly. For example, this is not clear for section 6.2
-
-## Examples using posterior distributions instead of point estimates.
-
-Once these features are available, we should show a simple example.

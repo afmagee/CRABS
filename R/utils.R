@@ -1,9 +1,3 @@
-#' One draw from a dirichlet distribution with concentration parameter alpha.
-#'
-#' @param dim The dimension
-#' @param alpha Concentration parameter
-#' @return Vector
-#' @keywords internal
 rdirichlet <- function(dim,alpha) {
   x <- rgamma(dim,alpha,1)
   return(x/sum(x))

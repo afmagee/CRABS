@@ -18,6 +18,13 @@ ACDC includes tools for exploring congruent phylogenetic birth-death models. ACD
 }
 }
 
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/afmagee/ACDC}
+}
+
+}
 \author{
 \strong{Maintainer}: Bjørn Tore Kopperud \email{kopperud@protonmail.com}
 

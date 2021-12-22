@@ -7,7 +7,8 @@
 #' @param summary_type either "none" for all the posterior samples, or "mean" or "median" for the posterior mean/median
 #' @param speciation_prefix the prefix string for the speciation rate column names. Must be unique
 #' @param extinction_prefix the prefix string for the extinction rate column names. Must be unique
-#' @usage read.RevBayes(x, n_times, max_t = 100, n_samples = 20)
+#' @usage read.RevBayes(x, n_times, max_t = 100, n_samples = 20, summary_type = "none", 
+#' extinction_prefix = "extinction_rate.", speciation_prefix = "speciation_rate.")
 #'
 #' @return a set of ACDC models, each being a sample in the posterior
 #' @export 
