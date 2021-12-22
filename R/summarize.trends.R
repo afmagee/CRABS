@@ -69,7 +69,7 @@ plotdata <- function(model_set, threshold, rate_name, relative_deltas, gmap){
 #' @param threshold a threshold for when \eqn{\Delta \lambda i} should be interpreted as decreasing, flat, or increasing
 #' @param rate_name either "lambda" or "mu" or "delta"
 #' @param return_data instead of plots, return the plotting dataframes
-#' @param rm_singleton whether or not to remove singeltons. Pass starting at present, going towards ancient
+#' @param rm_singleton whether or not to remove singletons. Pass starting at present, going towards ancient
 #' @param relative_deltas whether to divide \eqn{\Delta \lambda i} by the local lambda value
 #' @param group_names a vector of prefixes, if you want to group the models in a facet. For example 'c("reference", "model")'
 #' 

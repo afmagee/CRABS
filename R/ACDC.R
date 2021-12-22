@@ -1,4 +1,4 @@
-#' ACDC: Analysis of Congruent Dversification Analyses
+#' ACDC: Analysis of Congruent Diversification Classes
 #' 
 #' 
 #' 

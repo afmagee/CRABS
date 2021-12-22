@@ -16,7 +16,7 @@ return_data = FALSE, rm_singleton = FALSE, relative_deltas = FALSE)
 
 \item{return_data}{instead of plots, return the plotting dataframes}
 
-\item{rm_singleton}{whether or not to remove singeltons. Pass starting at present, going towards ancient}
+\item{rm_singleton}{whether or not to remove singletons. Pass starting at present, going towards ancient}
 
 \item{relative_deltas}{whether to divide \eqn{\Delta \lambda i} by the local lambda value}
 }
