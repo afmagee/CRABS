@@ -10,15 +10,15 @@ return_data = FALSE, rm_singleton = FALSE, relative_deltas = FALSE, group_names 
 \arguments{
 \item{model_set}{an object of type "ACDCset"}
 
-\item{threshold}{a threshold for when \eqn{\Delta\lambdai} should be interpreted as decreasing, flat, or increasing}
+\item{threshold}{a threshold for when \eqn{\Delta \lambda i} should be interpreted as decreasing, flat, or increasing}
 
-\item{rate_name}{either "lambda" or "mu"}
+\item{rate_name}{either "lambda" or "mu" or "delta"}
 
 \item{return_data}{instead of plots, return the plotting dataframes}
 
 \item{rm_singleton}{whether or not to remove singeltons. Pass starting at present, going towards ancient}
 
-\item{relative_deltas}{whether to divide \eqn{\Delta\lambdai} by the local lambda value}
+\item{relative_deltas}{whether to divide \eqn{\Delta \lambda i} by the local lambda value}
 
 \item{group_names}{a vector of prefixes, if you want to group the models in a facet. For example 'c("reference", "model")'}
 }

@@ -5,15 +5,15 @@ Authors@R: c(person("Bj\u00F8rn Tore", "Kopperud", role = c("aut", "cre"), email
              person("Sebastian", "H\u00F6hna", role =c("aut")),
              person("Andrew F.", "Magee", role = c("aut")))
 Encoding: UTF-8
-Description: ACDC includes tools for exploring congruent phylogenetic birth-death models. ACDC can construct the pulled speciation- and net-diversification rates from a reference model. Given alternative speciation- or extinction rates, it can construct new models that are congruent with the reference model. Functionality is included to sample new rate functions, and to visualize the distribution of one congruence class. See also Louca & Pennell (2020) <doi:10.1038/s41586-020-2176-1>.
+Description: This package includes tools for exploring congruent phylogenetic birth-death models. It can construct the pulled speciation- and net-diversification rates from a reference model. Given alternative speciation- or extinction rates, it can construct new models that are congruent with the reference model. Functionality is included to sample new rate functions, and to visualize the distribution of one congruence class. See also Louca & Pennell (2020) <doi:10.1038/s41586-020-2176-1>.
 LazyData: true
 Depends: R (>= 3.5.0), ggplot2
-Imports: ape, magrittr, deSolve, dplyr, tibble, colorspace, patchwork, latex2exp, tidyr
+Imports: magrittr, deSolve, dplyr, tibble, colorspace, patchwork, latex2exp, tidyr
 License: GPL-3 + file LICENSE
 Suggests: 
     knitr,
-    rmarkdown
-VignetteBuilder: knitr
+    rmarkdown,
+    ape
 RoxygenNote: 7.1.2
 URL: https://github.com/afmagee/ACDC
 
