@@ -171,7 +171,7 @@ This means, that every drawn single rate function has it's own fold change.
 All rate curves are sampled by rejection sampling to guarantee that the rates are all between `min.rate` and `max.rate`.
 By default, rates are assumed to be in [0,10] which on a million-year time scale is probably the extreme end of plausible variation.
 This rejection sampling means that the actual average change may not quite be what it is set to be.
-For example if one sets the model to be a decrease through time, sets the rate at present to be 0.5, and the maximum rate to be 0.75, clearly the average fold chane could not be a larger than 1.5x increase.
+For example if one sets the model to be a decrease through time, sets the rate at present to be 0.5, and the maximum rate to be 0.75, clearly the average fold change could not be a larger than 1.5x increase.
 Be aware, setting rejection limits that make it difficult to sample trajectories can make this function (which is normally quite fast) take a very long time!
 
 The initial rate is drawn from a lognormal distribution with median `rate0.median` and log(sigma) = `rate0.logsd`, which is to say a Lognormal(log(`rate0.median`),`rate0.logsd`) distribution.
