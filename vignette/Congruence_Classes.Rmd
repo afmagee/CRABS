@@ -323,14 +323,14 @@ Next, we can inspect the summary of the trends in the speciation rate through ti
 p <- summarize.trends(alt_models, threshold = 0.02)
 plot(p)
 ```
-Notice that there isvariation in the slope of the speciation rate ($\Delta\lambda$) throughout the entire time span of the phylogenetic tree. Yet, when we only consider rate changes that are smaller or greater than our threshold of $\epsilon = 0.02 \Delta\lambda$ per million years, it becomes evident that the constructed congruent models are in complete agreement of the two increases in speciation rate, as well as the more recent decline in speciation rate.
+Notice that there is variation in the slope of the speciation rate ($\Delta\lambda$) throughout the entire time span of the phylogenetic tree. Yet, when we only consider rate changes that are smaller or greater than our threshold of $\epsilon = 0.02 \Delta\lambda$ per million years, it becomes evident that the constructed congruent models are in complete agreement of the two increases in speciation rate, as well as the more recent decline in speciation rate.
 
 
 ### Linearly increasing extinction rates
 
 Next, we will explore different linear rate functions for the extinction rate.
 Let us assume that the extinction rate was linear with a range of different slopes.
-Specifically, let's assume that the slope was $\alpha=\{0.0,0.0005, \ldots, 0.0002\}$.
+Specifically, let's assume that the slope was $\alpha=\{0.0,0.0005, \ldots, 0.002\}$.
 We played around with these $\alpha$ values to get reasonable rate functions.
 You will need to modify these for your dataset.
 Note that in `ACDC`, rate functions are defined in backwards time, so while these look like decreasing extinction rates, they are in fact increasing extinction rates when you consider time forward from past to present.
@@ -367,7 +367,7 @@ Similar to the example with constant alternative extinctionrate models, there is
 Next, similar to the linear rate functions we explore some exponential rate functions.
 We start here with the exponentially increasing rates.
 Recall that the extinction rate is a function of time such that $\mu(0)$ is the rate at the present and $\mu(1)$ is the rate 1 time unit previously, thus what appear to be exponential increases are in fact decreases.
-Specifically, let's assume that the slope was $\alpha=\{0.0,0.005, \ldots, 0.02\}$.
+Specifically, let's assume that the growth rate was $\alpha=\{0.0,0.005, \ldots, 0.02\}$.
 Then, we define the extinction rate function as
 ```{r }
 mu_max = 0.015
@@ -827,7 +827,7 @@ plot(p)
 
 # Exploring the posterior
 
-Until this point, we have only considered point estimates for the fitted birth-death models. If we only consider the maximum-likelihood estimates, or the posterior median rates, it is easy to forget that there is often substantial estimation error for speciation and extinction rates. Previously we asked the question, if patterns in the posterior median rates are robust to the congruence class. What happens if we want to take into account the estimation error? Inspecting a series of samples in the posterior distribution is one way to assess this question.
+Until this point, we have only considered point estimates for the fitted birth-death models. If we only consider the maximum-likelihood estimates, or the posterior median rates, it is easy to forget that there is often substantial variability in the estimated speciation and extinction rates. Previously we asked the question, if patterns in the posterior median rates are robust to the congruence class. What happens if we want to take into account the estimation error? Inspecting a series of samples in the posterior distribution is one way to assess this question.
 
 ## Reading the posterior
 
@@ -839,7 +839,7 @@ data(primates_ebd_log)
 posterior <- read.RevBayes(primates_ebd_log, n_times = 1000,
                            max_t = 65, n_samples = 20)
 ```
-This yields a list of twenty models that are sampled from the posterior. Each sample is equally spaced on the MCMC iterations, meaning that we minimized the autocorrelation among the posterior samples. In `ACDC` we also included functionality to sample the congruence class, while also taking into account the variation in birth-death models in the posterior distribution. 
+This yields a list of twenty models that are sampled from the posterior. Each sample is equally spaced on the MCMC iterations, meaning that we minimized the autocorrelation among the posterior samples. In `ACDC` we have included functionality to sample the congruence class, while also taking into account the variation in birth-death models in the posterior distribution. 
 
 ## Sampling congruent models in the posterior
 
