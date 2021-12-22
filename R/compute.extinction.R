@@ -35,14 +35,6 @@ congruent.extinction <- function( model, func.lambda ) {
   return (res)
 }
 
-#' Create the piecewise-constant extinction rate
-#'
-#' @param lambda0 The rate at present
-#' @param v_p_div The pulled diversification rate at all change-points
-#' @param v_ext1 The extinction rate at all change-points
-#' @param delta_t The width of each grid cell
-#' @return Extinction rate at all change-points
-#' @keywords internal
 compute.extinction <- function( v_p_div, v_spec1, delta_t ) {
 
   # compute the derivatives
