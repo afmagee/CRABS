@@ -3,7 +3,7 @@
 RevBayes [@Hoehna2016b] provides several methods to estimate diversification rates through time.
 Here we used the [https://revbayes.github.io/tutorials/divrate/ebd.html](RevBayes tutorial) using the episodic-birth-death model with a Horseshoe-Markov-Random-Field (HSMRF) prior distribution to estimate diversification rates [@Magee2020].
 We assume here that you followed the RevBayes tutorial and have the output stored as a log-file in the *output* folder.
-If you have not run a RevBayes analysis and wish to explore functionality of the package, we have providesd a thinned output file, accessible with `data("HSMRFBDP_primates")`.
+If you have not run a RevBayes analysis and wish to explore functionality of the package, we have provided a thinned output file, accessible with `data("primates_ebd_log")`.
 
 For some of our plotting, we need the speciation times.
 So we extract these from the tree.
@@ -27,7 +27,7 @@ par_extinction <- samples[, startsWith(names(samples), "extinction_rate.")]
 ```
 In principle we can use now the full posterior estimates.
 However, in this example we are only interested in the posterior median.
-For HSMRF models we strongly encourage the use of medians and not means because the posterior median is a more robust estimate for rates, see @Magee2020.
+We strongly encourage to use the medians and not the means for HSMRF models, because the posterior median is a more robust estimate for rates, see @Magee2020.
 ```{r RevBayes-compute-median, cache=TRUE}
 est_speciation <- apply(par_speciation, 2, median)
 est_extinction <- apply(par_extinction, 2, median)
