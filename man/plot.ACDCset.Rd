@@ -18,16 +18,17 @@ nothing
 Plots the rate functions
 }
 \examples{
-lambda <- function(x) exp(0.3*x) - 0.5*x + 1
-mu <- function(x) exp(0.3*x) - 0.2*x + 0.2
-times <- seq(0, 5, by = 0.005)
+data(primates_ebd)
+lambda <- approxfun(primates_ebd$time, primates_ebd$lambda)
+mu <- approxfun(primates_ebd$time, primates_ebd$mu)
+times <- seq(0, max(primates_ebd$time), length.out = 500)
 
 model <- create.model(lambda, mu, times = times)
 
-mus <- list(function(t) 0.2 + exp(0.1*t), 
+mus <- list(function(t) 0.2 + exp(0.01*t), 
            function(t) 0.2 + sin(0.35*t) + 0.1*t,
-                       function(t) 1.0, 
-                       function(t) 0.5 + 0.2*t)
+           function(t) 1.0, 
+           function(t) 0.5 + 0.2*t)
 models <- congruent.models(model, mus = mus)
 
 plot(models)

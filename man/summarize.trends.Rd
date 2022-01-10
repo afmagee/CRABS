@@ -30,19 +30,21 @@ Summarize trends in the congruence class
 }
 \examples{
 
-lambda <- function(t) exp(0.3*t) - 0.5*t + 1
-mu <- function(t) exp(0.3*t) - 0.2*t + 0.2
+data(primates_ebd)
+lambda <- approxfun(primates_ebd$time, primates_ebd$lambda)
+mu <- approxfun(primates_ebd$time, primates_ebd$mu)
+times <- seq(0, max(primates_ebd$time), length.out = 500)
 
-reference <- create.model(lambda, mu, times = seq(0, 5, by = 0.005))
+reference <- create.model(lambda, mu, times = times)
 
-mu1 <- list(function(t) exp(0.2*t) - 0.3*t + 0.4,
-function(t) exp(-0.8*t) - 0.1*t + 0.8,
-function(t) exp(-1.5*t) + 0.2*t + 1.2,
-function(t) 1.2 + 0.5*t,
-function(t) 1.5 - 0.28*t)
+mus <- list(function(t) exp(0.01*t) - 0.01*t - 0.9,
+            function(t) exp(-0.02*t) - 0.2,
+            function(t) exp(-0.07*t) + 0.02*t - 0.5,
+            function(t) 0.2 + 0.01*t,
+            function(t) 0.2)
 
 
-model_set <- congruent.models(reference, mus = mu1)
+model_set <- congruent.models(reference, mus = mus)
 
-p <- summarize.trends(model_set, 0.01)
+p <- summarize.trends(model_set, 0.02)
 }

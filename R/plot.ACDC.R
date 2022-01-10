@@ -5,10 +5,13 @@
 #' 
 #' @export
 #' @examples
-#' lambda <- function(t) exp(0.3*t) - 0.5*t + 1
-#' mu <- function(t) exp(0.3*t) - 0.2*t + 0.2
 #' 
-#' model <- create.model(lambda, mu, times = seq(0, 5, by = 0.005))
+#' data(primates_ebd)
+#' lambda <- approxfun(primates_ebd$time, primates_ebd$lambda)
+#' mu <- approxfun(primates_ebd$time, primates_ebd$mu)
+#' times <- seq(0, max(primates_ebd$time), length.out = 500)
+#' 
+#' model <- create.model(lambda, mu, times = times)
 #' 
 #' plot(model)
 plot.ACDC <- function( x, ... ) {
@@ -88,11 +91,13 @@ plot.ACDC <- function( x, ... ) {
 #'
 #' @export
 #' @examples
-#' lambda <- function(t) exp(0.3*t) - 0.5*t + 1
-#' mu <- function(t) exp(0.3*t) - 0.2*t + 0.2
+#' data(primates_ebd)
+#' lambda <- approxfun(primates_ebd$time, primates_ebd$lambda)
+#' mu <- approxfun(primates_ebd$time, primates_ebd$mu)
+#' times <- seq(0, max(primates_ebd$time), length.out = 500)
 #' 
-#' model <- create.model(lambda, mu, times = seq(0, 5, by = 0.005))
-#'
+#' model <- create.model(lambda, mu, times = times)
+#' 
 #' print(model)
 print.ACDC <- function(x, ...){
   cat("Piecewise-linear birth-death model\n")

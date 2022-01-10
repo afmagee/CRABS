@@ -23,11 +23,13 @@ Create a set of congruent models
 }
 \examples{
 
-lambda <- function(t) exp(0.3*t) - 0.5*t + 1
-mu <- function(t) exp(0.3*t) - 0.2*t + 0.2
+data(primates_ebd)
+lambda <- approxfun(primates_ebd$time, primates_ebd$lambda)
+mu <- approxfun(primates_ebd$time, primates_ebd$mu)
 
 ## A reference model
-model <- create.model(lambda, mu, times = seq(0, 5, by = 0.005))
+times <- seq(0, max(primates_ebd$time), length.out = 500)
+model <- create.model(lambda, mu, times = times)
 
 mu1 <- lapply(c(0.5, 1.5, 3.0), function(m) function(t) m)
 
@@ -35,8 +37,8 @@ model_set1 <- congruent.models(model, mus = mu1)
 
 model_set1
 
-lambda0 = lambda(0.0) ## Speciation rates must all be equal at the present
-bs <- c(-0.1, 0.0, 0.1)
+lambda0 <- lambda(0.0) ## Speciation rates must all be equal at the present
+bs <- c(0.0, 0.01, 0.02)
 lambda1 <- lapply(bs, function(b) function(t) lambda0 + b*t)
 
 model_set2 <- congruent.models(model, lambdas = lambda1)
