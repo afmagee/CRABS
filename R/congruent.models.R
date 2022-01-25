@@ -88,7 +88,7 @@ congruent.models <- function(model, mus = NULL, lambdas = NULL, keep_ref = TRUE)
       if (!is.null(names(lambdas)[[i]])){
         names(models2)[[i]] <- names(lambdas)[[i]]
       }else{
-        names(models1)[[i]] <- paste0("model", model_idx)
+        names(models2)[[i]] <- paste0("model", model_idx)
         model_idx <- model_idx +1 
       }
     }

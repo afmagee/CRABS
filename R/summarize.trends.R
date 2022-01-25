@@ -124,6 +124,10 @@ summarize.trends <- function(model_set,
   
   df <- plotdata(model_set, threshold, rate_name, relative_deltas, gmap)
   
+  if(!is.null(gmap)){
+    df$group_name <- factor(df$group_name, levels = group_names)
+  }
+  
   rate_times <- model_set[[1]]$times
   
   if (rm_singleton){
