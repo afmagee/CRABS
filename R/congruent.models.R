@@ -50,6 +50,7 @@ congruent.models <- function(model, mus = NULL, lambdas = NULL, keep_ref = TRUE)
   }
   
   models1 <- list()
+  model_idx <- 1
   # Use mus to generate model
   if (!is.null(mus) && length(mus) > 0){
     
@@ -59,8 +60,14 @@ congruent.models <- function(model, mus = NULL, lambdas = NULL, keep_ref = TRUE)
   
     for (i in seq_along(mus)){
       models1[[i]] <- congruent.speciation(model, mus[[i]])
+      
+      if (!is.null(names(mus)[[i]])){
+        names(models1)[[i]] <- names(mus)[[i]]
+      }else{
+        names(models1)[[i]] <- paste0("model", model_idx)
+        model_idx <- model_idx +1 
+      }
     }
-    names(models1) <- paste0("model", seq_along(models1))
     
   }
   
@@ -78,9 +85,13 @@ congruent.models <- function(model, mus = NULL, lambdas = NULL, keep_ref = TRUE)
       }
       
       models2[[i]] <- congruent.extinction(model, lambdas[[i]])
+      if (!is.null(names(lambdas)[[i]])){
+        names(models2)[[i]] <- names(lambdas)[[i]]
+      }else{
+        names(models1)[[i]] <- paste0("model", model_idx)
+        model_idx <- model_idx +1 
+      }
     }
-    names(models2) <- paste0("model", seq_along(models2)+length(models1))
-    
   }
   models <- c(models, models1, models2)
   class(models) <- c("list", "ACDCset")

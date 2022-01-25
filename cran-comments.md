@@ -17,4 +17,3 @@ These words are not mis-spelled:
   Pennell (8:443)
   speciation (8:121, 8:205)
 ```
-
