@@ -42,7 +42,7 @@ summarize.posterior <- function(posterior,
   plotdata <- bind_rows(res)
   
   if(return_data){
-    return(df)
+    return(plotdata)
   }
   
   k <- sum(sapply(posterior, length))
