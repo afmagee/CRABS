@@ -4,7 +4,7 @@
 \alias{model2df}
 \title{model2df}
 \usage{
-model2df(model, gather = TRUE, rho = 1)
+model2df(model, gather = TRUE, rho = 1, compute.pulled.rates = TRUE)
 }
 \arguments{
 \item{model}{an object of class "ACDC"}
@@ -12,6 +12,8 @@ model2df(model, gather = TRUE, rho = 1)
 \item{gather}{boolean. Whether to return wide or long data frame}
 
 \item{rho}{the sampling fraction at the present. Used to calculate the pulled speciation rate}
+
+\item{compute.pulled.rates}{whether to compute the pulled rates}
 }
 \value{
 a data frame
