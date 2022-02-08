@@ -54,15 +54,22 @@ read.RevBayes <- function(x,
 
     for (it in iter){
       setTxtProgressBar(pb, i)
+      
+      if (any(is.na(speciation[it,])) || any(is.na(extinction[it,])) || any(speciation[it,] < 0) || any(extinction[it,] < 0)){
+        warning(paste("Posterior sample", it," containing negative or NA rate values. skipping."))
+      }else{
+        lambda <- approxfun(times_rb, speciation[it,])
+        mu <- approxfun(times_rb, extinction[it,])
+        times <- seq(0, max(times_rb), length.out = n_times)
+        
+        model <- create.model( lambda, mu, times = times)
+        models[[i]] <- model
+        i <- i + 1
+      }
 
-      lambda <- approxfun(times_rb, speciation[it,])
-      mu <- approxfun(times_rb, extinction[it,])
-      times <- seq(0, max(times_rb), length.out = n_times)
-
-      model <- create.model( lambda, mu, times = times)
-      models[[i]] <- model
-      i <- i + 1
+      
     }
+    close(pb)
     cat("\n")
 
     names(models) <- paste0("posterior", seq_along(models))
