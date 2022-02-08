@@ -8,6 +8,8 @@ sample.congruence.class.posterior(
   posterior,
   num.samples,
   rate.type = "extinction",
+  mu0.equal = FALSE,
+  rate0 = NULL,
   ...
 )
 }
@@ -17,6 +19,8 @@ sample.congruence.class.posterior(
 \item{num.samples}{The pulled diversification rate function (measured in time before present).}
 
 \item{rate.type}{either "extinction", "speciation", or "both"}
+
+\item{mu0.equal}{whether to propose alternative mu starting at mu0 equal to the posterior sample. default to FALSE}
 
 \item{...}{
   Arguments passed on to \code{\link[=sample.basic.models]{sample.basic.models}}
