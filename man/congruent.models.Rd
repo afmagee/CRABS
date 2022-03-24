@@ -4,7 +4,13 @@
 \alias{congruent.models}
 \title{Create a set of congruent models}
 \usage{
-congruent.models(model, mus = NULL, lambdas = NULL, keep_ref = TRUE)
+congruent.models(
+  model,
+  mus = NULL,
+  lambdas = NULL,
+  keep_ref = TRUE,
+  ode_solver = FALSE
+)
 }
 \arguments{
 \item{model}{The reference model. An object of class "ACDC"}
@@ -14,6 +20,8 @@ congruent.models(model, mus = NULL, lambdas = NULL, keep_ref = TRUE)
 \item{lambdas}{A list of speciation-rate functions}
 
 \item{keep_ref}{Whether or not to keep the reference model in the congruent set}
+
+\item{ode_solver}{Whether to use a numerical ODE solver to solve for lambda}
 }
 \value{
 An object of class "ACDCset"

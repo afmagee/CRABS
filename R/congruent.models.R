@@ -4,6 +4,7 @@
 #' @param mus A list of extinction-rate functions
 #' @param lambdas A list of speciation-rate functions
 #' @param keep_ref Whether or not to keep the reference model in the congruent set
+#' @param ode_solver Whether to use a numerical ODE solver to solve for lambda
 #'
 #' @return An object of class "ACDCset"
 #' @export
@@ -31,7 +32,7 @@
 #' model_set2 <- congruent.models(model, lambdas = lambda1)
 #' 
 #' model_set2
-congruent.models <- function(model, mus = NULL, lambdas = NULL, keep_ref = TRUE){
+congruent.models <- function(model, mus = NULL, lambdas = NULL, keep_ref = TRUE, ode_solver = FALSE){
   lambda0 <- model$lambda(0)
   times   <- model$times
   delta_t <- model$delta_t
@@ -59,7 +60,7 @@ congruent.models <- function(model, mus = NULL, lambdas = NULL, keep_ref = TRUE)
     }
   
     for (i in seq_along(mus)){
-      models1[[i]] <- congruent.speciation(model, mus[[i]])
+      models1[[i]] <- congruent.speciation(model, mus[[i]], ode_solver = ode_solver)
       
       if (!is.null(names(mus)[[i]])){
         names(models1)[[i]] <- names(mus)[[i]]
