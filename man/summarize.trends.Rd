@@ -14,6 +14,10 @@ return_data = FALSE, rm_singleton = FALSE, relative_deltas = FALSE, group_names 
 
 \item{rate_name}{either "lambda" or "mu" or "delta"}
 
+\item{window_size}{the window size "k" in \eqn{\Delta\lambdai = \lambdai - \lambda(i-k)}}
+
+\item{per_time}{whether to compute \eqn{\Delta\lambdai} that are in units of per time, i.e. divide by \eqn{\Deltat}}
+
 \item{return_data}{instead of plots, return the plotting dataframes}
 
 \item{rm_singleton}{whether or not to remove singletons. Pass starting at present, going towards ancient}

@@ -1,20 +1,48 @@
-create_heatmatrix <- function(model, name, rate_name, threshold, relative_deltas = FALSE, gmap = NULL){
+create_heatmatrix <- function(model, 
+                              name, 
+                              rate_name, 
+                              threshold, 
+                              window_size, 
+                              method,
+                              per_time, 
+                              relative_deltas = FALSE, 
+                              gmap = NULL){
   times <- model$times
-  delta_t <- model$times[2] - model$times[1]
-  
-  ## \Delta \lambda_{i+1} = \lambda_{i+1} - \lambda_i
   rate <- model[[rate_name]](times)
-  rate_i <- tail(rate, n = -1)
-  rate_i_minus_one <- head(rate, n = -1)
   
-  if (relative_deltas){
-    delta_rate <- (rate_i_minus_one - rate_i) / rate_i
+  #method <- "neighbour"
+  if (method == "neighbour"){
+    delta_t <- model$times[window_size+1] - model$times[1]
+    
+    ## \Delta \lambda_{i} = \lambda_{i} - \lambda_{i-k}
+    rate_i <- tail(rate, n = -window_size)
+    rate_i_minus_k <- head(rate, n = -window_size) ## k is the window size
+    
+    if (relative_deltas){
+      delta_rate <- (rate_i_minus_k - rate_i) / rate_i
+    }else{
+      delta_rate <- (rate_i_minus_k - rate_i)
+    }
+    
+    if (per_time){
+      delta_rate <- delta_rate / delta_t  
+    }
+    
+    xtimes <- (head(times, n = -window_size) + tail(times, n = -window_size))/2
+  }else if (is.numeric(method)){
+    if(per_time){
+      stop("the option \"per time\" is not supported when not using neighbours. Set \"per time\" to FALSE.")
+    }
+    
+    rate_i <- rate
+    rate_k <- rate[method]
+    
+    delta_rate <- rate_i - rate_k
+    xtimes <- times
   }else{
-    delta_rate <- (rate_i_minus_one - rate_i)
+    stop("method must either be \"neighbour\" or a numeric value")
   }
-  delta_rate <- delta_rate / delta_t
   
-  xtimes <- (head(times, n = -1) + tail(times, n = -1))/2
   
   # is increasing
   inc <- ifelse(delta_rate > threshold, 1, 0)
@@ -52,10 +80,28 @@ direction_labels <- function(x){
   ifelse(x == "-1", "Decreasing", ifelse(x == "1", "Increasing", "Flat"))
 }
 
-plotdata <- function(model_set, threshold, rate_name, relative_deltas, gmap){
+plotdata <- function(model_set, 
+                     threshold,
+                     rate_name, 
+                     window_size, 
+                     method,
+                     per_time,
+                     relative_deltas, 
+                     gmap){
   model_names <- names(model_set)
-  l <- lapply(model_names, 
-              function(name) create_heatmatrix(model_set[[name]], name, rate_name, threshold, relative_deltas, gmap))
+  l <- list()
+  for (i in seq_along(model_names)){
+    name <- model_names[i]
+    l[[i]] <- create_heatmatrix(model_set[[name]], 
+                                name, 
+                                rate_name, 
+                                threshold, 
+                                window_size, 
+                                method,
+                                per_time,
+                                relative_deltas,
+                                gmap)
+  }
   df <- do.call(rbind, l)
   
   df$direction <- factor(df$direction, levels = sort(levels(df$direction)))
@@ -68,6 +114,9 @@ plotdata <- function(model_set, threshold, rate_name, relative_deltas, gmap){
 #' @param model_set an object of type "ACDCset"
 #' @param threshold a threshold for when \eqn{\Delta \lambda i} should be interpreted as decreasing, flat, or increasing
 #' @param rate_name either "lambda" or "mu" or "delta"
+#' @param window_size the window size "k" in \eqn{\Delta\lambdai = \lambdai - \lambda(i-k)}
+#' @param method
+#' @param per_time whether to compute \eqn{\Delta\lambdai} that are in units of per time, i.e. divide by \eqn{\Deltat}
 #' @param return_data instead of plots, return the plotting dataframes
 #' @param rm_singleton whether or not to remove singletons. Pass starting at present, going towards ancient
 #' @param relative_deltas whether to divide \eqn{\Delta \lambda i} by the local lambda value
@@ -102,6 +151,9 @@ plotdata <- function(model_set, threshold, rate_name, relative_deltas, gmap){
 summarize.trends <- function(model_set, 
                            threshold = 0.005, 
                            rate_name = "lambda", 
+                           window_size = 1,
+                           method = "neighbour",
+                           per_time = TRUE,
                            return_data = FALSE, 
                            rm_singleton = FALSE, 
                            relative_deltas = FALSE, 
@@ -122,7 +174,7 @@ summarize.trends <- function(model_set,
     gmap <- NULL
   }
   
-  df <- plotdata(model_set, threshold, rate_name, relative_deltas, gmap)
+  df <- plotdata(model_set, threshold, rate_name, window_size, method, per_time, relative_deltas, gmap)
   
   if(!is.null(gmap)){
     df$group_name <- factor(df$group_name, levels = group_names)
@@ -138,12 +190,24 @@ summarize.trends <- function(model_set,
   
   # plot finite-difference derivative
   if(rate_name %in% c("lambda", "mu", "delta")){
-    if(relative_deltas){
-      lab <- paste0("$\\Delta\\", rate_name, " = \\frac{\\", rate_name, "_{i-1} - \\", rate_name, "_i}{\\Delta t\\", rate_name, "_i}$")
+    if (method == "neighbour"){
+      lab <- paste0("\\Delta\\", rate_name, " = \\frac{\\", rate_name, "_{i-", window_size, "} - \\", rate_name, "_i}")  
     }else{
-      lab <- paste0("$\\Delta\\", rate_name, " = \\frac{\\", rate_name, "_{i-1} - \\", rate_name, "_i}{\\Delta t}$")
+      lab <- paste0("\\Delta\\", rate_name, " = \\frac{\\", rate_name, "_{", method,"} - \\", rate_name, "_i}")  
     }
-    ylabel <- latex2exp::TeX(lab)
+    
+    denum <- ""
+    if(per_time){
+      denum <- paste0(denum, "\\Delta t")
+    }
+    if(relative_deltas){
+      denum <- paste0(denum, "\\", rate_name, "_i")
+    }
+    if(!per_time && !relative_deltas){
+      denum <- paste0(denum, "1")
+    }
+    denum <- paste0("{", denum, "}")
+    ylabel <- latex2exp::TeX(paste0("$", lab, denum, "$"))
   }else{
     stop("rate_name must either be 'lambda' or 'mu' or 'delta'.")
   }
