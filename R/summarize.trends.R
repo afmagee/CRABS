@@ -115,7 +115,7 @@ plotdata <- function(model_set,
 #' @param threshold a threshold for when \eqn{\Delta \lambda i} should be interpreted as decreasing, flat, or increasing
 #' @param rate_name either "lambda" or "mu" or "delta"
 #' @param window_size the window size "k" in \eqn{\Delta\lambdai = \lambdai - \lambda(i-k)}
-#' @param method
+#' @param method .
 #' @param per_time whether to compute \eqn{\Delta\lambdai} that are in units of per time, i.e. divide by \eqn{\Deltat}
 #' @param return_data instead of plots, return the plotting dataframes
 #' @param rm_singleton whether or not to remove singletons. Pass starting at present, going towards ancient

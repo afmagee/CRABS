@@ -26,6 +26,8 @@ summarize.posterior <- function(posterior,
                                 rate_name = "lambda",
                                 return_data = FALSE,
                                 rm_singleton = FALSE,
+                                per_time = TRUE,
+                                window_size = 1,
                                 relative_deltas = FALSE){
   times <- posterior[[1]][[1]]$times
   max_t <- max(times)
@@ -35,6 +37,8 @@ summarize.posterior <- function(posterior,
   for (i in seq_along(posterior)){
     df <- summarize.trends(posterior[[i]], 
                            threshold = threshold, 
+                           window_size = window_size,
+                           per_time = per_time,
                            return_data = TRUE)[["heatmap_data"]]
     df["posterior"] <- paste0("sample",i)
     res[[i]] <- df
@@ -47,8 +51,14 @@ summarize.posterior <- function(posterior,
   
   k <- sum(sapply(posterior, length))
   
+  #levels_base <- 
+  levels1 <- c("-1", "0", "1")
+  levels1 <- levels1[levels1 %in% levels(plotdata$direction)]
+  
+  plotdata$direction <- factor(plotdata$direction, levels = levels1)
+  
   p1 <- ggplot(plotdata, aes(x = time, fill = direction)) +
-    geom_histogram(aes(y = stat(count / sum(count)*n_epochs)), binwidth = max_t/n_epochs) +
+    geom_histogram(aes(y = stat(count / sum(count)*(n_epochs-window_size+1))), binwidth = max_t/n_epochs) +
     theme_classic() +
     scale_fill_manual(values = c("purple","white", "#7fbf7b"), labels = direction_labels) +
     theme(legend.position = c(0.3, 0.3),

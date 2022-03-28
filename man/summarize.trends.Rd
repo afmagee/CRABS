@@ -16,6 +16,8 @@ return_data = FALSE, rm_singleton = FALSE, relative_deltas = FALSE, group_names 
 
 \item{window_size}{the window size "k" in \eqn{\Delta\lambdai = \lambdai - \lambda(i-k)}}
 
+\item{method}{.}
+
 \item{per_time}{whether to compute \eqn{\Delta\lambdai} that are in units of per time, i.e. divide by \eqn{\Deltat}}
 
 \item{return_data}{instead of plots, return the plotting dataframes}
