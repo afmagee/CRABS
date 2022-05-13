@@ -49,7 +49,11 @@ create.model <- function(func_spec0, func_ext0, times = seq(from = 0, to = 5, by
   ## compute the pulled diversification rate
   if(missing("func_p_div")){
     #v_p_div     <- compute.pulled.diversification( v_spec0, v_ext0, delta_t )
-    lambda_deriv <- pracma::fderiv(func_spec0, times, method = "central")
+    back <- pracma::fderiv(func_spec0, times, method = "backward")
+    forw <- pracma::fderiv(func_spec0, times, method = "forward")
+    m <- rbind(forw, back)
+    lambda_deriv <- apply(m, 2, mean, na.rm = TRUE)
+    
     v_p_div <- v_spec0 - v_ext0 + (1/v_spec0) * lambda_deriv
     func_p_div  <- approxfun(times,v_p_div)
   }
