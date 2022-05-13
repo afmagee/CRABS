@@ -18,7 +18,7 @@ plot.ACDC <- function( x, ... ) {
   df <- model2df(x)
   
   df_lambda <- df %>% filter(grepl("speciation", rate, ignore.case = TRUE))
-  df_mu     <- df %>% filter(rate == "Extinction")
+  df_mu     <- df %>% filter(rate %in% c("Extinction", "Pulled extinction"))
   df_delta  <- df %>% filter(grepl("net-diversification", rate, ignore.case = TRUE))
   df_relext <- df %>% filter(rate == "Relative extinction")
   
@@ -30,6 +30,7 @@ plot.ACDC <- function( x, ... ) {
     geom_line(color = "darkblue") +
     scale_x_reverse() +
     theme(legend.position = c(0.5, 0.6),
+          legend.background = element_blank(),
           legend.title = element_blank(),
           axis.title.x = element_blank(),
           plot.title = element_text(hjust = 0.5)) +
@@ -39,15 +40,17 @@ plot.ACDC <- function( x, ... ) {
     ylim(ylim)
   
   p2 <- df_mu %>%
-    ggplot(aes(x = Time, y = value)) +
+    ggplot(aes(x = Time, y = value, linetype = rate)) +
     theme_classic() +
     geom_line(color = "orange") +
     scale_x_reverse() +
-    theme(legend.position = "NA",
+    theme(legend.position = c(0.5, 0.6),
+          legend.background = element_blank(),
           plot.title = element_text(hjust = 0.5),
           axis.title.y = element_blank(),
           axis.title.x = element_blank(),
           legend.title = element_blank()) +
+    scale_linetype_manual(breaks=c("Extinction", "Pulled extinction"), values=c(1,5)) +
     ylab("rate") +
     labs(title = "Extinction") +
     ylim(ylim)
@@ -59,6 +62,7 @@ plot.ACDC <- function( x, ... ) {
     scale_x_reverse() +
     theme(legend.position = c(0.5, 0.5),
           plot.title = element_text(hjust = 0.5),
+          legend.background = element_blank(),
           legend.title = element_blank()) +
     scale_linetype_manual(breaks=c("Net-diversification", "Pulled net-diversification"), values=c(1,5)) +
     labs(title = "Net-diversification") +

@@ -45,9 +45,11 @@ model2df <- function(model, gather = TRUE, rho = 1.0, compute.pulled.rates = TRU
   if (compute.pulled.rates){
     p.lambda <- pulled.speciation(model, rho = rho)(times)
     p.delta <- model$p.delta(times)  
+    p.mu <- model$lambda(0.0) - p.delta
   }else{
     p.lambda <- NULL
     p.delta <- NULL
+    p.mu <- NULL
   }
   
   
@@ -57,7 +59,8 @@ model2df <- function(model, gather = TRUE, rho = 1.0, compute.pulled.rates = TRU
                "Net-diversification" = l - ex,
                "Relative extinction" = ex / l,
                "Pulled net-diversification" = p.delta,
-               "Pulled speciation" = p.lambda)
+               "Pulled speciation" = p.lambda,
+               "Pulled extinction" = p.mu)
   if (gather){
     df <- gather(df, "rate", "value", -Time)  
   }
