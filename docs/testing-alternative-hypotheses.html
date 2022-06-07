@@ -6,11 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>5 Testing alternative hypotheses | ACDC: Analysis of Congruent Diversification Analyses</title>
   <meta name="description" content="5 Testing alternative hypotheses | ACDC: Analysis of Congruent Diversification Analyses" />
-  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
 
   <meta property="og:title" content="5 Testing alternative hypotheses | ACDC: Analysis of Congruent Diversification Analyses" />
   <meta property="og:type" content="book" />
-  
   
   
   
@@ -26,7 +25,7 @@
 <meta name="author" content="Andrew F. Magee" />
 
 
-<meta name="date" content="2022-01-10" />
+<meta name="date" content="2022-06-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -35,7 +34,6 @@
   
 <link rel="prev" href="creating-the-congruence-class.html"/>
 <link rel="next" href="exploring-the-congruence-class.html"/>
-<script src="lib/header-attrs-2.11/header-attrs.js"></script>
 <script src="lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="lib/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -54,8 +52,9 @@
 
 
 <script src="lib/accessible-code-block-0.0.1/empty-anchor.js"></script>
-<link href="lib/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
-<script src="lib/anchor-sections-1.0.1/anchor-sections.js"></script>
+<link href="lib/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="lib/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="lib/anchor-sections-1.1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
@@ -174,6 +173,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.2.3" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#linearly-increasing"><i class="fa fa-check"></i><b>6.2.3</b> Linearly increasing</a></li>
 <li class="chapter" data-level="6.2.4" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#episodic"><i class="fa fa-check"></i><b>6.2.4</b> Episodic</a></li>
 <li class="chapter" data-level="6.2.5" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#uniform-independent"><i class="fa fa-check"></i><b>6.2.5</b> Uniform independent</a></li>
+<li class="chapter" data-level="6.2.6" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#brownian-motion-with-a-trend"><i class="fa fa-check"></i><b>6.2.6</b> Brownian motion with a trend</a></li>
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#sample-alternative-speciation-rates"><i class="fa fa-check"></i><b>6.3</b> Sample alternative speciation rates</a>
 <ul>
@@ -210,17 +210,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="testing-alternative-hypotheses" class="section level1" number="5">
-<h1><span class="header-section-number">5</span> Testing alternative hypotheses</h1>
+<div id="testing-alternative-hypotheses" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">5</span> Testing alternative hypotheses<a href="testing-alternative-hypotheses.html#testing-alternative-hypotheses" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>In this section we focus on specific alternative hypotheses for diversification rates.
 The first part of our congruence class exploration focuses on specific alternative models.
 That is, we first start by providing a set of alternative extinction rate functions and compute the matching speciation rate functions.
 Then, we turn the approach around and specify some alternative speciation rate functions for which we compute the matching extinction rate functions.</p>
-<div id="alt-ext" class="section level2" number="5.1">
-<h2><span class="header-section-number">5.1</span> Testing alternative extinction rates</h2>
+<div id="alt-ext" class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> Testing alternative extinction rates<a href="testing-alternative-hypotheses.html#alt-ext" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>In this subsection we focus entirely on alternative hypotheses of extinction rates for which we compute the resulting speciation rates.</p>
-<div id="constant-extinction-rates" class="section level3" number="5.1.1">
-<h3><span class="header-section-number">5.1.1</span> Constant extinction rates</h3>
+<div id="constant-extinction-rates" class="section level3 hasAnchor" number="5.1.1">
+<h3><span class="header-section-number">5.1.1</span> Constant extinction rates<a href="testing-alternative-hypotheses.html#constant-extinction-rates" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Let us assume that the extinction rate was constant, but at a range of different values.
 Specifically, let’s assume that the true extinction rate was <span class="math inline">\(\mu(t)=\{0.0,0.025,0.05,0.075,0.1\}\)</span>.
 For our models we need to create extinction rate functions with these values.</p>
@@ -253,8 +253,8 @@ Figure 5.2: Summary of directional trends in the congruence class.
 </div>
 <p>Notice that there is variation in the slope of the speciation rate (<span class="math inline">\(\Delta\lambda\)</span>) throughout the entire time span of the phylogenetic tree. Yet, when we only consider rate changes that are smaller or greater than our threshold of <span class="math inline">\(\epsilon = 0.02 \Delta\lambda\)</span> per million years, it becomes evident that the constructed congruent models are in complete agreement of the two increases in speciation rate, as well as the more recent decline in speciation rate.</p>
 </div>
-<div id="linearly-increasing-extinction-rates" class="section level3" number="5.1.2">
-<h3><span class="header-section-number">5.1.2</span> Linearly increasing extinction rates</h3>
+<div id="linearly-increasing-extinction-rates" class="section level3 hasAnchor" number="5.1.2">
+<h3><span class="header-section-number">5.1.2</span> Linearly increasing extinction rates<a href="testing-alternative-hypotheses.html#linearly-increasing-extinction-rates" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Next, we will explore different linear rate functions for the extinction rate.
 Let us assume that the extinction rate was linear with a range of different slopes.
 Specifically, let’s assume that the slope was <span class="math inline">\(\alpha=\{0.0,0.0005, \ldots, 0.002\}\)</span>.
@@ -292,8 +292,8 @@ Figure 5.4: Summary of directional trends in the congruence class.
 </div>
 <p>Similar to the example with constant alternative extinctionrate models, there is some variation in the trends, but the same conclusion remains. Namely, for our threshold of <span class="math inline">\(\epsilon = 0.02 \Delta\lambda\)</span> per million years, it is evident that the constructed congruent models are in complete agreement of the two increases in speciation rate, as well as the more recent decline in speciation rate.</p>
 </div>
-<div id="exponential-increasing-extinction-rates" class="section level3" number="5.1.3">
-<h3><span class="header-section-number">5.1.3</span> Exponential increasing extinction rates</h3>
+<div id="exponential-increasing-extinction-rates" class="section level3 hasAnchor" number="5.1.3">
+<h3><span class="header-section-number">5.1.3</span> Exponential increasing extinction rates<a href="testing-alternative-hypotheses.html#exponential-increasing-extinction-rates" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Next, similar to the linear rate functions we explore some exponential rate functions.
 We start here with the exponentially increasing rates.
 Recall that the extinction rate is a function of time such that <span class="math inline">\(\mu(0)\)</span> is the rate at the present and <span class="math inline">\(\mu(1)\)</span> is the rate 1 time unit previously, thus what appear to be exponential increases are in fact decreases.
@@ -329,8 +329,8 @@ Figure 5.6: Summary of directional trends in the congruence class.
 </div>
 <p>Similar to the two previous examples, there is some variation in the trends, but the same conclusion remains. Namely, for our threshold of <span class="math inline">\(\epsilon = 0.02 \Delta\lambda\)</span> per million years, it is evident that the constructed congruent models are in complete agreement of the two increases in speciation rate, as well as the more recent decline in speciation rate.</p>
 </div>
-<div id="two-epoch-extinction-rates" class="section level3" number="5.1.4">
-<h3><span class="header-section-number">5.1.4</span> Two-epoch extinction rates</h3>
+<div id="two-epoch-extinction-rates" class="section level3 hasAnchor" number="5.1.4">
+<h3><span class="header-section-number">5.1.4</span> Two-epoch extinction rates<a href="testing-alternative-hypotheses.html#two-epoch-extinction-rates" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Let us assume that the extinction rate changed abruptly at a pre-defined change-point.
 We’ll try to fix the change-point to the estimated rapid increase in diversification.
 Thus, we are modeling the extinction rate as a 2-epoch model.
@@ -368,8 +368,8 @@ Figure 5.8: Summary of directional trends in the congruence class.
 </div>
 <p>Again, for our threshold of <span class="math inline">\(\epsilon = 0.02 \Delta\lambda\)</span> per million years, it is evident that the constructed congruent models are in complete agreement of the two increases in speciation rate, as well as the more recent decline in speciation rate.</p>
 </div>
-<div id="reversed-trend-extinction-rates" class="section level3" number="5.1.5">
-<h3><span class="header-section-number">5.1.5</span> Reversed trend extinction rates</h3>
+<div id="reversed-trend-extinction-rates" class="section level3 hasAnchor" number="5.1.5">
+<h3><span class="header-section-number">5.1.5</span> Reversed trend extinction rates<a href="testing-alternative-hypotheses.html#reversed-trend-extinction-rates" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>As a last example, let us explore the case where the extinction rate had the opposite trend to the estimated speciation rate.
 That is, if the speciation rate was going up, now we model that the extinction rate goes down.
 This should produce the same pattern in the net-diversification rate.
@@ -415,12 +415,12 @@ Specifically, the observed pattern of a sharp increase of the speciation rate to
 Only if we would change the extinction rates in extreme and biologically unrealistic ways, e.g., by allowing the extinction rate to become implausible large, then the extinction rates can overwhelm our observed diversification rate pattern.</p>
 </div>
 </div>
-<div id="testing-alternative-speciation-rates" class="section level2" number="5.2">
-<h2><span class="header-section-number">5.2</span> Testing alternative speciation rates</h2>
+<div id="testing-alternative-speciation-rates" class="section level2 hasAnchor" number="5.2">
+<h2><span class="header-section-number">5.2</span> Testing alternative speciation rates<a href="testing-alternative-hypotheses.html#testing-alternative-speciation-rates" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Let us now look at the congruence class from the angle of the speciation rates.
 Can we also specify different speciation rate function and obtain valid extinction rates?</p>
-<div id="constant-speciation-rates" class="section level3" number="5.2.1">
-<h3><span class="header-section-number">5.2.1</span> Constant speciation rates</h3>
+<div id="constant-speciation-rates" class="section level3 hasAnchor" number="5.2.1">
+<h3><span class="header-section-number">5.2.1</span> Constant speciation rates<a href="testing-alternative-hypotheses.html#constant-speciation-rates" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Let us assume that the speciation rate was constant.
 However, the congruence class as defined by <span class="citation">Louca &amp; Pennell (2020)</span> dictates that <span class="math inline">\(\lambda(0) = \lambda&#39;(0)\)</span>, assuming the same present day sampling fraction for both models.
 Thus, there is only one possible constant rate speciation model within the congruence class with <span class="math inline">\(\lambda&#39;(t) = \lambda(0)\)</span>
@@ -442,8 +442,8 @@ Figure 5.11: Diversification rate functions for a constant speciation rates with
 A negative extinction rate is clearly unrealistic.
 Thus, we can conclude that there is no constant rate speciation rate function within the congruence class.</p>
 </div>
-<div id="exponential-increasingdecreasing-speciation-rates" class="section level3" number="5.2.2">
-<h3><span class="header-section-number">5.2.2</span> Exponential increasing/decreasing speciation rates</h3>
+<div id="exponential-increasingdecreasing-speciation-rates" class="section level3 hasAnchor" number="5.2.2">
+<h3><span class="header-section-number">5.2.2</span> Exponential increasing/decreasing speciation rates<a href="testing-alternative-hypotheses.html#exponential-increasingdecreasing-speciation-rates" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Let us assume that the speciation rate was exponentially increasing or decreasing.
 Furthermore, let us try a range of different factors of increase/decrease.
 Specifically, let’s assume that the growth rate was <span class="math inline">\(\alpha=\{-0.04,-0.03,\ldots, 0.04\}\)</span>.
@@ -471,9 +471,9 @@ Figure 5.12: Diversification rate functions for exponentially increasing/decreas
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="testing-alternative-hypotheses.html#cb37-1"></a>p &lt;-<span class="st"> </span><span class="kw">summarize.trends</span>(alt_models, <span class="dt">threshold =</span> <span class="fl">0.02</span>, <span class="dt">rate_name =</span> <span class="st">&quot;mu&quot;</span>)</span>
 <span id="cb37-2"><a href="testing-alternative-hypotheses.html#cb37-2"></a><span class="kw">plot</span>(p)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:lambda-exp-trendmu"></span>
-<img src="figures/lambda-exp-trendmu-1.png" alt="asd" width="480" />
+<img src="figures/lambda-exp-trendmu-1.png" alt="Congruence class assuming exponentially changing speciation rates." width="480" />
 <p class="caption">
-Figure 5.13: asd
+Figure 5.13: Congruence class assuming exponentially changing speciation rates.
 </p>
 </div>
 <p>Our results here for the exponentially increasing speciation functions show again that the derived extinction rates are negative towards the present and/or at another point in time.

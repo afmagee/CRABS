@@ -544,7 +544,7 @@ Let's have a look at these *alternative models*.
 plot( alt_models )
 ```
 We can also plot the directional trends in the extinction rate through time:
-```{r lambda-exp-trendmu, fig.cap = "asd", fig.width = 5, fig.height = 3}
+```{r lambda-exp-trendmu, fig.cap = "Congruence class assuming exponentially changing speciation rates.", fig.width = 5, fig.height = 3}
 p <- summarize.trends(alt_models, threshold = 0.02, rate_name = "mu")
 plot(p)
 ```
@@ -783,6 +783,38 @@ plot(p)
 
 As we can see, the alternative models present many distinct histories of the rates through time.
 Nonetheless, even in this extreme scenario, the increases and decrease near the present are preserved.
+
+
+### Brownian motion with a trend
+
+It is also possible to specify fully customized rate sampling functions, and use these to sample the congruence class in `ACDC`. Suppose we thought that the extinction rate was tiny when the clade emerged, but steadily rose in a linear fashion towards the present. Additionally, suppose we allow for some random variation around this linear increase. This can be implemented as a Brownian motion with a trend, as follows.
+
+```{r sample-bm-trend-decreasing}
+med_times <- seq(0, max(my_model$time), length.out = 30)
+
+extinction_rate_samples <- function(){
+  y <- -0.01*med_times + rnorm(30, mean = 0, sd = 0.1) + 0.5
+  y <- ifelse(y < 0.001, 0.001, y)
+  f <- approxfun(med_times, y)
+}
+```
+For simplicity, we restrict rates that are very small or negative to be a minimum of 0.001 units. As before, we can use `ACDC` to sample from the congruence class using this form of proposed extinction rates, and plot the rates:
+
+```{r bm-trend-spaghetti, fig.cap = "Rate plots for the congruent models that were sampled assuming an extinction rate modeled as a Brownian motion with a linearly increasing trend"}
+samples <- sample.congruence.class(
+  my_model,
+  num.samples=15,
+  rate.type="extinction",
+  sample.extinction.rates=extinction_rate_samples)
+plot(samples)
+```
+
+The summary of trends across these models contain quite a bit of variation. However, the three main signals in the primate reference model are all recovered: two increases and one decrease in the recent part of the phylogeny  \@ref(fig:bm-trend-summary).
+
+```{r bm-trend-summary, fig.cap = "A summary of directional trends through time across the congruent models. The proposed extinction rate is modeled as a Brownian motion with a trend that increases linearly towards the present.", fig.width = 6, fig.height = 3}
+p <- summarize.trends(samples, threshold = 0.02)
+plot(p)
+```
 
 
 ## Sample alternative speciation rates

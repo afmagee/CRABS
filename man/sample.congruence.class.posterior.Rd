@@ -35,6 +35,7 @@ sample.congruence.class.posterior(
     \item{\code{fc.mean}}{Determines the average amount of change when drawing from the model.}
     \item{\code{rate0.median}}{When not specified, rate at present is drawn from a lognormal distribution with this median.}
     \item{\code{rate0.logsd}}{When not specified, rate at present is drawn from a lognormal distribution with this sd}
+    \item{\code{mrf.var.scale}}{scale the variance of the mrf process up or down. defaults to 1.0}
     \item{\code{min.rate}}{The minimum rate (rescaling fone after after drawing rates).}
     \item{\code{max.rate}}{The maximum rate (rescaling fone after after drawing rates).}
   }}

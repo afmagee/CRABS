@@ -6,11 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>3 Features | ACDC: Analysis of Congruent Diversification Analyses</title>
   <meta name="description" content="3 Features | ACDC: Analysis of Congruent Diversification Analyses" />
-  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
 
   <meta property="og:title" content="3 Features | ACDC: Analysis of Congruent Diversification Analyses" />
   <meta property="og:type" content="book" />
-  
   
   
   
@@ -26,7 +25,7 @@
 <meta name="author" content="Andrew F. Magee" />
 
 
-<meta name="date" content="2022-01-10" />
+<meta name="date" content="2022-06-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -35,7 +34,6 @@
   
 <link rel="prev" href="installation.html"/>
 <link rel="next" href="creating-the-congruence-class.html"/>
-<script src="lib/header-attrs-2.11/header-attrs.js"></script>
 <script src="lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="lib/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -54,8 +52,9 @@
 
 
 <script src="lib/accessible-code-block-0.0.1/empty-anchor.js"></script>
-<link href="lib/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
-<script src="lib/anchor-sections-1.0.1/anchor-sections.js"></script>
+<link href="lib/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="lib/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="lib/anchor-sections-1.1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
@@ -174,6 +173,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.2.3" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#linearly-increasing"><i class="fa fa-check"></i><b>6.2.3</b> Linearly increasing</a></li>
 <li class="chapter" data-level="6.2.4" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#episodic"><i class="fa fa-check"></i><b>6.2.4</b> Episodic</a></li>
 <li class="chapter" data-level="6.2.5" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#uniform-independent"><i class="fa fa-check"></i><b>6.2.5</b> Uniform independent</a></li>
+<li class="chapter" data-level="6.2.6" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#brownian-motion-with-a-trend"><i class="fa fa-check"></i><b>6.2.6</b> Brownian motion with a trend</a></li>
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#sample-alternative-speciation-rates"><i class="fa fa-check"></i><b>6.3</b> Sample alternative speciation rates</a>
 <ul>
@@ -210,10 +210,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="features" class="section level1" number="3">
-<h1><span class="header-section-number">3</span> Features</h1>
-<div id="overview-of-functions-in-acdc" class="section level2" number="3.1">
-<h2><span class="header-section-number">3.1</span> Overview of functions in <code>ACDC</code></h2>
+<div id="features" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">3</span> Features<a href="features.html#features" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="overview-of-functions-in-acdc" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Overview of functions in <code>ACDC</code><a href="features.html#overview-of-functions-in-acdc" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Here we give you an overview of the main functions available in <code>ACDC</code>.</p>
 <table>
 <colgroup>
@@ -265,8 +265,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 We use these functions throughout the sections in the vignette.
 For <code>sample.basic.models</code>, we have a separate section explaining the most important flags and use cases because <code>sample.basic.models</code> might represent a more complex but important function of <code>ACDC</code>.</p>
 </div>
-<div id="samplebasic" class="section level2" number="3.2">
-<h2><span class="header-section-number">3.2</span> <code>sample.basic.models</code></h2>
+<div id="samplebasic" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> <code>sample.basic.models</code><a href="features.html#samplebasic" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>This function is designed to enable easy generation of commonly employed diversification-rate scenarios.
 The basic models are specified by the argument <code>model</code> exponentially increasing/decreasing rates, linearly decreasing rates, episodic (or piecewise constant rates), and Markov random field (MRF) models (constant rates are also possible).
 The direction of change (increase or decrease) is controlled by the argument <code>direction</code>.

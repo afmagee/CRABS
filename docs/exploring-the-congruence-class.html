@@ -6,11 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>6 Exploring the congruence class | ACDC: Analysis of Congruent Diversification Analyses</title>
   <meta name="description" content="6 Exploring the congruence class | ACDC: Analysis of Congruent Diversification Analyses" />
-  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
 
   <meta property="og:title" content="6 Exploring the congruence class | ACDC: Analysis of Congruent Diversification Analyses" />
   <meta property="og:type" content="book" />
-  
   
   
   
@@ -26,7 +25,7 @@
 <meta name="author" content="Andrew F. Magee" />
 
 
-<meta name="date" content="2022-01-10" />
+<meta name="date" content="2022-06-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -35,7 +34,6 @@
   
 <link rel="prev" href="testing-alternative-hypotheses.html"/>
 <link rel="next" href="exploring-the-posterior.html"/>
-<script src="lib/header-attrs-2.11/header-attrs.js"></script>
 <script src="lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="lib/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -54,8 +52,9 @@
 
 
 <script src="lib/accessible-code-block-0.0.1/empty-anchor.js"></script>
-<link href="lib/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
-<script src="lib/anchor-sections-1.0.1/anchor-sections.js"></script>
+<link href="lib/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="lib/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="lib/anchor-sections-1.1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
@@ -174,6 +173,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.2.3" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#linearly-increasing"><i class="fa fa-check"></i><b>6.2.3</b> Linearly increasing</a></li>
 <li class="chapter" data-level="6.2.4" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#episodic"><i class="fa fa-check"></i><b>6.2.4</b> Episodic</a></li>
 <li class="chapter" data-level="6.2.5" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#uniform-independent"><i class="fa fa-check"></i><b>6.2.5</b> Uniform independent</a></li>
+<li class="chapter" data-level="6.2.6" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#brownian-motion-with-a-trend"><i class="fa fa-check"></i><b>6.2.6</b> Brownian motion with a trend</a></li>
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#sample-alternative-speciation-rates"><i class="fa fa-check"></i><b>6.3</b> Sample alternative speciation rates</a>
 <ul>
@@ -210,15 +210,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="exploring-the-congruence-class" class="section level1" number="6">
-<h1><span class="header-section-number">6</span> Exploring the congruence class</h1>
+<div id="exploring-the-congruence-class" class="section level1 hasAnchor" number="6">
+<h1><span class="header-section-number">6</span> Exploring the congruence class<a href="exploring-the-congruence-class.html#exploring-the-congruence-class" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>In theory there are infinitely many speciation and extinction rate functions that are within a congruence class, i.e., all rate functions that have exactly the same likelihood.
 It is clearly impossible to enumerate all rate functions.
 Instead of trying to explore literally all rate functions, we will sample from these rate functions instead.
 This idea is very similar to all sampling based methods.
 For example, a posterior distribution with a 95% credible interval between 0.01 and 0.02 contains infinitely many values, but we are we comfortable today with simply sampling values proportional to their posterior probability and looking/plotting the distribution.</p>
-<div id="assumptions-on-rates" class="section level2" number="6.1">
-<h2><span class="header-section-number">6.1</span> Assumptions on rates</h2>
+<div id="assumptions-on-rates" class="section level2 hasAnchor" number="6.1">
+<h2><span class="header-section-number">6.1</span> Assumptions on rates<a href="exploring-the-congruence-class.html#assumptions-on-rates" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>There are several plausible assumptions that can be made about diversification rates and how these rates vary.
 First, you could make assumptions about the magnitude of rate variation, and specifically what are plausible minimum and maximum rates.
 Clearly, speciation and extinction rates should not have been smaller than 0, so that could be a safe assumption.</p>
@@ -242,10 +242,10 @@ This would mean that diversification rates are autocorrelated and do not vary co
 <p>With the built-in functions <code>sample.basic.models</code> and <code>sample.rates</code>, users have freedom to explore these, and many other forms of rate variation.
 If these functions are not sufficient, as shown in previous sections, it is easy to customize the sampling to your liking.</p>
 </div>
-<div id="sample-alternative-extinction-rates" class="section level2" number="6.2">
-<h2><span class="header-section-number">6.2</span> Sample alternative extinction rates</h2>
-<div id="temporally-autocorrelated" class="section level3" number="6.2.1">
-<h3><span class="header-section-number">6.2.1</span> Temporally autocorrelated</h3>
+<div id="sample-alternative-extinction-rates" class="section level2 hasAnchor" number="6.2">
+<h2><span class="header-section-number">6.2</span> Sample alternative extinction rates<a href="exploring-the-congruence-class.html#sample-alternative-extinction-rates" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="temporally-autocorrelated" class="section level3 hasAnchor" number="6.2.1">
+<h3><span class="header-section-number">6.2.1</span> Temporally autocorrelated<a href="exploring-the-congruence-class.html#temporally-autocorrelated" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Here, we generate a variety of alternative extinction rates using HSMRF models <span class="citation">(Magee et al., 2020)</span>.
 When sampling from models, we get random walks, or temporally autocorrelated, extinction rates, and the HSMRF tends to produce random walks that look like piecewise constant functions.
 The rates produced here have no overall trend, the median change from past to present is 0.
@@ -282,8 +282,8 @@ Figure 6.2: Congruence class assuming linearly changing extinction rates.
 <p>As we can see, the alternative models are not in perfect agreement about the entire history of the rates.
 Nonetheless, the increases and decrease near the present are preserved, indicating robustness to this form of extinction-rate variation.</p>
 </div>
-<div id="exponentially-decreasing" class="section level3" number="6.2.2">
-<h3><span class="header-section-number">6.2.2</span> Exponentially decreasing</h3>
+<div id="exponentially-decreasing" class="section level3 hasAnchor" number="6.2.2">
+<h3><span class="header-section-number">6.2.2</span> Exponentially decreasing<a href="exploring-the-congruence-class.html#exponentially-decreasing" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Here, we generate a variety of alternative extinction rates using HSMRF models <span class="citation">(Magee et al., 2020)</span> with an exponential trend.
 We otherwise make the same assumptions as above.
 To help the rates we simulate fit within 0 and 1, we set the fold change average to be 2 instead of the default 3.</p>
@@ -318,8 +318,8 @@ Figure 6.4: Congruence class assuming exponentially changing extinction rates
 <p>As we can see, the alternative models are not in perfect agreement about the entire history of the rates.
 Nonetheless, the increases and decrease near the present are preserved, indicating robustness to this form of extinction-rate variation.</p>
 </div>
-<div id="linearly-increasing" class="section level3" number="6.2.3">
-<h3><span class="header-section-number">6.2.3</span> Linearly increasing</h3>
+<div id="linearly-increasing" class="section level3 hasAnchor" number="6.2.3">
+<h3><span class="header-section-number">6.2.3</span> Linearly increasing<a href="exploring-the-congruence-class.html#linearly-increasing" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Here, we generate a variety of alternative extinction rates using GMRF models <span class="citation">(Magee et al., 2020)</span> with a linear trend.
 Unlike the exponential section, we here assume that rates have increased, that the increase has been monotonic (there were no decreases, where in the exponential decreases above there were occasional increases), and that the stochastic variability comes from a GMRF.
 We otherwise make the same assumptions as above.</p>
@@ -357,8 +357,8 @@ Figure 6.6: Congruence class assuming linearly changing extinction rates.
 <p>As we can see, the increases and decrease near the present are preserved, indicating robustness to this form of extinction-rate variation.
 Compared to the exponential and HSMRF models above, there is even better agreement between the alternative models.</p>
 </div>
-<div id="episodic" class="section level3" number="6.2.4">
-<h3><span class="header-section-number">6.2.4</span> Episodic</h3>
+<div id="episodic" class="section level3 hasAnchor" number="6.2.4">
+<h3><span class="header-section-number">6.2.4</span> Episodic<a href="exploring-the-congruence-class.html#episodic" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Here, we generate a variety of alternative extinction rates without stochastic noise.
 Without noise (<code>noisy=FALSE</code>), all changes will be in the same direction, here decreases.
 The model we generate is an episodic model with 5 rates.
@@ -393,8 +393,8 @@ Figure 6.7: Congruence class assuming episodically changing extinction rates.
 <p>As we can see, the increases and decrease near the present are preserved, indicating robustness to this form of extinction-rate variation.
 The agreement between the alternative models is comparable to the linear scenarios above, and higher than for the exponential and HSMRF models.</p>
 </div>
-<div id="uniform-independent" class="section level3" number="6.2.5">
-<h3><span class="header-section-number">6.2.5</span> Uniform independent</h3>
+<div id="uniform-independent" class="section level3 hasAnchor" number="6.2.5">
+<h3><span class="header-section-number">6.2.5</span> Uniform independent<a href="exploring-the-congruence-class.html#uniform-independent" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The previous functions used <code>sample.basic.models</code> to construct a variety of pre-defined hypotheses.
 <code>ACDC</code> also implements <code>sample.rates</code> to allow more flexibility in user-defined rate functions (and of course the user is free to define their own functions as well).
 Here we show this with IID rates.
@@ -435,63 +435,96 @@ Figure 6.9: Congruence class assuming independent and uniformly distributed exti
 <p>As we can see, the alternative models present many distinct histories of the rates through time.
 Nonetheless, even in this extreme scenario, the increases and decrease near the present are preserved.</p>
 </div>
-</div>
-<div id="sample-alternative-speciation-rates" class="section level2" number="6.3">
-<h2><span class="header-section-number">6.3</span> Sample alternative speciation rates</h2>
-<p>It is also possible to sample alternative speciation rates. Since the congruence class requires a shared <span class="math inline">\(\lambda_0\)</span> for all models in the congruence class, we must constrain our sampler to always start on the same speciation rate at the present.</p>
-<div id="temporally-autocorrelated-1" class="section level3" number="6.3.1">
-<h3><span class="header-section-number">6.3.1</span> Temporally autocorrelated</h3>
-<p>Here we choose to sample speciation rates according to a horseshoe Markov random field distribution.</p>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="exploring-the-congruence-class.html#cb58-1"></a>times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="kw">max</span>(my_model<span class="op">$</span>time), <span class="dt">length.out =</span> <span class="dv">100</span>)</span>
-<span id="cb58-2"><a href="exploring-the-congruence-class.html#cb58-2"></a>speciation_rate_samples &lt;-<span class="st"> </span><span class="cf">function</span>() {</span>
-<span id="cb58-3"><a href="exploring-the-congruence-class.html#cb58-3"></a>   <span class="kw">sample.basic.models</span>( <span class="dt">times =</span> times,</span>
-<span id="cb58-4"><a href="exploring-the-congruence-class.html#cb58-4"></a>                        <span class="dt">rate0 =</span> my_model<span class="op">$</span><span class="kw">lambda</span>(<span class="fl">0.0</span>),</span>
-<span id="cb58-5"><a href="exploring-the-congruence-class.html#cb58-5"></a>                        <span class="dt">model =</span> <span class="st">&quot;MRF&quot;</span>,</span>
-<span id="cb58-6"><a href="exploring-the-congruence-class.html#cb58-6"></a>                        <span class="dt">MRF.type =</span> <span class="st">&quot;HSMRF&quot;</span>,</span>
-<span id="cb58-7"><a href="exploring-the-congruence-class.html#cb58-7"></a>                        <span class="dt">max.rate =</span> <span class="fl">1.0</span>)</span>
-<span id="cb58-8"><a href="exploring-the-congruence-class.html#cb58-8"></a>}</span></code></pre></div>
-<p>Next, we can sample ten models from the congruence class.</p>
+<div id="brownian-motion-with-a-trend" class="section level3 hasAnchor" number="6.2.6">
+<h3><span class="header-section-number">6.2.6</span> Brownian motion with a trend<a href="exploring-the-congruence-class.html#brownian-motion-with-a-trend" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>It is also possible to specify fully customized rate sampling functions, and use these to sample the congruence class in <code>ACDC</code>. Suppose we thought that the extinction rate was tiny when the clade emerged, but steadily rose in a linear fashion towards the present. Additionally, suppose we allow for some random variation around this linear increase. This can be implemented as a Brownian motion with a trend, as follows.</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="exploring-the-congruence-class.html#cb58-1"></a>med_times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="kw">max</span>(my_model<span class="op">$</span>time), <span class="dt">length.out =</span> <span class="dv">30</span>)</span>
+<span id="cb58-2"><a href="exploring-the-congruence-class.html#cb58-2"></a></span>
+<span id="cb58-3"><a href="exploring-the-congruence-class.html#cb58-3"></a>extinction_rate_samples &lt;-<span class="st"> </span><span class="cf">function</span>(){</span>
+<span id="cb58-4"><a href="exploring-the-congruence-class.html#cb58-4"></a>  y &lt;-<span class="st"> </span><span class="fl">-0.01</span><span class="op">*</span>med_times <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">30</span>, <span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sd =</span> <span class="fl">0.1</span>) <span class="op">+</span><span class="st"> </span><span class="fl">0.5</span></span>
+<span id="cb58-5"><a href="exploring-the-congruence-class.html#cb58-5"></a>  y &lt;-<span class="st"> </span><span class="kw">ifelse</span>(y <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.001</span>, <span class="fl">0.001</span>, y)</span>
+<span id="cb58-6"><a href="exploring-the-congruence-class.html#cb58-6"></a>  f &lt;-<span class="st"> </span><span class="kw">approxfun</span>(med_times, y)</span>
+<span id="cb58-7"><a href="exploring-the-congruence-class.html#cb58-7"></a>}</span></code></pre></div>
+<p>For simplicity, we restrict rates that are very small or negative to be a minimum of 0.001 units. As before, we can use <code>ACDC</code> to sample from the congruence class using this form of proposed extinction rates, and plot the rates:</p>
 <div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="exploring-the-congruence-class.html#cb59-1"></a>samples &lt;-<span class="st"> </span><span class="kw">sample.congruence.class</span>(</span>
 <span id="cb59-2"><a href="exploring-the-congruence-class.html#cb59-2"></a>  my_model,</span>
-<span id="cb59-3"><a href="exploring-the-congruence-class.html#cb59-3"></a>  <span class="dt">num.samples=</span><span class="dv">10</span>,</span>
-<span id="cb59-4"><a href="exploring-the-congruence-class.html#cb59-4"></a>  <span class="dt">rate.type=</span><span class="st">&quot;speciation&quot;</span>,</span>
-<span id="cb59-5"><a href="exploring-the-congruence-class.html#cb59-5"></a>  <span class="dt">sample.speciation.rates =</span> speciation_rate_samples)</span></code></pre></div>
+<span id="cb59-3"><a href="exploring-the-congruence-class.html#cb59-3"></a>  <span class="dt">num.samples=</span><span class="dv">15</span>,</span>
+<span id="cb59-4"><a href="exploring-the-congruence-class.html#cb59-4"></a>  <span class="dt">rate.type=</span><span class="st">&quot;extinction&quot;</span>,</span>
+<span id="cb59-5"><a href="exploring-the-congruence-class.html#cb59-5"></a>  <span class="dt">sample.extinction.rates=</span>extinction_rate_samples)</span>
+<span id="cb59-6"><a href="exploring-the-congruence-class.html#cb59-6"></a><span class="kw">plot</span>(samples)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:bm-trend-spaghetti"></span>
+<img src="figures/bm-trend-spaghetti-1.png" alt="Rate plots for the congruent models that were sampled assuming an extinction rate modeled as a Brownian motion with a linearly increasing trend" width="384" />
+<p class="caption">
+Figure 6.10: Rate plots for the congruent models that were sampled assuming an extinction rate modeled as a Brownian motion with a linearly increasing trend
+</p>
+</div>
+<p>The summary of trends across these models contain quite a bit of variation. However, the three main signals in the primate reference model are all recovered: two increases and one decrease in the recent part of the phylogeny <a href="exploring-the-congruence-class.html#fig:bm-trend-summary">6.11</a>.</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="exploring-the-congruence-class.html#cb60-1"></a>p &lt;-<span class="st"> </span><span class="kw">summarize.trends</span>(samples, <span class="dt">threshold =</span> <span class="fl">0.02</span>)</span>
+<span id="cb60-2"><a href="exploring-the-congruence-class.html#cb60-2"></a><span class="kw">plot</span>(p)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:bm-trend-summary"></span>
+<img src="figures/bm-trend-summary-1.png" alt="A summary of directional trends through time across the congruent models. The proposed extinction rate is modeled as a Brownian motion with a trend that increases linearly towards the present." width="576" />
+<p class="caption">
+Figure 6.11: A summary of directional trends through time across the congruent models. The proposed extinction rate is modeled as a Brownian motion with a trend that increases linearly towards the present.
+</p>
+</div>
+</div>
+</div>
+<div id="sample-alternative-speciation-rates" class="section level2 hasAnchor" number="6.3">
+<h2><span class="header-section-number">6.3</span> Sample alternative speciation rates<a href="exploring-the-congruence-class.html#sample-alternative-speciation-rates" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>It is also possible to sample alternative speciation rates. Since the congruence class requires a shared <span class="math inline">\(\lambda_0\)</span> for all models in the congruence class, we must constrain our sampler to always start on the same speciation rate at the present.</p>
+<div id="temporally-autocorrelated-1" class="section level3 hasAnchor" number="6.3.1">
+<h3><span class="header-section-number">6.3.1</span> Temporally autocorrelated<a href="exploring-the-congruence-class.html#temporally-autocorrelated-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Here we choose to sample speciation rates according to a horseshoe Markov random field distribution.</p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="exploring-the-congruence-class.html#cb61-1"></a>times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="kw">max</span>(my_model<span class="op">$</span>time), <span class="dt">length.out =</span> <span class="dv">100</span>)</span>
+<span id="cb61-2"><a href="exploring-the-congruence-class.html#cb61-2"></a>speciation_rate_samples &lt;-<span class="st"> </span><span class="cf">function</span>() {</span>
+<span id="cb61-3"><a href="exploring-the-congruence-class.html#cb61-3"></a>   <span class="kw">sample.basic.models</span>( <span class="dt">times =</span> times,</span>
+<span id="cb61-4"><a href="exploring-the-congruence-class.html#cb61-4"></a>                        <span class="dt">rate0 =</span> my_model<span class="op">$</span><span class="kw">lambda</span>(<span class="fl">0.0</span>),</span>
+<span id="cb61-5"><a href="exploring-the-congruence-class.html#cb61-5"></a>                        <span class="dt">model =</span> <span class="st">&quot;MRF&quot;</span>,</span>
+<span id="cb61-6"><a href="exploring-the-congruence-class.html#cb61-6"></a>                        <span class="dt">MRF.type =</span> <span class="st">&quot;HSMRF&quot;</span>,</span>
+<span id="cb61-7"><a href="exploring-the-congruence-class.html#cb61-7"></a>                        <span class="dt">max.rate =</span> <span class="fl">1.0</span>)</span>
+<span id="cb61-8"><a href="exploring-the-congruence-class.html#cb61-8"></a>}</span></code></pre></div>
+<p>Next, we can sample ten models from the congruence class.</p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="exploring-the-congruence-class.html#cb62-1"></a>samples &lt;-<span class="st"> </span><span class="kw">sample.congruence.class</span>(</span>
+<span id="cb62-2"><a href="exploring-the-congruence-class.html#cb62-2"></a>  my_model,</span>
+<span id="cb62-3"><a href="exploring-the-congruence-class.html#cb62-3"></a>  <span class="dt">num.samples=</span><span class="dv">10</span>,</span>
+<span id="cb62-4"><a href="exploring-the-congruence-class.html#cb62-4"></a>  <span class="dt">rate.type=</span><span class="st">&quot;speciation&quot;</span>,</span>
+<span id="cb62-5"><a href="exploring-the-congruence-class.html#cb62-5"></a>  <span class="dt">sample.speciation.rates =</span> speciation_rate_samples)</span></code></pre></div>
 <p>We can plot the samples using</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="exploring-the-congruence-class.html#cb60-1"></a><span class="kw">plot</span>(samples)</span></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="exploring-the-congruence-class.html#cb63-1"></a><span class="kw">plot</span>(samples)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:sample-extinction-rateplot"></span>
 <img src="figures/sample-extinction-rateplot-1.png" alt="Rate functions for the congruence class. The reference model is given in black. The alternative speciation rates are proposed by sampling from a temporally autocorrelated (HSMRF) model." width="384" />
 <p class="caption">
-Figure 6.10: Rate functions for the congruence class. The reference model is given in black. The alternative speciation rates are proposed by sampling from a temporally autocorrelated (HSMRF) model.
+Figure 6.12: Rate functions for the congruence class. The reference model is given in black. The alternative speciation rates are proposed by sampling from a temporally autocorrelated (HSMRF) model.
 </p>
 </div>
 <p>Notice that all of our congruent models have a negative extinction rate near the present. This becomes more evident if we plot the extinction rates on its own panel and adjust the axis limits.</p>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="exploring-the-congruence-class.html#cb61-1"></a>p &lt;-<span class="st"> </span><span class="kw">plot</span>(samples)[[<span class="dv">2</span>]] <span class="op">+</span><span class="st"> </span></span>
-<span id="cb61-2"><a href="exploring-the-congruence-class.html#cb61-2"></a><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">ylim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)) <span class="op">+</span></span>
-<span id="cb61-3"><a href="exploring-the-congruence-class.html#cb61-3"></a><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;time before present&quot;</span>) <span class="op">+</span></span>
-<span id="cb61-4"><a href="exploring-the-congruence-class.html#cb61-4"></a><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;rate&quot;</span>)</span>
-<span id="cb61-5"><a href="exploring-the-congruence-class.html#cb61-5"></a><span class="kw">plot</span>(p)</span></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="exploring-the-congruence-class.html#cb64-1"></a>p &lt;-<span class="st"> </span><span class="kw">plot</span>(samples)[[<span class="dv">2</span>]] <span class="op">+</span><span class="st"> </span></span>
+<span id="cb64-2"><a href="exploring-the-congruence-class.html#cb64-2"></a><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">ylim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)) <span class="op">+</span></span>
+<span id="cb64-3"><a href="exploring-the-congruence-class.html#cb64-3"></a><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;time before present&quot;</span>) <span class="op">+</span></span>
+<span id="cb64-4"><a href="exploring-the-congruence-class.html#cb64-4"></a><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;rate&quot;</span>)</span>
+<span id="cb64-5"><a href="exploring-the-congruence-class.html#cb64-5"></a><span class="kw">plot</span>(p)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:sample-speciation-mus"></span>
 <img src="figures/sample-speciation-mus-1.png" alt="Inferred congruent extinction rates, zoomed in for clarity." width="480" />
 <p class="caption">
-Figure 6.11: Inferred congruent extinction rates, zoomed in for clarity.
+Figure 6.13: Inferred congruent extinction rates, zoomed in for clarity.
 </p>
 </div>
-<p>The models depicted in <a href="exploring-the-congruence-class.html#fig:sample-speciation-mus">6.11</a> do not make sense, since rates are only defined on the positive numbers. Similarly to before, we can evaluate the directional changes in the extinction rate</p>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="exploring-the-congruence-class.html#cb62-1"></a>p &lt;-<span class="st"> </span><span class="kw">summarize.trends</span>(samples, <span class="dt">threshold =</span> <span class="fl">0.02</span>, <span class="dt">rate_name =</span> <span class="st">&quot;mu&quot;</span>)</span>
-<span id="cb62-2"><a href="exploring-the-congruence-class.html#cb62-2"></a><span class="kw">plot</span>(p)</span></code></pre></div>
+<p>The models depicted in <a href="exploring-the-congruence-class.html#fig:sample-speciation-mus">6.13</a> do not make sense, since rates are only defined on the positive numbers. Similarly to before, we can evaluate the directional changes in the extinction rate</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="exploring-the-congruence-class.html#cb65-1"></a>p &lt;-<span class="st"> </span><span class="kw">summarize.trends</span>(samples, <span class="dt">threshold =</span> <span class="fl">0.02</span>, <span class="dt">rate_name =</span> <span class="st">&quot;mu&quot;</span>)</span>
+<span id="cb65-2"><a href="exploring-the-congruence-class.html#cb65-2"></a><span class="kw">plot</span>(p)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:sample-extinction-trendplot"></span>
 <img src="figures/sample-extinction-trendplot-1.png" alt="A summary of directional trends through time across the congruent models." width="576" />
 <p class="caption">
-Figure 6.12: A summary of directional trends through time across the congruent models.
+Figure 6.14: A summary of directional trends through time across the congruent models.
 </p>
 </div>
 <p>Notice how the reference model (top row) is flat throughout the entire time span. Yet, when we propose alternative speciation rates, the inferred (extinction) rates depict a pattern of two decreases and one increase in the near present. We can also inspect the directional trends for the net-diversification rate (<span class="math inline">\(\delta(t) = \lambda(t) - \mu(t)\)</span>)</p>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="exploring-the-congruence-class.html#cb63-1"></a>p &lt;-<span class="st"> </span><span class="kw">summarize.trends</span>(samples, <span class="dt">threshold =</span> <span class="fl">0.02</span>, <span class="dt">rate_name =</span> <span class="st">&quot;delta&quot;</span>)</span>
-<span id="cb63-2"><a href="exploring-the-congruence-class.html#cb63-2"></a><span class="kw">plot</span>(p)</span></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="exploring-the-congruence-class.html#cb66-1"></a>p &lt;-<span class="st"> </span><span class="kw">summarize.trends</span>(samples, <span class="dt">threshold =</span> <span class="fl">0.02</span>, <span class="dt">rate_name =</span> <span class="st">&quot;delta&quot;</span>)</span>
+<span id="cb66-2"><a href="exploring-the-congruence-class.html#cb66-2"></a><span class="kw">plot</span>(p)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:netdiv-trends"></span>
 <img src="figures/netdiv-trends-1.png" alt="Directional trends in the net-diversification rate. The congruence class was constructed using alternative speciation rates, and all congruent models have negative extinction rates." width="480" />
 <p class="caption">
-Figure 6.13: Directional trends in the net-diversification rate. The congruence class was constructed using alternative speciation rates, and all congruent models have negative extinction rates.
+Figure 6.15: Directional trends in the net-diversification rate. The congruence class was constructed using alternative speciation rates, and all congruent models have negative extinction rates.
 </p>
 </div>
 </div>

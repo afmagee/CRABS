@@ -66,6 +66,7 @@ sample.rates <- function(times,
 #' @param fc.mean Determines the average amount of change when drawing from the model.
 #' @param rate0.median When not specified, rate at present is drawn from a lognormal distribution with this median.
 #' @param rate0.logsd When not specified, rate at present is drawn from a lognormal distribution with this sd
+#' @param mrf.var.scale scale the variance of the mrf process up or down. defaults to 1.0
 #' @param min.rate The minimum rate (rescaling fone after after drawing rates).
 #' @param max.rate The maximum rate (rescaling fone after after drawing rates).
 #' @return Speciation or extinction rate at a number of timepoints.
@@ -100,6 +101,7 @@ sample.basic.models <- function(times,
                                 fc.mean=3, 
                                 rate0.median=0.1, 
                                 rate0.logsd=1.17481, 
+                                mrf.var.scale = 1.0,
                                 min.rate=0, 
                                 max.rate=10) {
   num.epochs <- length(times)
@@ -185,11 +187,11 @@ sample.basic.models <- function(times,
           zeta <- get.hsmrf.global.scale(num.epochs)
           gamma <- min(abs(rcauchy(1,0,1)),1000) # avoid numerical instability
           sigma <- abs(rcauchy(num_deltas,0,1))
-          delta_stochastic <- rnorm(num_deltas,0,sigma*gamma*zeta)
+          delta_stochastic <- rnorm(num_deltas,0,sigma*gamma*zeta*mrf.var.scale)
         } else if ( MRF.type == "GMRF" ) {
           zeta <- get.gmrf.global.scale(num.epochs)
           gamma <- min(abs(rcauchy(1,0,1)),1000) # avoid numerical instability
-          delta_stochastic <- rnorm(num_deltas,0,gamma*zeta)
+          delta_stochastic <- rnorm(num_deltas,0,gamma*zeta*mrf.var.scale)
         } else {
           stop("Invalid \"MRF.type\"")
         }
