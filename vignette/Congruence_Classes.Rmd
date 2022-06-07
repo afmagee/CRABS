@@ -793,7 +793,8 @@ It is also possible to specify fully customized rate sampling functions, and use
 med_times <- seq(0, max(my_model$time), length.out = 30)
 
 extinction_rate_samples <- function(){
-  y <- -0.01*med_times + rnorm(30, mean = 0, sd = 0.1) + 0.5
+  noise <- cumsum(rnorm(30, mean = 0, sd = 0.03))
+  y <- -0.008*med_times + noise + 0.6
   y <- ifelse(y < 0.001, 0.001, y)
   f <- approxfun(med_times, y)
 }
