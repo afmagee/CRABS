@@ -114,9 +114,9 @@ plotdata <- function(model_set,
 #' @param model_set an object of type "ACDCset"
 #' @param threshold a threshold for when \eqn{\Delta \lambda i} should be interpreted as decreasing, flat, or increasing
 #' @param rate_name either "lambda" or "mu" or "delta"
-#' @param window_size the window size "k" in \eqn{\Delta\lambdai = \lambdai - \lambda(i-k)}
-#' @param method .
-#' @param per_time whether to compute \eqn{\Delta\lambdai} that are in units of per time, i.e. divide by \eqn{\Deltat}
+#' @param window_size the window size "k" in \eqn{\Delta\lambda i = \lambda i - \lambda(i-k)}
+#' @param method default to "neighbours", i.e. to compare rate values at neighbouring time points. 
+#' @param per_time whether to compute \eqn{\Delta\lambda i} that are in units of per time, i.e. divide by \eqn{\Delta t}
 #' @param return_data instead of plots, return the plotting dataframes
 #' @param rm_singleton whether or not to remove singletons. Pass starting at present, going towards ancient
 #' @param relative_deltas whether to divide \eqn{\Delta \lambda i} by the local lambda value

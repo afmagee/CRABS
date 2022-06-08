@@ -14,11 +14,11 @@ return_data = FALSE, rm_singleton = FALSE, relative_deltas = FALSE, group_names 
 
 \item{rate_name}{either "lambda" or "mu" or "delta"}
 
-\item{window_size}{the window size "k" in \eqn{\Delta\lambdai = \lambdai - \lambda(i-k)}}
+\item{window_size}{the window size "k" in \eqn{\Delta\lambda i = \lambda i - \lambda(i-k)}}
 
-\item{method}{.}
+\item{method}{default to "neighbours", i.e. to compare rate values at neighbouring time points.}
 
-\item{per_time}{whether to compute \eqn{\Delta\lambdai} that are in units of per time, i.e. divide by \eqn{\Deltat}}
+\item{per_time}{whether to compute \eqn{\Delta\lambda i} that are in units of per time, i.e. divide by \eqn{\Delta t}}
 
 \item{return_data}{instead of plots, return the plotting dataframes}
 

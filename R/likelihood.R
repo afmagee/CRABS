@@ -1,27 +1,24 @@
-R <- function(t, model, rtol){
-  f <- function(u) model$lambda(u) - model$mu(u)
-  pracma::quadgk(f, 0, t, tol = rtol)
-}
-
-logpsi <- function(s, t, model, rho, rtol){
-  stopifnot(t > s)
+dLTT <- function(model, times, N0, rho = 1.0){
+  lambda0 <- model$lambda(0.0)
   
-  part_a <- R(t, model, rtol) - R(s, model, rtol)
+  odeN <- function(time, state, parameters, lambda, mu){
+    l <- lambda(time)
+    m <- mu(time)
+    with(as.list(c(state, parameters)), {
+      dN = N * (m - l)
+      dE = m - E * (l + m) + E^2 * l
+      return(list(c(dN, dE), l, m))
+    })
+  }
   
-  fb <- function(u) model$lambda(u)*exp(R(u, model, rtol)); fb <- Vectorize(fb)
-  part_b <- log(1.0 + rho * pracma::quadgk(fb, 0.0, s, tol = rtol))
+  parameters <- list()
+  state <- c("N" = N0 / rho, "E" = 1 - rho)
   
-  fc <- function(u) model$lambda(u)*exp(R(u, model, rtol)); fc <- Vectorize(fc)
-  part_c <- log(1.0 + rho * pracma::quadgk(fc, 0.0, t, tol = rtol))
-  
-  res = part_a + 2*(part_b - part_c)
-}
-
-fooE <- function(t, model, rho, rtol){
-  f <- function(s) model$lambda(s) * exp(R(s, model, rtol))
-  f <- Vectorize(f)
-  res <- exp(R(t, model, rtol)) / ((1.0 / rho) + pracma::quadgk(f, 0.0, t, tol = rtol))
-  return(res)
+  res <- as.data.frame(deSolve::radau(y = state, times = times, 
+                                      func = odeN, parms = parameters, 
+                                      lambda = model$lambda, mu = model$mu))
+  M <- res$N * (1 - res$E)
+  return(M)
 }
 
 #' Compute likelihood
@@ -29,48 +26,30 @@ fooE <- function(t, model, rho, rtol){
 #' @param phy an object of class "phylo"
 #' @param model an object of class "ACDC"
 #' @param rho the taxon sampling fraction
-#' @param TESS whether or not to call `tess.likelihood()`
-#' @param rtol relative tolerance for numerical integration
-#' @param ... additional arguments passed to `tess.likelihood(...)`
 #'
 #' @return the log-likelihood of the tree given the model
 #' @export
 #'
 #' @examples
-#' library(ape)
-#' lambda <- function(t) exp(0.3*t) - 0.5*t + 1
-#' mu <- function(t) exp(0.3*t) - 0.2*t + 0.2
-#' 
+#' lambda <- function(t) exp(0.3*t) - 0.5*t
+#' mu <- function(t) exp(0.3*t) - 0.2*t - 0.8
+#'  
 #' model <- create.model(lambda, mu, times = seq(0, 3, by = 0.005))
 #' 
 #' set.seed(123)
 #' phy <- rcoal(25)
 #' 
 #' acdc.loglikelihood(phy, model)
-acdc.loglikelihood <- function(phy, model, rho = 1.0, TESS = FALSE, rtol = 0.01, ...){
-  if (TESS){
-    th <- max(node.depth.edgelength(phy)) ## tree height
-    
-    ## translate the time coordinates
-    mu <- function(t) model$mu(th - t)
-    lambda <- function(t) model$lambda(th - t)
-    times <- branching.times(phy)
-    
-    ## tess takes input as time starting at the root, increasing toward present
-    res <- tess.likelihood(times = times, lambda = lambda, mu = mu, ...)
-  }else{
-    
-    times <- sort(branching.times(phy), decreasing = TRUE)
-    times <- unname(times)
-    n <- length(times)
-    
-    res <- (n+1)*log(rho) + logpsi(0.0, times[1], model, rho, rtol) + log(model$lambda((times[1])))
-    
-    for (i in seq(from = 2, by = 1, to = n)){
-      res <- res + log(model$lambda(times[i])) + logpsi(0.0, times[i], model, rho, rtol)
-    }
-    
-    res <- res - log(fooE(times[1], model, rho, rtol))
-  }
-  return(res)
+acdc.loglikelihood <- function(model, phy, rho = 1.0){
+  times <- model$times
+  N0 <- length(phy$tip.label)
+  M <- approxfun(times, dLTT(model, times, N0, rho))
+  
+  bt <- branching.times(phy)
+  n <- length(bt)
+  
+  dM = tail(fderiv(M, bt), n = -1)
+  
+  logL <- log(M(bt[1])) - (n+1)*log(M(0.0)) + sum(log(-dM))
+  return(logL)
 }

@@ -4,20 +4,14 @@
 \alias{acdc.loglikelihood}
 \title{Compute likelihood}
 \usage{
-acdc.loglikelihood(phy, model, rho = 1, TESS = FALSE, rtol = 0.01, ...)
+acdc.loglikelihood(model, phy, rho)
 }
 \arguments{
-\item{phy}{an object of class "phylo"}
-
 \item{model}{an object of class "ACDC"}
 
+\item{phy}{an object of class "phylo"}
+
 \item{rho}{the taxon sampling fraction}
-
-\item{TESS}{whether or not to call `tess.likelihood()`}
-
-\item{rtol}{relative tolerance for numerical integration}
-
-\item{...}{additional arguments passed to `tess.likelihood(...)`}
 }
 \value{
 the log-likelihood of the tree given the model
@@ -26,7 +20,6 @@ the log-likelihood of the tree given the model
 Compute likelihood
 }
 \examples{
-library(ape)
 lambda <- function(t) exp(0.3*t) - 0.5*t + 1
 mu <- function(t) exp(0.3*t) - 0.2*t + 0.2
 
