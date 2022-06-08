@@ -25,7 +25,7 @@
 <meta name="author" content="Andrew F. Magee" />
 
 
-<meta name="date" content="2022-06-07" />
+<meta name="date" content="2022-06-08" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -225,27 +225,29 @@ Then we solve the pulled diversification rate equation for this new rate functio
 \end{equation}\]</span></p>
 <p>As you may notice, the latter part of this equation entails the derivative of the speciation rate function.
 This derivative is only known for simple rate models, for example the constant rate process, linear rates or exponential rates.
-For more complex models, it is often impractical or impossible to find the derivative analytically.</p>
-<p>Computationally, it is difficult if not impossible to work with arbitrary continuous rate functions.
-Here we follow a common approach to use piecewise-linear rates as an approximation for an arbitrary continuous rate function.
-You could create as many intervals as you want, and in our examples we use 1000.</p>
-<p>Since we are using piecewise linear rates, we get (at the interval times) the pulled diversification rate function as
-<span class="math display" id="eq:pulled-diversification-linear">\[\begin{equation}
-    r_p(t_i) = \lambda_i - \mu_i + \frac{1}{\lambda_i} \frac{\lambda_i - \lambda_{i-1}}{\Delta t}
-    \tag{4.2}
-\end{equation}\]</span>
-This function is much simpler to compute and is used in our package.</p>
-<p>Next, if we know the pulled diversification rate and the new extinction rate, then we can compute the speciation rate as
-<span class="math display" id="eq:lambdasolve">\[\begin{equation}
-    \lambda_i = \frac{\sqrt{4\times \lambda_{i-1}\times \Delta t + (r_p(t_i) \times \Delta t+\mu_i \times \Delta t - 1)^2} + r_p(t_i)\times \Delta t + \mu_i \times \Delta t - 1}{2\times \Delta t}
-    \tag{4.3}
-\end{equation}\]</span>
-Equation <a href="creating-the-congruence-class.html#eq:lambdasolve">(4.3)</a> was obtained by solving the pulled diversification rate <a href="creating-the-congruence-class.html#eq:pulled-diversification-linear">(4.2)</a> for <span class="math inline">\(\lambda_i\)</span>.
-Conversely, if we know the speciation rate and the pulled diversification rates, then we can solve Equation <a href="creating-the-congruence-class.html#eq:pulled-diversification-linear">(4.2)</a> for <span class="math inline">\(\mu\)</span> and get
-<span class="math display" id="eq:musolve">\[\begin{equation}
-    \mu_i = \lambda_i - r_p(t_i) + \frac{1}{\lambda_i} \frac{\lambda_i - \lambda_{i-1}}{\Delta t}
-    \tag{4.4}
-\end{equation}\]</span></p>
+For more complex models, it is often impractical or impossible to find the derivative analytically.
+In order to solve (eq. <a href="#pulled-diversification"><strong>??</strong></a>) for <span class="math inline">\(mu(t)\)</span>, the rearrangement of <span class="math inline">\(\mu(t) = \lambda(t) - r_p(t) + \frac{1}{\lambda(t)}\frac{d\lambda}{dt}\)</span> is trivial, and we use the finite difference method to approximate the derivative <span class="math inline">\(\frac{d\lambda}{dt}\)</span> evaluated at time <span class="math inline">\(t\)</span>.
+In order to get <span class="math inline">\(\lambda(t)\)</span>, we use an ODE (Ordinary Differential Equation) solver to compute the solution numerically. More specifically, we use a Runge-Kutta method of order five, implemented in Fortran. We use the function <code>radau()</code> in the R-package <code>deSolve</code> as an interface to access the ODE solver in R.</p>
+<!-- Computationally, it is difficult if not impossible to work with arbitrary continuous rate functions. -->
+<!-- Here we follow a common approach to use piecewise-linear rates as an approximation for an arbitrary continuous rate function. -->
+<!-- You could create as many intervals as you want, and in our examples we use 1000. -->
+<!-- Since we are using piecewise linear rates, we get (at the interval times) the pulled diversification rate function as -->
+<!-- \begin{equation} -->
+<!--    r_p(t_i) = \lambda_i - \mu_i + \frac{1}{\lambda_i} \frac{\lambda_i - \lambda_{i-1}}{\Delta t} -->
+<!--    (\#eq:pulled-diversification-linear) -->
+<!-- \end{equation} -->
+<!-- This function is much simpler to compute and is used in our package. -->
+<!-- Next, if we know the pulled diversification rate and the new extinction rate, then we can compute the speciation rate as -->
+<!-- \begin{equation} -->
+<!--    \lambda_i = \frac{\sqrt{4\times \lambda_{i-1}\times \Delta t + (r_p(t_i) \times \Delta t+\mu_i \times \Delta t - 1)^2} + r_p(t_i)\times \Delta t + \mu_i \times \Delta t - 1}{2\times \Delta t} -->
+<!--    (\#eq:lambdasolve) -->
+<!-- \end{equation} -->
+<!-- Equation \@ref(eq:lambdasolve) was obtained by solving the pulled diversification rate \@ref(eq:pulled-diversification-linear) for $\lambda_i$.  -->
+<!-- Conversely, if we know the speciation rate and the pulled diversification rates, then we can solve Equation \@ref(eq:pulled-diversification-linear) for $\mu$ and get -->
+<!-- \begin{equation} -->
+<!--    \mu_i = \lambda_i - r_p(t_i) + \frac{1}{\lambda_i} \frac{\lambda_i - \lambda_{i-1}}{\Delta t} -->
+<!--    (\#eq:musolve) -->
+<!-- \end{equation} -->
 <p>These are our fundamental pieces about the congruence classes.
 We have the reference model, from which we compute the pulled diversification rate.
 Then you can either specify alternative speciation or extinction rate functions, for which we then compute the matching extinction or speciation rate function respectively, or you can explore a space of speciation or extinction rate functions.

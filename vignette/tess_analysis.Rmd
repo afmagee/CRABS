@@ -1,7 +1,5 @@
 ## TESS Analysis {#tess}
 
-Needs to be written ...
-
 First, load the TESS package.
 ```{r load-TESS}
 library(TESS)
