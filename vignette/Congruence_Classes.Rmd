@@ -1,5 +1,5 @@
 ---
-title: "CRABS: Congruent Rate Analysis in Birth-death Scenarios"
+title: "CRABS: Congruent Rate Analyses in Birth-death Scenarios"
 date: '`r Sys.Date()`'
 author: 
   - Sebastian Höhna
@@ -73,7 +73,7 @@ set.seed(53079239)
 
 # Overview
 
-This is a vignette, or long-form documentation, accompanying the R-package CRABS: Congruent Rate Analysis in Birth-death Scenarios.
+This is a vignette, or long-form documentation, accompanying the R-package CRABS: Congruent Rate Analyses in Birth-death Scenarios.
 
 The main purpose of CRABS is to explore congruence classes of macroevolutionary diversification rates.
 Specifically, this tutorial has two main aims/applications:

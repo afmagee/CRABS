@@ -1,4 +1,4 @@
-#' CRABS: Congruent Rate Analysis in Birth-death Scenarios
+#' CRABS: Congruent Rate Analyses in Birth-death Scenarios
 #' 
 #' 
 #' 
