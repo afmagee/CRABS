@@ -32,7 +32,7 @@
 #' model_set2 <- congruent.models(model, lambdas = lambda1)
 #' 
 #' model_set2
-congruent.models <- function(model, mus = NULL, lambdas = NULL, keep_ref = TRUE, ode_solver = FALSE){
+congruent.models <- function(model, mus = NULL, lambdas = NULL, keep_ref = TRUE, ode_solver = TRUE){
   lambda0 <- model$lambda(0)
   times   <- model$times
   delta_t <- model$delta_t

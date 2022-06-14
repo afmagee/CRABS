@@ -9,7 +9,7 @@ congruent.models(
   mus = NULL,
   lambdas = NULL,
   keep_ref = TRUE,
-  ode_solver = FALSE
+  ode_solver = TRUE
 )
 }
 \arguments{

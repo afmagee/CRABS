@@ -4,7 +4,7 @@
 \alias{acdc.loglikelihood}
 \title{Compute likelihood}
 \usage{
-acdc.loglikelihood(model, phy, rho)
+acdc.loglikelihood(model, phy, rho = 1)
 }
 \arguments{
 \item{model}{an object of class "ACDC"}
@@ -20,9 +20,9 @@ the log-likelihood of the tree given the model
 Compute likelihood
 }
 \examples{
-lambda <- function(t) exp(0.3*t) - 0.5*t + 1
-mu <- function(t) exp(0.3*t) - 0.2*t + 0.2
-
+lambda <- function(t) exp(0.3*t) - 0.5*t
+mu <- function(t) exp(0.3*t) - 0.2*t - 0.8
+ 
 model <- create.model(lambda, mu, times = seq(0, 3, by = 0.005))
 
 set.seed(123)
