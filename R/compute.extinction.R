@@ -31,7 +31,7 @@ congruent.extinction <- function( model, func.lambda ) {
              max.t = model$max.t,
              delta_t = model$delta_t,
              num.intervals = model$num.intervals)
-  class(res) <- c("ACDC")
+  class(res) <- c("CRABS")
   
   return (res)
 }

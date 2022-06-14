@@ -24,13 +24,14 @@ dLTT <- function(model, times, N0, rho = 1.0){
 #' Compute likelihood
 #'
 #' @param phy an object of class "phylo"
-#' @param model an object of class "ACDC"
+#' @param model an object of class "CRABS"
 #' @param rho the taxon sampling fraction
 #'
 #' @return the log-likelihood of the tree given the model
 #' @export
 #'
 #' @examples
+#' library(ape)
 #' lambda <- function(t) exp(0.3*t) - 0.5*t
 #' mu <- function(t) exp(0.3*t) - 0.2*t - 0.8
 #'  
@@ -39,8 +40,8 @@ dLTT <- function(model, times, N0, rho = 1.0){
 #' set.seed(123)
 #' phy <- rcoal(25)
 #' 
-#' acdc.loglikelihood(phy, model)
-acdc.loglikelihood <- function(model, phy, rho = 1.0){
+#' crabs.loglikelihood(phy, model)
+crabs.loglikelihood <- function(model, phy, rho = 1.0){
   times <- model$times
   N0 <- length(phy$tip.label)
   M <- approxfun(times, dLTT(model, times, N0, rho))

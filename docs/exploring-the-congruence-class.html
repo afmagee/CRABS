@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>6 Exploring the congruence class | ACDC: Analysis of Congruent Diversification Analyses</title>
-  <meta name="description" content="6 Exploring the congruence class | ACDC: Analysis of Congruent Diversification Analyses" />
+  <title>6 Exploring the congruence class | CRABS: Congruent Rate Analysis in Birth-death Scenarios</title>
+  <meta name="description" content="6 Exploring the congruence class | CRABS: Congruent Rate Analysis in Birth-death Scenarios" />
   <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="6 Exploring the congruence class | ACDC: Analysis of Congruent Diversification Analyses" />
+  <meta property="og:title" content="6 Exploring the congruence class | CRABS: Congruent Rate Analysis in Birth-death Scenarios" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="6 Exploring the congruence class | ACDC: Analysis of Congruent Diversification Analyses" />
+  <meta name="twitter:title" content="6 Exploring the congruence class | CRABS: Congruent Rate Analysis in Birth-death Scenarios" />
   
   
   
@@ -25,7 +25,7 @@
 <meta name="author" content="Andrew F. Magee" />
 
 
-<meta name="date" content="2022-06-08" />
+<meta name="date" content="2022-06-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -138,7 +138,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2" data-path="installation.html"><a href="installation.html"><i class="fa fa-check"></i><b>2</b> Installation</a></li>
 <li class="chapter" data-level="3" data-path="features.html"><a href="features.html"><i class="fa fa-check"></i><b>3</b> Features</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="features.html"><a href="features.html#overview-of-functions-in-acdc"><i class="fa fa-check"></i><b>3.1</b> Overview of functions in <code>ACDC</code></a></li>
+<li class="chapter" data-level="3.1" data-path="features.html"><a href="features.html#overview-of-functions-in-crabs"><i class="fa fa-check"></i><b>3.1</b> Overview of functions in <code>CRABS</code></a></li>
 <li class="chapter" data-level="3.2" data-path="features.html"><a href="features.html#samplebasic"><i class="fa fa-check"></i><b>3.2</b> <code>sample.basic.models</code></a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="creating-the-congruence-class.html"><a href="creating-the-congruence-class.html"><i class="fa fa-check"></i><b>4</b> Creating the congruence class</a>
@@ -202,7 +202,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">ACDC: Analysis of Congruent Diversification Analyses</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">CRABS: Congruent Rate Analysis in Birth-death Scenarios</a>
           </h1>
         </div>
 
@@ -396,7 +396,7 @@ The agreement between the alternative models is comparable to the linear scenari
 <div id="uniform-independent" class="section level3 hasAnchor" number="6.2.5">
 <h3><span class="header-section-number">6.2.5</span> Uniform independent<a href="exploring-the-congruence-class.html#uniform-independent" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The previous functions used <code>sample.basic.models</code> to construct a variety of pre-defined hypotheses.
-<code>ACDC</code> also implements <code>sample.rates</code> to allow more flexibility in user-defined rate functions (and of course the user is free to define their own functions as well).
+<code>CRABS</code> also implements <code>sample.rates</code> to allow more flexibility in user-defined rate functions (and of course the user is free to define their own functions as well).
 Here we show this with IID rates.
 We assume that the extinction rates could have had any value between 0 and 1 (you could easily pick different numbers here).
 Our motivation for these values was, that (i) having a maximal expected extinction time per lineage of 1.0 million years seems reasonable from the fossil record, and (ii) we estimated a maximal speciation rate of 0.4, which is clearly smaller than 1.0.</p>
@@ -437,7 +437,7 @@ Nonetheless, even in this extreme scenario, the increases and decrease near the 
 </div>
 <div id="brownian-motion-with-a-trend" class="section level3 hasAnchor" number="6.2.6">
 <h3><span class="header-section-number">6.2.6</span> Brownian motion with a trend<a href="exploring-the-congruence-class.html#brownian-motion-with-a-trend" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>It is also possible to specify fully customized rate sampling functions, and use these to sample the congruence class in <code>ACDC</code>. Suppose we thought that the extinction rate was tiny when the clade emerged, but steadily rose in a linear fashion towards the present. Additionally, suppose we allow for some random variation around this linear increase. This can be implemented as a Brownian motion with a trend, as follows.</p>
+<p>It is also possible to specify fully customized rate sampling functions, and use these to sample the congruence class in <code>CRABS</code>. Suppose we thought that the extinction rate was tiny when the clade emerged, but steadily rose in a linear fashion towards the present. Additionally, suppose we allow for some random variation around this linear increase. This can be implemented as a Brownian motion with a trend, as follows.</p>
 <div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="exploring-the-congruence-class.html#cb58-1"></a>med_times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="kw">max</span>(my_model<span class="op">$</span>time), <span class="dt">length.out =</span> <span class="dv">30</span>)</span>
 <span id="cb58-2"><a href="exploring-the-congruence-class.html#cb58-2"></a></span>
 <span id="cb58-3"><a href="exploring-the-congruence-class.html#cb58-3"></a>extinction_rate_samples &lt;-<span class="st"> </span><span class="cf">function</span>(){</span>
@@ -446,7 +446,7 @@ Nonetheless, even in this extreme scenario, the increases and decrease near the 
 <span id="cb58-6"><a href="exploring-the-congruence-class.html#cb58-6"></a>  y &lt;-<span class="st"> </span><span class="kw">ifelse</span>(y <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.001</span>, <span class="fl">0.001</span>, y)</span>
 <span id="cb58-7"><a href="exploring-the-congruence-class.html#cb58-7"></a>  f &lt;-<span class="st"> </span><span class="kw">approxfun</span>(med_times, y)</span>
 <span id="cb58-8"><a href="exploring-the-congruence-class.html#cb58-8"></a>}</span></code></pre></div>
-<p>For simplicity, we restrict rates that are very small or negative to be a minimum of 0.001 units. As before, we can use <code>ACDC</code> to sample from the congruence class using this form of proposed extinction rates, and plot the rates:</p>
+<p>For simplicity, we restrict rates that are very small or negative to be a minimum of 0.001 units. As before, we can use <code>CRABS</code> to sample from the congruence class using this form of proposed extinction rates, and plot the rates:</p>
 <div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="exploring-the-congruence-class.html#cb59-1"></a>samples &lt;-<span class="st"> </span><span class="kw">sample.congruence.class</span>(</span>
 <span id="cb59-2"><a href="exploring-the-congruence-class.html#cb59-2"></a>  my_model,</span>
 <span id="cb59-3"><a href="exploring-the-congruence-class.html#cb59-3"></a>  <span class="dt">num.samples=</span><span class="dv">15</span>,</span>

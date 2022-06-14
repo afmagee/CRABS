@@ -1,6 +1,6 @@
 #' Plots the rate functions including the pulled rates.
 #'
-#' @param x An object of class "ACDC"
+#' @param x An object of class "CRABS"
 #' @param ... other parameters
 #' 
 #' @export
@@ -14,7 +14,7 @@
 #' model <- create.model(lambda, mu, times = times)
 #' 
 #' plot(model)
-plot.ACDC <- function( x, ... ) {
+plot.CRABS <- function( x, ... ) {
   df <- model2df(x)
   
   df_lambda <- df %>% filter(grepl("speciation", rate, ignore.case = TRUE))
@@ -88,9 +88,9 @@ plot.ACDC <- function( x, ... ) {
   return(p)
 }
 
-#' Print method for ACDC object
+#' Print method for CRABS object
 #'
-#' @param x and object of class ACDC
+#' @param x and object of class CRABS
 #' @param ... other arguments
 #'
 #' @export
@@ -103,11 +103,11 @@ plot.ACDC <- function( x, ... ) {
 #' model <- create.model(lambda, mu, times = times)
 #' 
 #' print(model)
-print.ACDC <- function(x, ...){
+print.CRABS <- function(x, ...){
   cat("Piecewise-linear birth-death model\n")
   cat("Knots:", length(x$times), "\n")
   cat("Delta-tau:", x$delta_t, "\n")
-  p <- plot.ACDC(x, ...)
+  p <- plot.CRABS(x, ...)
   plot(p)
   invisible()
 }

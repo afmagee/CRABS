@@ -1,5 +1,5 @@
 ---
-title: "ACDC: Analysis of Congruent Diversification Analyses"
+title: "CRABS: Congruent Rate Analysis in Birth-death Scenarios"
 date: '`r Sys.Date()`'
 author: 
   - Sebastian Höhna
@@ -29,7 +29,7 @@ classoption:
 vignette: |
   %\VignetteKeyword{Documentation}
   %\VignetteIndexEntry{Congruence Classes}
-  %\VignettePackage{ACDC}
+  %\VignettePackage{CRABS}
   %\VignetteEngine{knitr::rmarkdown}
 bibliography: literature.bib
 csl: methods-in-ecology-and-evolution.csl
@@ -67,15 +67,15 @@ opts_chunk$set(
 
 options(width=60)
 set.seed(53079239)
-# install R/ACDC package if necessary:
-#if(!require("ACDC")) install.packages("ACDC", repos="https://cran.us.r-project.org")
+# install R/CRABS package if necessary:
+#if(!require("CRABS")) install.packages("CRABS", repos="https://cran.us.r-project.org")
 ```
 
 # Overview
 
-This is a vignette, or long-form documentation, accompanying the R-package ACDC: Analysis of Congruent Diversification Classes.
+This is a vignette, or long-form documentation, accompanying the R-package CRABS: Congruent Rate Analysis in Birth-death Scenarios.
 
-The main purpose of ACDC is to explore congruence classes of macroevolutionary diversification rates.
+The main purpose of CRABS is to explore congruence classes of macroevolutionary diversification rates.
 Specifically, this tutorial has two main aims/applications:
 
 * For a given speciation and extinction rate, you can compute the alternative speciation and extinction rates via the pulled net-diversification rate 
@@ -88,30 +88,30 @@ We will explain these in detail below with an empirical example.
 
 # Installation
 
-To get started with exploring congruence classes, you need to have our package `ACDC` installed.
+To get started with exploring congruence classes, you need to have our package `CRABS` installed.
 First, make sure that you have a recent version of R installed.
-You can install the stable version of `ACDC` from CRAN:
+You can install the stable version of `CRABS` from CRAN:
 ```{r inst-cran, eval=FALSE}
-install.packages("ACDC")
+install.packages("CRABS")
 ```
 
-We host the developmental version of `ACDC` on github. If you don't already have it, the `devtools` R-package makes it easy to install directly from github. Using devtools makes it easy to install `ACDC` directly from GitHub.
+We host the developmental version of `CRABS` on github. If you don't already have it, the `devtools` R-package makes it easy to install directly from github. Using devtools makes it easy to install `CRABS` directly from GitHub.
 ```{r load-devtools, eval=FALSE}
 install.packages("devtools")
 library(devtools)
-install_github("afmagee/ACDC")
+install_github("afmagee/CRABS")
 ```
 <!-- % Sebastian: This is only for now until we have the package properly on GitHub -->
-```{r local-install-ACDC, echo=FALSE}
+```{r local-install-CRABS, echo=FALSE}
 install.packages("..",type="source",repos=NULL)
 ```
 
 
-You can then load the `ACDC` package using the `library` function:
-```{r load-ACDC}
-library(ACDC)
+You can then load the `CRABS` package using the `library` function:
+```{r load-CRABS}
+library(CRABS)
 ```
-Now you are ready to use `ACDC` to explore congruence classes in macroevolutionary diversification rates.
+Now you are ready to use `CRABS` to explore congruence classes in macroevolutionary diversification rates.
 
 <!-- Dependencies for the vignette -->
 ```{r vignette-dependencies}
@@ -122,9 +122,9 @@ library(dplyr)
 
 # Features
 
-##  Overview of functions in `ACDC`
+##  Overview of functions in `CRABS`
 
-Here we give you an overview of the main functions available in `ACDC`.
+Here we give you an overview of the main functions available in `CRABS`.
 
 
 | Function      | Description  |
@@ -141,7 +141,7 @@ Here we give you an overview of the main functions available in `ACDC`.
 
 You can consult the R documentation for each of these by placing a question mark in front of the name. For example, try calling `?create.model` or `?sample.basic.model` in R. 
 We use these functions throughout the sections in the vignette.
-For `sample.basic.models`, we have a separate section explaining the most important flags and use cases because `sample.basic.models` might represent a more complex but important function of `ACDC`.
+For `sample.basic.models`, we have a separate section explaining the most important flags and use cases because `sample.basic.models` might represent a more complex but important function of `CRABS`.
 
 ## `sample.basic.models` {#samplebasic}
 This function is designed to enable easy generation of commonly employed diversification-rate scenarios.
@@ -251,7 +251,7 @@ We will come back to the summaries later when we created samples from the congru
 ## The model object
 
 In order to create a congruence class, we require some information about the extinction and speciation rate functions in at least one of the models in the congruence class. 
-In the following examples we will use the results from an episodic birth-death model fitted in RevBayes (see Section \@ref(revbayes)), but we note that ACDC can work with any rate estimates. 
+In the following examples we will use the results from an episodic birth-death model fitted in RevBayes (see Section \@ref(revbayes)), but we note that CRABS can work with any rate estimates. 
 To simplify this section, we provide the results in a convenient format:
 ```{r load-revbayes}
 data("primates_ebd")
@@ -335,7 +335,7 @@ Let us assume that the extinction rate was linear with a range of different slop
 Specifically, let's assume that the slope was $\alpha=\{0.0,0.0005, \ldots, 0.002\}$.
 We played around with these $\alpha$ values to get reasonable rate functions.
 You will need to modify these for your dataset.
-Note that in `ACDC`, rate functions are defined in backwards time, so while these look like decreasing extinction rates, they are in fact increasing extinction rates when you consider time forward from past to present.
+Note that in `CRABS`, rate functions are defined in backwards time, so while these look like decreasing extinction rates, they are in fact increasing extinction rates when you consider time forward from past to present.
 
 We create extinction rate functions with these $\alpha$ values.
 ```{r }
@@ -745,7 +745,7 @@ The agreement between the alternative models is comparable to the linear scenari
 ### Uniform independent
 
 The previous functions used `sample.basic.models` to construct a variety of pre-defined hypotheses.
-`ACDC` also implements `sample.rates` to allow more flexibility in user-defined rate functions (and of course the user is free to define their own functions as well).
+`CRABS` also implements `sample.rates` to allow more flexibility in user-defined rate functions (and of course the user is free to define their own functions as well).
 Here we show this with IID rates.
 We assume that the extinction rates could have had any value between 0 and 1 (you could easily pick different numbers here).
 Our motivation for these values was, that (i) having a maximal expected extinction time per lineage of 1.0 million years seems reasonable from the fossil record, and (ii) we estimated a maximal speciation rate of 0.4, which is clearly smaller than 1.0.
@@ -789,7 +789,7 @@ Nonetheless, even in this extreme scenario, the increases and decrease near the 
 
 ### Brownian motion with a trend
 
-It is also possible to specify fully customized rate sampling functions, and use these to sample the congruence class in `ACDC`. Suppose we thought that the extinction rate was tiny when the clade emerged, but steadily rose in a linear fashion towards the present. Additionally, suppose we allow for some random variation around this linear increase. This can be implemented as a Brownian motion with a trend, as follows.
+It is also possible to specify fully customized rate sampling functions, and use these to sample the congruence class in `CRABS`. Suppose we thought that the extinction rate was tiny when the clade emerged, but steadily rose in a linear fashion towards the present. Additionally, suppose we allow for some random variation around this linear increase. This can be implemented as a Brownian motion with a trend, as follows.
 
 ```{r sample-bm-trend-decreasing}
 med_times <- seq(0, max(my_model$time), length.out = 30)
@@ -801,7 +801,7 @@ extinction_rate_samples <- function(){
   f <- approxfun(med_times, y)
 }
 ```
-For simplicity, we restrict rates that are very small or negative to be a minimum of 0.001 units. As before, we can use `ACDC` to sample from the congruence class using this form of proposed extinction rates, and plot the rates:
+For simplicity, we restrict rates that are very small or negative to be a minimum of 0.001 units. As before, we can use `CRABS` to sample from the congruence class using this form of proposed extinction rates, and plot the rates:
 
 ```{r bm-trend-spaghetti, fig.cap = "Rate plots for the congruent models that were sampled assuming an extinction rate modeled as a Brownian motion with a linearly increasing trend"}
 samples <- sample.congruence.class(
@@ -881,7 +881,7 @@ Until this point, we have only considered point estimates for the fitted birth-d
 
 ## Reading the posterior
 
-In ACDC, we have included functionality to read RevBayes log outputs.
+In CRABS, we have included functionality to read RevBayes log outputs.
 
 ```{r read-posterior, results = "hide"}
 data(primates_ebd_log)
@@ -889,7 +889,7 @@ data(primates_ebd_log)
 posterior <- read.RevBayes(primates_ebd_log, n_times = 1000,
                            max_t = 65, n_samples = 20)
 ```
-This yields a list of twenty models that are sampled from the posterior. Each sample is equally spaced on the MCMC iterations, meaning that we minimized the autocorrelation among the posterior samples. In `ACDC` we have included functionality to sample the congruence class, while also taking into account the variation in birth-death models in the posterior distribution. 
+This yields a list of twenty models that are sampled from the posterior. Each sample is equally spaced on the MCMC iterations, meaning that we minimized the autocorrelation among the posterior samples. In `CRABS` we have included functionality to sample the congruence class, while also taking into account the variation in birth-death models in the posterior distribution. 
 
 ## Sampling congruent models in the posterior
 
@@ -938,7 +938,7 @@ In contrast to the previous summaries (Section \@ref(alt-ext)), the congruence c
 
 # Estimating birth-death models
 
-One of the main features and aims of `ACDC` is to explore the congruence class for the diversification rates that you estimated using another software or R package.
+One of the main features and aims of `CRABS` is to explore the congruence class for the diversification rates that you estimated using another software or R package.
 Here we provide you some examples using standard software for estimating diversification rates through time, but if your preferred software is not included then you can either specify the diversification rate functions manually, or try to follow our examples in loading the output.
 
 ## Reading the phylogenetic tree

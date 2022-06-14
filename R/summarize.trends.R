@@ -111,7 +111,7 @@ plotdata <- function(model_set,
 
 #' Summarize trends in the congruence class
 #'
-#' @param model_set an object of type "ACDCset"
+#' @param model_set an object of type "CRABSset"
 #' @param threshold a threshold for when \eqn{\Delta \lambda i} should be interpreted as decreasing, flat, or increasing
 #' @param rate_name either "lambda" or "mu" or "delta"
 #' @param window_size the window size "k" in \eqn{\Delta\lambda i = \lambda i - \lambda(i-k)}

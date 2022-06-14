@@ -1,6 +1,6 @@
 #' Stochastic exploration of congruent models.
 #'
-#' @param model the reference model, an object of class "ACDC"
+#' @param model the reference model, an object of class "CRABS"
 #' @param num.samples The pulled diversification rate function (measured in time before present).
 #' @param rate.type either "extinction", "speciation", or "both"
 #' @param sample.speciation.rates a function that when called returns a speciation rate function

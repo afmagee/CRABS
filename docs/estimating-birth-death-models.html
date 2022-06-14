@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>8 Estimating birth-death models | ACDC: Analysis of Congruent Diversification Analyses</title>
-  <meta name="description" content="8 Estimating birth-death models | ACDC: Analysis of Congruent Diversification Analyses" />
+  <title>8 Estimating birth-death models | CRABS: Congruent Rate Analysis in Birth-death Scenarios</title>
+  <meta name="description" content="8 Estimating birth-death models | CRABS: Congruent Rate Analysis in Birth-death Scenarios" />
   <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="8 Estimating birth-death models | ACDC: Analysis of Congruent Diversification Analyses" />
+  <meta property="og:title" content="8 Estimating birth-death models | CRABS: Congruent Rate Analysis in Birth-death Scenarios" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="8 Estimating birth-death models | ACDC: Analysis of Congruent Diversification Analyses" />
+  <meta name="twitter:title" content="8 Estimating birth-death models | CRABS: Congruent Rate Analysis in Birth-death Scenarios" />
   
   
   
@@ -25,7 +25,7 @@
 <meta name="author" content="Andrew F. Magee" />
 
 
-<meta name="date" content="2022-06-08" />
+<meta name="date" content="2022-06-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -138,7 +138,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2" data-path="installation.html"><a href="installation.html"><i class="fa fa-check"></i><b>2</b> Installation</a></li>
 <li class="chapter" data-level="3" data-path="features.html"><a href="features.html"><i class="fa fa-check"></i><b>3</b> Features</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="features.html"><a href="features.html#overview-of-functions-in-acdc"><i class="fa fa-check"></i><b>3.1</b> Overview of functions in <code>ACDC</code></a></li>
+<li class="chapter" data-level="3.1" data-path="features.html"><a href="features.html#overview-of-functions-in-crabs"><i class="fa fa-check"></i><b>3.1</b> Overview of functions in <code>CRABS</code></a></li>
 <li class="chapter" data-level="3.2" data-path="features.html"><a href="features.html#samplebasic"><i class="fa fa-check"></i><b>3.2</b> <code>sample.basic.models</code></a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="creating-the-congruence-class.html"><a href="creating-the-congruence-class.html"><i class="fa fa-check"></i><b>4</b> Creating the congruence class</a>
@@ -202,7 +202,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">ACDC: Analysis of Congruent Diversification Analyses</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">CRABS: Congruent Rate Analysis in Birth-death Scenarios</a>
           </h1>
         </div>
 
@@ -212,7 +212,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="estimating-birth-death-models" class="section level1 hasAnchor" number="8">
 <h1><span class="header-section-number">8</span> Estimating birth-death models<a href="estimating-birth-death-models.html#estimating-birth-death-models" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>One of the main features and aims of <code>ACDC</code> is to explore the congruence class for the diversification rates that you estimated using another software or R package.
+<p>One of the main features and aims of <code>CRABS</code> is to explore the congruence class for the diversification rates that you estimated using another software or R package.
 Here we provide you some examples using standard software for estimating diversification rates through time, but if your preferred software is not included then you can either specify the diversification rate functions manually, or try to follow our examples in loading the output.</p>
 <div id="reading-the-phylogenetic-tree" class="section level2 hasAnchor" number="8.1">
 <h2><span class="header-section-number">8.1</span> Reading the phylogenetic tree<a href="estimating-birth-death-models.html#reading-the-phylogenetic-tree" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -272,7 +272,7 @@ So we extract these from the tree.</p>
 <span id="cb77-2"><a href="estimating-birth-death-models.html#cb77-2"></a>                              <span class="dt">numExpectedRateChanges =</span> <span class="dv">2</span>)</span></code></pre></div>
 <div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="estimating-birth-death-models.html#cb78-1"></a>est_speciation &lt;-<span class="st"> </span><span class="kw">apply</span>(tess.output[[<span class="st">&quot;speciation rates&quot;</span>]], <span class="dv">2</span>, median)</span>
 <span id="cb78-2"><a href="estimating-birth-death-models.html#cb78-2"></a>est_extinction &lt;-<span class="st"> </span><span class="kw">apply</span>(tess.output[[<span class="st">&quot;extinction rates&quot;</span>]], <span class="dv">2</span>, median)</span></code></pre></div>
-<p>Let us make a data frame representation of the rates. Since TESS is parameterized in forward time (i.e. with <span class="math inline">\(t = 0\)</span> being the root of the phylogeny, increasing toward the present), we want to reverse the rates to be compatible with <code>ACDC</code>.</p>
+<p>Let us make a data frame representation of the rates. Since TESS is parameterized in forward time (i.e. with <span class="math inline">\(t = 0\)</span> being the root of the phylogeny, increasing toward the present), we want to reverse the rates to be compatible with <code>CRABS</code>.</p>
 <div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="estimating-birth-death-models.html#cb79-1"></a>times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, max_t, <span class="dt">length.out =</span> <span class="dv">100</span>)</span>
 <span id="cb79-2"><a href="estimating-birth-death-models.html#cb79-2"></a></span>
 <span id="cb79-3"><a href="estimating-birth-death-models.html#cb79-3"></a>primates_ebd_tess &lt;-<span class="st"> </span><span class="kw">tibble</span>(</span>
@@ -306,7 +306,7 @@ So we extract these from the tree.</p>
 Figure 8.1: The estimated posterior median results from an episodic birth-death model fitted in RevBayes.
 </p>
 </div>
-<p>The data frame <code>primates_ebd_tess</code> is what we get when we call the <code>data("primates_ebd_tess")</code> function in <code>ACDC</code>. We use the RevBayes estimated rates in our vignette examples, but it is easy to substitute those for the TESS analysis results to construct the congruence class.</p>
+<p>The data frame <code>primates_ebd_tess</code> is what we get when we call the <code>data("primates_ebd_tess")</code> function in <code>CRABS</code>. We use the RevBayes estimated rates in our vignette examples, but it is easy to substitute those for the TESS analysis results to construct the congruence class.</p>
 </div>
 <div id="treepar" class="section level2 hasAnchor" number="8.3">
 <h2><span class="header-section-number">8.3</span> TreePar<a href="estimating-birth-death-models.html#treepar" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -442,7 +442,7 @@ We strongly encourage to use the medians and not the means for HSMRF models, bec
 Figure 8.2: The estimated posterior median results from an episodic birth-death model fitted in RevBayes.
 </p>
 </div>
-<p>The data frame <code>primates_ebd_revbayes</code> is essentially equal to the data frame we get when we call the <code>data("primates_ebd")</code> function in <code>ACDC</code>. We use these estimated rates in our vignette examples, but we note that it is possible to use any kind of rate functions to construct the congruence class.</p>
+<p>The data frame <code>primates_ebd_revbayes</code> is essentially equal to the data frame we get when we call the <code>data("primates_ebd")</code> function in <code>CRABS</code>. We use these estimated rates in our vignette examples, but we note that it is possible to use any kind of rate functions to construct the congruence class.</p>
 </div>
 </div>
             </section>

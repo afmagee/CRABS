@@ -19,7 +19,7 @@
 #' models <- congruent.models(model, mus = mus)
 #' 
 #' plot(models)
-plot.ACDCset <- function( x, ... ) {
+plot.CRABSset <- function( x, ... ) {
   dfs <- lapply(x, model2df)
   ## Add names columns
   for (i in seq_along(dfs)){
@@ -109,9 +109,9 @@ plot.ACDCset <- function( x, ... ) {
   return(p)
 }
 
-#' Print method for ACDCset object
+#' Print method for CRABSset object
 #'
-#' @param x an object of class ACDCset
+#' @param x an object of class CRABSset
 #' @param ... other arguments
 #'
 #' @export
@@ -130,13 +130,13 @@ plot.ACDCset <- function( x, ... ) {
 #' models <- congruent.models(model, mus = mus)
 #' 
 #' print(models)
-print.ACDCset <- function(x, ...){
+print.CRABSset <- function(x, ...){
   cat("A congruent set of piecewise-linear birth-death models\n")
   cat("Knots:", length(x[[1]]$times), "\n")
   cat("Delta-tau:", x[[1]]$delta_t, "\n")
   cat("n_models: ", length(x), "\n")
   if (length(x) <= 50){
-    p <- plot.ACDCset(x)  
+    p <- plot.CRABSset(x)  
     plot(p)
   }else{
     cat("Your set is too large (>50), and won't be plotted.")

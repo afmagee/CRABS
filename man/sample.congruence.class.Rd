@@ -13,7 +13,7 @@ sample.congruence.class(
 )
 }
 \arguments{
-\item{model}{the reference model, an object of class "ACDC"}
+\item{model}{the reference model, an object of class "CRABS"}
 
 \item{num.samples}{The pulled diversification rate function (measured in time before present).}
 

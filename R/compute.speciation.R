@@ -32,7 +32,7 @@ congruent.speciation <- function( model, func.mu, ode_solver ) {
              max.t = model$max.t,
              delta_t = model$delta_t,
              num.intervals = model$num.intervals)
-  class(res) <- c("ACDC")
+  class(res) <- c("CRABS")
 
 
   

@@ -23,7 +23,7 @@ extinction_prefix = "extinction_rate.", speciation_prefix = "speciation_rate.")
 \item{speciation_prefix}{the prefix string for the speciation rate column names. Must be unique}
 }
 \value{
-a set of ACDC models, each being a sample in the posterior
+a set of CRABS models, each being a sample in the posterior
 }
 \description{
 read RevBayes log file

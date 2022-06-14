@@ -1,12 +1,12 @@
 #' Create a set of congruent models
 #'
-#' @param model The reference model. An object of class "ACDC"
+#' @param model The reference model. An object of class "CRABS"
 #' @param mus A list of extinction-rate functions
 #' @param lambdas A list of speciation-rate functions
 #' @param keep_ref Whether or not to keep the reference model in the congruent set
 #' @param ode_solver Whether to use a numerical ODE solver to solve for lambda
 #'
-#' @return An object of class "ACDCset"
+#' @return An object of class "CRABSset"
 #' @export
 #'
 #' @examples
@@ -95,6 +95,6 @@ congruent.models <- function(model, mus = NULL, lambdas = NULL, keep_ref = TRUE,
     }
   }
   models <- c(models, models1, models2)
-  class(models) <- c("list", "ACDCset")
+  class(models) <- c("list", "CRABSset")
   return(models)
 }

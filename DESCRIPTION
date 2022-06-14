@@ -1,6 +1,6 @@
-Package: ACDC
-Title: Analysis of Congruent Diversification Classes
-Version: 1.0.1.9000
+Package: CRABS
+Title: Congruent Rate Analyses in Birth-death Scenarios
+Version: 1.1.0.9000
 Authors@R: c(person("Bj\u00F8rn Tore", "Kopperud", role = c("aut", "cre"), email = "kopperud@protonmail.com"),
              person("Sebastian", "H\u00F6hna", role =c("aut")),
              person("Andrew F.", "Magee", role = c("aut")))
@@ -15,5 +15,5 @@ Suggests:
     rmarkdown,
     ape
 RoxygenNote: 7.1.2
-URL: https://github.com/afmagee/ACDC
+URL: https://github.com/afmagee/CRABS
 

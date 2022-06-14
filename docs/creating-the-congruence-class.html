@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>4 Creating the congruence class | ACDC: Analysis of Congruent Diversification Analyses</title>
-  <meta name="description" content="4 Creating the congruence class | ACDC: Analysis of Congruent Diversification Analyses" />
+  <title>4 Creating the congruence class | CRABS: Congruent Rate Analysis in Birth-death Scenarios</title>
+  <meta name="description" content="4 Creating the congruence class | CRABS: Congruent Rate Analysis in Birth-death Scenarios" />
   <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="4 Creating the congruence class | ACDC: Analysis of Congruent Diversification Analyses" />
+  <meta property="og:title" content="4 Creating the congruence class | CRABS: Congruent Rate Analysis in Birth-death Scenarios" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="4 Creating the congruence class | ACDC: Analysis of Congruent Diversification Analyses" />
+  <meta name="twitter:title" content="4 Creating the congruence class | CRABS: Congruent Rate Analysis in Birth-death Scenarios" />
   
   
   
@@ -25,7 +25,7 @@
 <meta name="author" content="Andrew F. Magee" />
 
 
-<meta name="date" content="2022-06-08" />
+<meta name="date" content="2022-06-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -138,7 +138,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2" data-path="installation.html"><a href="installation.html"><i class="fa fa-check"></i><b>2</b> Installation</a></li>
 <li class="chapter" data-level="3" data-path="features.html"><a href="features.html"><i class="fa fa-check"></i><b>3</b> Features</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="features.html"><a href="features.html#overview-of-functions-in-acdc"><i class="fa fa-check"></i><b>3.1</b> Overview of functions in <code>ACDC</code></a></li>
+<li class="chapter" data-level="3.1" data-path="features.html"><a href="features.html#overview-of-functions-in-crabs"><i class="fa fa-check"></i><b>3.1</b> Overview of functions in <code>CRABS</code></a></li>
 <li class="chapter" data-level="3.2" data-path="features.html"><a href="features.html#samplebasic"><i class="fa fa-check"></i><b>3.2</b> <code>sample.basic.models</code></a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="creating-the-congruence-class.html"><a href="creating-the-congruence-class.html"><i class="fa fa-check"></i><b>4</b> Creating the congruence class</a>
@@ -202,7 +202,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">ACDC: Analysis of Congruent Diversification Analyses</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">CRABS: Congruent Rate Analysis in Birth-death Scenarios</a>
           </h1>
         </div>
 
@@ -268,7 +268,7 @@ The sign of the slope shows the direction of change, either increasing or decrea
 <div id="the-model-object" class="section level2 hasAnchor" number="4.3">
 <h2><span class="header-section-number">4.3</span> The model object<a href="creating-the-congruence-class.html#the-model-object" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>In order to create a congruence class, we require some information about the extinction and speciation rate functions in at least one of the models in the congruence class.
-In the following examples we will use the results from an episodic birth-death model fitted in RevBayes (see Section <a href="estimating-birth-death-models.html#revbayes">8.4</a>), but we note that ACDC can work with any rate estimates.
+In the following examples we will use the results from an episodic birth-death model fitted in RevBayes (see Section <a href="estimating-birth-death-models.html#revbayes">8.4</a>), but we note that CRABS can work with any rate estimates.
 To simplify this section, we provide the results in a convenient format:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="creating-the-congruence-class.html#cb5-1"></a><span class="kw">data</span>(<span class="st">&quot;primates_ebd&quot;</span>)</span>
 <span id="cb5-2"><a href="creating-the-congruence-class.html#cb5-2"></a><span class="kw">head</span>(primates_ebd)</span></code></pre></div>

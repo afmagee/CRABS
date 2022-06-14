@@ -53,5 +53,5 @@ p <- primates_ebd_revbayes %>%
   labs(y = "rate", x = "time before present")
 plot(p)
 ```
-The data frame `primates_ebd_revbayes` is essentially equal to the data frame we get when we call the `data("primates_ebd")` function in `ACDC`. We use these estimated rates in our vignette examples, but we note that it is possible to use any kind of rate functions to construct the congruence class.
+The data frame `primates_ebd_revbayes` is essentially equal to the data frame we get when we call the `data("primates_ebd")` function in `CRABS`. We use these estimated rates in our vignette examples, but we note that it is possible to use any kind of rate functions to construct the congruence class.
 

@@ -14,7 +14,7 @@ sample.congruence.class.posterior(
 )
 }
 \arguments{
-\item{posterior}{a list of ACDC model objects}
+\item{posterior}{a list of CRABS model objects}
 
 \item{num.samples}{The pulled diversification rate function (measured in time before present).}
 
@@ -44,7 +44,7 @@ sample.congruence.class.posterior(
 A named list with congruent rates.
 }
 \description{
-This function takes a posterior sample as input: a list of ACDC objects. 
+This function takes a posterior sample as input: a list of CRABS objects. 
 It will then iterate over the samples, and for each posterior sample it will
 sample from the posterior class. It will sample using the \code{\link{sample.basic.models}}
 function, and all additional parameters are passed to \code{\link{sample.basic.models}}.

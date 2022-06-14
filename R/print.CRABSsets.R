@@ -1,6 +1,6 @@
-#' print.ACDCsets
+#' print.CRABSsets
 #'
-#' @param x a list of (congruent) ACDC sets
+#' @param x a list of (congruent) CRABS sets
 #' @param ... additional parameters
 #'
 #' @return nothing
@@ -19,8 +19,8 @@
 #'                                              max.rate = 1.0)
 #'                                              
 #' print(samples)
-print.ACDCsets <- function(x, ...){
-  cat("A group of ", length(x), "ACDC sets.\n")
+print.CRABSsets <- function(x, ...){
+  cat("A group of ", length(x), "CRABS sets.\n")
   cat("Knots:", length(x[[1]][[1]]$times), "\n")
   cat("Delta-tau:", x[[1]][[1]]$delta_t, "\n")
   invisible()

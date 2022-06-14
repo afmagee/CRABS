@@ -1,12 +1,12 @@
 #' Stochastic exploration of congruent models for all samples in the posterior
 #' 
 #' @description 
-#' This function takes a posterior sample as input: a list of ACDC objects. 
+#' This function takes a posterior sample as input: a list of CRABS objects. 
 #' It will then iterate over the samples, and for each posterior sample it will
 #' sample from the posterior class. It will sample using the \code{\link{sample.basic.models}}
 #' function, and all additional parameters are passed to \code{\link{sample.basic.models}}.
 #'
-#' @param posterior a list of ACDC model objects
+#' @param posterior a list of CRABS model objects
 #' @param mu0.equal whether to propose alternative mu starting at mu0 equal to the posterior sample. default to FALSE
 #' @inheritParams sample.congruence.class
 #' @inheritDotParams sample.basic.models
@@ -74,6 +74,6 @@ sample.congruence.class.posterior <- function(posterior,
   close(pb)
   
   names(res) <- paste0("posterior", seq_along(res))
-  class(res) <- c("ACDCsets", "list")
+  class(res) <- c("CRABSsets", "list")
   return(res)
 }

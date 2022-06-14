@@ -8,7 +8,7 @@ summarize.trends(model_set, threshold = 0.005, rate_name = "lambda",
 return_data = FALSE, rm_singleton = FALSE, relative_deltas = FALSE, group_names = NULL)
 }
 \arguments{
-\item{model_set}{an object of type "ACDCset"}
+\item{model_set}{an object of type "CRABSset"}
 
 \item{threshold}{a threshold for when \eqn{\Delta \lambda i} should be interpreted as decreasing, flat, or increasing}
 

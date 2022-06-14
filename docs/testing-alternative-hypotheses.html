@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>5 Testing alternative hypotheses | ACDC: Analysis of Congruent Diversification Analyses</title>
-  <meta name="description" content="5 Testing alternative hypotheses | ACDC: Analysis of Congruent Diversification Analyses" />
+  <title>5 Testing alternative hypotheses | CRABS: Congruent Rate Analysis in Birth-death Scenarios</title>
+  <meta name="description" content="5 Testing alternative hypotheses | CRABS: Congruent Rate Analysis in Birth-death Scenarios" />
   <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="5 Testing alternative hypotheses | ACDC: Analysis of Congruent Diversification Analyses" />
+  <meta property="og:title" content="5 Testing alternative hypotheses | CRABS: Congruent Rate Analysis in Birth-death Scenarios" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="5 Testing alternative hypotheses | ACDC: Analysis of Congruent Diversification Analyses" />
+  <meta name="twitter:title" content="5 Testing alternative hypotheses | CRABS: Congruent Rate Analysis in Birth-death Scenarios" />
   
   
   
@@ -25,7 +25,7 @@
 <meta name="author" content="Andrew F. Magee" />
 
 
-<meta name="date" content="2022-06-08" />
+<meta name="date" content="2022-06-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -138,7 +138,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2" data-path="installation.html"><a href="installation.html"><i class="fa fa-check"></i><b>2</b> Installation</a></li>
 <li class="chapter" data-level="3" data-path="features.html"><a href="features.html"><i class="fa fa-check"></i><b>3</b> Features</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="features.html"><a href="features.html#overview-of-functions-in-acdc"><i class="fa fa-check"></i><b>3.1</b> Overview of functions in <code>ACDC</code></a></li>
+<li class="chapter" data-level="3.1" data-path="features.html"><a href="features.html#overview-of-functions-in-crabs"><i class="fa fa-check"></i><b>3.1</b> Overview of functions in <code>CRABS</code></a></li>
 <li class="chapter" data-level="3.2" data-path="features.html"><a href="features.html#samplebasic"><i class="fa fa-check"></i><b>3.2</b> <code>sample.basic.models</code></a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="creating-the-congruence-class.html"><a href="creating-the-congruence-class.html"><i class="fa fa-check"></i><b>4</b> Creating the congruence class</a>
@@ -202,7 +202,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">ACDC: Analysis of Congruent Diversification Analyses</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">CRABS: Congruent Rate Analysis in Birth-death Scenarios</a>
           </h1>
         </div>
 
@@ -260,7 +260,7 @@ Let us assume that the extinction rate was linear with a range of different slop
 Specifically, let’s assume that the slope was <span class="math inline">\(\alpha=\{0.0,0.0005, \ldots, 0.002\}\)</span>.
 We played around with these <span class="math inline">\(\alpha\)</span> values to get reasonable rate functions.
 You will need to modify these for your dataset.
-Note that in <code>ACDC</code>, rate functions are defined in backwards time, so while these look like decreasing extinction rates, they are in fact increasing extinction rates when you consider time forward from past to present.</p>
+Note that in <code>CRABS</code>, rate functions are defined in backwards time, so while these look like decreasing extinction rates, they are in fact increasing extinction rates when you consider time forward from past to present.</p>
 <p>We create extinction rate functions with these <span class="math inline">\(\alpha\)</span> values.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="testing-alternative-hypotheses.html#cb13-1"></a>mu_min =<span class="st"> </span><span class="fl">0.01</span></span>
 <span id="cb13-2"><a href="testing-alternative-hypotheses.html#cb13-2"></a>mu_vals &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="fl">0.002</span>,<span class="fl">0.0005</span>)</span>

@@ -7,7 +7,7 @@
 model2df(model, gather = TRUE, rho = 1, compute.pulled.rates = TRUE)
 }
 \arguments{
-\item{model}{an object of class "ACDC"}
+\item{model}{an object of class "CRABS"}
 
 \item{gather}{boolean. Whether to return wide or long data frame}
 

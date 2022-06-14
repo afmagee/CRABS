@@ -1,7 +1,7 @@
 library(ggplot2)
 library(gridExtra)
 library(TreePar)
-library(ACDC)
+library(CRABS)
 
 # source("src/utils.R")
 # source("src/sample.congruence.class.R")
@@ -50,7 +50,7 @@ samples <- sample.congruence.class(func_spec0=lambda, func_ext0=mu, max.t=max_t,
 
 
 pdf("~/Downloads/congruence_spaghetti.pdf")
-  ACDC.plot.congruence.class.spaghetti(func_spec0=lambda, func_ext0=mu, max.t=max_t, sample.grid=samples )
+  CRABS.plot.congruence.class.spaghetti(func_spec0=lambda, func_ext0=mu, max.t=max_t, sample.grid=samples )
 dev.off()
 
 

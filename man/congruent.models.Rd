@@ -13,7 +13,7 @@ congruent.models(
 )
 }
 \arguments{
-\item{model}{The reference model. An object of class "ACDC"}
+\item{model}{The reference model. An object of class "CRABS"}
 
 \item{mus}{A list of extinction-rate functions}
 
@@ -24,7 +24,7 @@ congruent.models(
 \item{ode_solver}{Whether to use a numerical ODE solver to solve for lambda}
 }
 \value{
-An object of class "ACDCset"
+An object of class "CRABSset"
 }
 \description{
 Create a set of congruent models

@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>2 Installation | ACDC: Analysis of Congruent Diversification Analyses</title>
-  <meta name="description" content="2 Installation | ACDC: Analysis of Congruent Diversification Analyses" />
+  <title>2 Installation | CRABS: Congruent Rate Analysis in Birth-death Scenarios</title>
+  <meta name="description" content="2 Installation | CRABS: Congruent Rate Analysis in Birth-death Scenarios" />
   <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="2 Installation | ACDC: Analysis of Congruent Diversification Analyses" />
+  <meta property="og:title" content="2 Installation | CRABS: Congruent Rate Analysis in Birth-death Scenarios" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="2 Installation | ACDC: Analysis of Congruent Diversification Analyses" />
+  <meta name="twitter:title" content="2 Installation | CRABS: Congruent Rate Analysis in Birth-death Scenarios" />
   
   
   
@@ -25,7 +25,7 @@
 <meta name="author" content="Andrew F. Magee" />
 
 
-<meta name="date" content="2022-06-08" />
+<meta name="date" content="2022-06-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -138,7 +138,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2" data-path="installation.html"><a href="installation.html"><i class="fa fa-check"></i><b>2</b> Installation</a></li>
 <li class="chapter" data-level="3" data-path="features.html"><a href="features.html"><i class="fa fa-check"></i><b>3</b> Features</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="features.html"><a href="features.html#overview-of-functions-in-acdc"><i class="fa fa-check"></i><b>3.1</b> Overview of functions in <code>ACDC</code></a></li>
+<li class="chapter" data-level="3.1" data-path="features.html"><a href="features.html#overview-of-functions-in-crabs"><i class="fa fa-check"></i><b>3.1</b> Overview of functions in <code>CRABS</code></a></li>
 <li class="chapter" data-level="3.2" data-path="features.html"><a href="features.html#samplebasic"><i class="fa fa-check"></i><b>3.2</b> <code>sample.basic.models</code></a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="creating-the-congruence-class.html"><a href="creating-the-congruence-class.html"><i class="fa fa-check"></i><b>4</b> Creating the congruence class</a>
@@ -202,7 +202,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">ACDC: Analysis of Congruent Diversification Analyses</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">CRABS: Congruent Rate Analysis in Birth-death Scenarios</a>
           </h1>
         </div>
 
@@ -212,18 +212,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="installation" class="section level1 hasAnchor" number="2">
 <h1><span class="header-section-number">2</span> Installation<a href="installation.html#installation" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>To get started with exploring congruence classes, you need to have our package <code>ACDC</code> installed.
+<p>To get started with exploring congruence classes, you need to have our package <code>CRABS</code> installed.
 First, make sure that you have a recent version of R installed.
-You can install the stable version of <code>ACDC</code> from CRAN:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="installation.html#cb1-1"></a><span class="kw">install.packages</span>(<span class="st">&quot;ACDC&quot;</span>)</span></code></pre></div>
-<p>We host the developmental version of <code>ACDC</code> on github. If you don’t already have it, the <code>devtools</code> R-package makes it easy to install directly from github. Using devtools makes it easy to install <code>ACDC</code> directly from GitHub.</p>
+You can install the stable version of <code>CRABS</code> from CRAN:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="installation.html#cb1-1"></a><span class="kw">install.packages</span>(<span class="st">&quot;CRABS&quot;</span>)</span></code></pre></div>
+<p>We host the developmental version of <code>CRABS</code> on github. If you don’t already have it, the <code>devtools</code> R-package makes it easy to install directly from github. Using devtools makes it easy to install <code>CRABS</code> directly from GitHub.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="installation.html#cb2-1"></a><span class="kw">install.packages</span>(<span class="st">&quot;devtools&quot;</span>)</span>
 <span id="cb2-2"><a href="installation.html#cb2-2"></a><span class="kw">library</span>(devtools)</span>
-<span id="cb2-3"><a href="installation.html#cb2-3"></a><span class="kw">install_github</span>(<span class="st">&quot;afmagee/ACDC&quot;</span>)</span></code></pre></div>
+<span id="cb2-3"><a href="installation.html#cb2-3"></a><span class="kw">install_github</span>(<span class="st">&quot;afmagee/CRABS&quot;</span>)</span></code></pre></div>
 <!-- % Sebastian: This is only for now until we have the package properly on GitHub -->
-<p>You can then load the <code>ACDC</code> package using the <code>library</code> function:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="installation.html#cb3-1"></a><span class="kw">library</span>(ACDC)</span></code></pre></div>
-<p>Now you are ready to use <code>ACDC</code> to explore congruence classes in macroevolutionary diversification rates.</p>
+<p>You can then load the <code>CRABS</code> package using the <code>library</code> function:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="installation.html#cb3-1"></a><span class="kw">library</span>(CRABS)</span></code></pre></div>
+<p>Now you are ready to use <code>CRABS</code> to explore congruence classes in macroevolutionary diversification rates.</p>
 <!-- Dependencies for the vignette -->
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="installation.html#cb4-1"></a><span class="kw">library</span>(dplyr)</span></code></pre></div>
 </div>

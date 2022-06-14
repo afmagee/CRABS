@@ -33,7 +33,7 @@ est_speciation <- apply(tess.output[["speciation rates"]], 2, median)
 est_extinction <- apply(tess.output[["extinction rates"]], 2, median)
 ```
 
-Let us make a data frame representation of the rates. Since TESS is parameterized in forward time (i.e. with $t = 0$ being the root of the phylogeny, increasing toward the present), we want to reverse the rates to be compatible with `ACDC`.
+Let us make a data frame representation of the rates. Since TESS is parameterized in forward time (i.e. with $t = 0$ being the root of the phylogeny, increasing toward the present), we want to reverse the rates to be compatible with `CRABS`.
 ```{r tess-rates-dataframe}
 times <- seq(0, max_t, length.out = 100)
 
@@ -57,4 +57,4 @@ p <- primates_ebd_tess %>%
 plot(p)
 ```
 
-The data frame `primates_ebd_tess` is what we get when we call the `data("primates_ebd_tess")` function in `ACDC`. We use the RevBayes estimated rates in our vignette examples, but it is easy to substitute those for the TESS analysis results to construct the congruence class.
+The data frame `primates_ebd_tess` is what we get when we call the `data("primates_ebd_tess")` function in `CRABS`. We use the RevBayes estimated rates in our vignette examples, but it is easy to substitute those for the TESS analysis results to construct the congruence class.

@@ -67,7 +67,7 @@ create.model <- function(func_spec0, func_ext0, times = seq(from = 0, to = 5, by
              max.t = max.t,
              delta_t = delta_t,
              num.intervals = num.intervals)
-  class(res) <- c("ACDC")
+  class(res) <- c("CRABS")
   
   return (res)
 }

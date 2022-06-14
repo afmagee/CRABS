@@ -10,7 +10,7 @@
 #' @usage read.RevBayes(x, n_times, max_t = 100, n_samples = 20, summary_type = "none", 
 #' extinction_prefix = "extinction_rate.", speciation_prefix = "speciation_rate.")
 #'
-#' @return a set of ACDC models, each being a sample in the posterior
+#' @return a set of CRABS models, each being a sample in the posterior
 #' @export 
 #'
 #' @examples
@@ -73,7 +73,7 @@ read.RevBayes <- function(x,
     cat("\n")
 
     names(models) <- paste0("posterior", seq_along(models))
-    class(models) <- c("list", "ACDCposterior")
+    class(models) <- c("list", "CRABSposterior")
     return(models)
   }else{
     speciation_summary <- apply(speciation, 2, summary_type)
@@ -93,7 +93,7 @@ read.RevBayes <- function(x,
 
 #' Title
 #'
-#' @param x a list of ACDC objects
+#' @param x a list of CRABS objects
 #' @param ... additional parameters
 #'
 #' @return nothing
@@ -103,11 +103,11 @@ read.RevBayes <- function(x,
 #' data(primates_ebd_log)
 #' posterior <- read.RevBayes(primates_ebd_log, max_t = 65, n_samples = 20)
 #' print(posterior)
-print.ACDCposterior <- function(x, ...){
+print.CRABSposterior <- function(x, ...){
   cat("Posterior sample\n")
   cat("Knots:", length(x[[1]]$times), "\n")
   cat("Delta-tau:", x[[1]]$delta_t, "\n")
-  #p <- plot.ACDC(x, ...)
+  #p <- plot.CRABS(x, ...)
   #plot(p)
   invisible()
 }

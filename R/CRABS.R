@@ -1,4 +1,4 @@
-#' ACDC: Analysis of Congruent Diversification Classes
+#' CRABS: Congruent Rate Analysis in Birth-death Scenarios
 #' 
 #' 
 #' 
