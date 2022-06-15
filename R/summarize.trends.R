@@ -125,8 +125,9 @@ plotdata <- function(model_set,
 #' @importFrom ggplot2 facet_grid stat
 #'
 #' @return a patchwork object
-#' @usage summarize.trends(model_set, threshold = 0.005, rate_name = "lambda", window_size = 1, method = "neighbour", per_time = TRUE,
-#' return_data = FALSE, rm_singleton = FALSE, relative_deltas = FALSE, group_names = NULL)
+#' @usage summarize.trends(model_set, threshold = 0.005, rate_name = "lambda", 
+#' window_size = 1, method = "neighbour", per_time = TRUE, return_data = FALSE,
+#' rm_singleton = FALSE, relative_deltas = FALSE, group_names = NULL)
 #' @export summarize.trends
 #'
 #' @examples

@@ -4,8 +4,9 @@
 \alias{summarize.trends}
 \title{Summarize trends in the congruence class}
 \usage{
-summarize.trends(model_set, threshold = 0.005, rate_name = "lambda", window_size = 1, method = "neighbour", per_time = TRUE,
-return_data = FALSE, rm_singleton = FALSE, relative_deltas = FALSE, group_names = NULL)
+summarize.trends(model_set, threshold = 0.005, rate_name = "lambda", 
+window_size = 1, method = "neighbour", per_time = TRUE, return_data = FALSE,
+rm_singleton = FALSE, relative_deltas = FALSE, group_names = NULL)
 }
 \arguments{
 \item{model_set}{an object of type "CRABSset"}
