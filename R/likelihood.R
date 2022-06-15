@@ -41,7 +41,7 @@ dLTT <- function(model, times, N0, rho = 1.0){
 #' phy <- rcoal(25)
 #' 
 #' crabs.loglikelihood(phy, model)
-crabs.loglikelihood <- function(model, phy, rho = 1.0){
+crabs.loglikelihood <- function(phy, model, rho = 1.0){
   times <- model$times
   N0 <- length(phy$tip.label)
   M <- approxfun(times, dLTT(model, times, N0, rho))

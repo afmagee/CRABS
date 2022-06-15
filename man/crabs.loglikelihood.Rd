@@ -4,12 +4,12 @@
 \alias{crabs.loglikelihood}
 \title{Compute likelihood}
 \usage{
-crabs.loglikelihood(model, phy, rho = 1)
+crabs.loglikelihood(phy, model, rho = 1)
 }
 \arguments{
-\item{model}{an object of class "CRABS"}
-
 \item{phy}{an object of class "phylo"}
+
+\item{model}{an object of class "CRABS"}
 
 \item{rho}{the taxon sampling fraction}
 }
