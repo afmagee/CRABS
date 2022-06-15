@@ -8,7 +8,7 @@
 
 Status: 1 NOTE
 
-This is the first/new submission of the package, and hence the note.
+This package was previously called "ACDC", and we have re-named the package. This is the first/new submission of the new package, and hence the note.
 
 These words are not mis-spelled:
 
