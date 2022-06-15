@@ -34,10 +34,10 @@ Summarize trends in the posterior
 \examples{
 data(primates_ebd_log)
 
-posterior <- read.RevBayes(primates_ebd_log, max_t = 65, n_samples = 20)
+posterior <- read.RevBayes(primates_ebd_log, max_t = 65, n_samples = 10)
 
 samples <- sample.congruence.class.posterior(posterior, 
-                                             num.samples = 20,
+                                             num.samples = 5,
                                              rate.type = "extinction",
                                              rate0.median = 0.1,
                                              model = "MRF",
