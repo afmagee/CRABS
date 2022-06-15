@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>8 Estimating birth-death models | CRABS: Congruent Rate Analysis in Birth-death Scenarios</title>
-  <meta name="description" content="8 Estimating birth-death models | CRABS: Congruent Rate Analysis in Birth-death Scenarios" />
+  <title>8 Estimating birth-death models | CRABS: Congruent Rate Analyses in Birth-death Scenarios</title>
+  <meta name="description" content="8 Estimating birth-death models | CRABS: Congruent Rate Analyses in Birth-death Scenarios" />
   <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="8 Estimating birth-death models | CRABS: Congruent Rate Analysis in Birth-death Scenarios" />
+  <meta property="og:title" content="8 Estimating birth-death models | CRABS: Congruent Rate Analyses in Birth-death Scenarios" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="8 Estimating birth-death models | CRABS: Congruent Rate Analysis in Birth-death Scenarios" />
+  <meta name="twitter:title" content="8 Estimating birth-death models | CRABS: Congruent Rate Analyses in Birth-death Scenarios" />
   
   
   
@@ -25,7 +25,7 @@
 <meta name="author" content="Andrew F. Magee" />
 
 
-<meta name="date" content="2022-06-14" />
+<meta name="date" content="2022-06-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -202,7 +202,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">CRABS: Congruent Rate Analysis in Birth-death Scenarios</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">CRABS: Congruent Rate Analyses in Birth-death Scenarios</a>
           </h1>
         </div>
 
@@ -256,8 +256,8 @@ So we extract these from the tree.</p>
 ## 
 ## Parameter | delta | Acceptance Probability
 ## ==========================================
-## diversification      | 0.189     | 0.415
-## turnover     | 0.029     | 0.428
+## diversification      | 0.152     | 0.487
+## turnover     | 0.031     | 0.406
 ## 
 ## Performing CoMET analysis.
 ## 
@@ -284,12 +284,12 @@ So we extract these from the tree.</p>
 <pre><code>## # A tibble: 6 × 3
 ##    time lambda    mu
 ##   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
-## 1 0      0.209 0.331
-## 2 0.721  0.596 0.332
-## 3 1.44   0.597 0.345
-## 4 2.16   0.596 0.429
-## 5 2.88   0.591 0.493
-## 6 3.60   0.575 0.507</code></pre>
+## 1 0      0.194 0.337
+## 2 0.721  0.592 0.337
+## 3 1.44   0.593 0.355
+## 4 2.16   0.592 0.421
+## 5 2.88   0.586 0.477
+## 6 3.60   0.569 0.491</code></pre>
 <p>Now let’s have a look at the estimated rate functions</p>
 <div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="estimating-birth-death-models.html#cb81-1"></a>p &lt;-<span class="st"> </span>primates_ebd_tess <span class="op">%&gt;%</span></span>
 <span id="cb81-2"><a href="estimating-birth-death-models.html#cb81-2"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">gather</span>(<span class="st">&quot;rate&quot;</span>, <span class="st">&quot;value&quot;</span>, <span class="op">-</span>time) <span class="op">%&gt;%</span></span>
