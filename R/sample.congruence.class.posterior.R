@@ -8,6 +8,7 @@
 #'
 #' @param posterior a list of CRABS model objects
 #' @param mu0.equal whether to propose alternative mu starting at mu0 equal to the posterior sample. default to FALSE
+#' @param rate0 rate0 allows the user to fix the extinction rate at the present to a single value. defaults to NULL, for drawing it randomly
 #' @inheritParams sample.congruence.class
 #' @inheritDotParams sample.basic.models
 #'

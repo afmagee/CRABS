@@ -115,7 +115,7 @@ plotdata <- function(model_set,
 #' @param threshold a threshold for when \eqn{\Delta \lambda i} should be interpreted as decreasing, flat, or increasing
 #' @param rate_name either "lambda" or "mu" or "delta"
 #' @param window_size the window size "k" in \eqn{\Delta\lambda i = \lambda i - \lambda(i-k)}
-#' @param method default to "neighbours", i.e. to compare rate values at neighbouring time points. 
+#' @param method default to "neighbour", i.e. to compare rate values at neighbouring time points. 
 #' @param per_time whether to compute \eqn{\Delta\lambda i} that are in units of per time, i.e. divide by \eqn{\Delta t}
 #' @param return_data instead of plots, return the plotting dataframes
 #' @param rm_singleton whether or not to remove singletons. Pass starting at present, going towards ancient
@@ -125,7 +125,7 @@ plotdata <- function(model_set,
 #' @importFrom ggplot2 facet_grid stat
 #'
 #' @return a patchwork object
-#' @usage summarize.trends(model_set, threshold = 0.005, rate_name = "lambda", window_size = 1, method = "neighbours", per_time = TRUE,
+#' @usage summarize.trends(model_set, threshold = 0.005, rate_name = "lambda", window_size = 1, method = "neighbour", per_time = TRUE,
 #' return_data = FALSE, rm_singleton = FALSE, relative_deltas = FALSE, group_names = NULL)
 #' @export summarize.trends
 #'

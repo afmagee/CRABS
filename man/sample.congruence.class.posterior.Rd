@@ -22,11 +22,12 @@ sample.congruence.class.posterior(
 
 \item{mu0.equal}{whether to propose alternative mu starting at mu0 equal to the posterior sample. default to FALSE}
 
+\item{rate0}{rate0 allows the user to fix the extinction rate at the present to a single value. defaults to NULL, for drawing it randomly}
+
 \item{...}{
   Arguments passed on to \code{\link[=sample.basic.models]{sample.basic.models}}
   \describe{
     \item{\code{times}}{the time knots}
-    \item{\code{rate0}}{The rate at present, otherwise drawn randomly.}
     \item{\code{model}}{"MRF" for pure MRF model, otherwise MRF has a trend of type "exponential","linear", or "episodic<n>"}
     \item{\code{direction}}{"increase" or "decrease" (measured in past to present)}
     \item{\code{noisy}}{If FALSE, no MRF noise is added to the trajectory}
@@ -35,7 +36,7 @@ sample.congruence.class.posterior(
     \item{\code{fc.mean}}{Determines the average amount of change when drawing from the model.}
     \item{\code{rate0.median}}{When not specified, rate at present is drawn from a lognormal distribution with this median.}
     \item{\code{rate0.logsd}}{When not specified, rate at present is drawn from a lognormal distribution with this sd}
-    \item{\code{mrf.var.scale}}{scale the variance of the mrf process up or down. defaults to 1.0}
+    \item{\code{mrf.sd.scale}}{scale the sd of the mrf process up or down. defaults to 1.0}
     \item{\code{min.rate}}{The minimum rate (rescaling fone after after drawing rates).}
     \item{\code{max.rate}}{The maximum rate (rescaling fone after after drawing rates).}
   }}

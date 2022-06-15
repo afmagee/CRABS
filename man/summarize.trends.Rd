@@ -4,7 +4,7 @@
 \alias{summarize.trends}
 \title{Summarize trends in the congruence class}
 \usage{
-summarize.trends(model_set, threshold = 0.005, rate_name = "lambda", window_size = 1, method = "neighbours", per_time = TRUE,
+summarize.trends(model_set, threshold = 0.005, rate_name = "lambda", window_size = 1, method = "neighbour", per_time = TRUE,
 return_data = FALSE, rm_singleton = FALSE, relative_deltas = FALSE, group_names = NULL)
 }
 \arguments{
@@ -16,7 +16,7 @@ return_data = FALSE, rm_singleton = FALSE, relative_deltas = FALSE, group_names 
 
 \item{window_size}{the window size "k" in \eqn{\Delta\lambda i = \lambda i - \lambda(i-k)}}
 
-\item{method}{default to "neighbours", i.e. to compare rate values at neighbouring time points.}
+\item{method}{default to "neighbour", i.e. to compare rate values at neighbouring time points.}
 
 \item{per_time}{whether to compute \eqn{\Delta\lambda i} that are in units of per time, i.e. divide by \eqn{\Delta t}}
 

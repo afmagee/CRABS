@@ -12,8 +12,7 @@ Imports: magrittr, deSolve, dplyr, tibble, colorspace, patchwork, latex2exp, tid
 License: GPL-3
 Suggests: 
     knitr,
-    rmarkdown,
-    ape
+    rmarkdown
 RoxygenNote: 7.1.2
 URL: https://github.com/afmagee/CRABS
 

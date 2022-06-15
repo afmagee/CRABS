@@ -15,7 +15,7 @@ sample.basic.models(
   fc.mean = 3,
   rate0.median = 0.1,
   rate0.logsd = 1.17481,
-  mrf.var.scale = 1,
+  mrf.sd.scale = 1,
   min.rate = 0,
   max.rate = 10
 )
@@ -41,7 +41,7 @@ sample.basic.models(
 
 \item{rate0.logsd}{When not specified, rate at present is drawn from a lognormal distribution with this sd}
 
-\item{mrf.var.scale}{scale the variance of the mrf process up or down. defaults to 1.0}
+\item{mrf.sd.scale}{scale the sd of the mrf process up or down. defaults to 1.0}
 
 \item{min.rate}{The minimum rate (rescaling fone after after drawing rates).}
 
