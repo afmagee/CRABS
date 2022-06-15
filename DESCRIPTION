@@ -9,7 +9,7 @@ Description: Features tools for exploring congruent phylogenetic birth-death mod
 LazyData: true
 Depends: R (>= 3.5.0), ggplot2
 Imports: magrittr, deSolve, dplyr, tibble, colorspace, patchwork, latex2exp, tidyr, pracma
-License: GPL-3 + file LICENSE
+License: GPL-3
 Suggests: 
     knitr,
     rmarkdown,

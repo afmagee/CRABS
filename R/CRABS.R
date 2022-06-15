@@ -15,6 +15,8 @@
 #'@importFrom dplyr group_map bind_rows filter
 #'@importFrom patchwork plot_layout
 #'@importFrom colorspace sequential_hcl
+#'@importFrom ape branching.times
+#'@importFrom pracma fderiv
 #' 
 #' 
 #' @section References:

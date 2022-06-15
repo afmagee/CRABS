@@ -4,7 +4,7 @@
 \alias{summarize.trends}
 \title{Summarize trends in the congruence class}
 \usage{
-summarize.trends(model_set, threshold = 0.005, rate_name = "lambda", 
+summarize.trends(model_set, threshold = 0.005, rate_name = "lambda", window_size = 1, method = "neighbours", per_time = TRUE,
 return_data = FALSE, rm_singleton = FALSE, relative_deltas = FALSE, group_names = NULL)
 }
 \arguments{
