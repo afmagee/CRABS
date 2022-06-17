@@ -12,7 +12,7 @@
 \item{...}{other parameters}
 }
 \value{
-nothing
+a patchwork object object
 }
 \description{
 Plots the rate functions

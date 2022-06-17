@@ -11,6 +11,9 @@
 
 \item{...}{other parameters}
 }
+\value{
+a patchwork object
+}
 \description{
 Plots the rate functions including the pulled rates.
 }

@@ -11,6 +11,9 @@
 
 \item{...}{other arguments}
 }
+\value{
+nothing
+}
 \description{
 Print method for CRABS object
 }

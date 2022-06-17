@@ -2,7 +2,9 @@
 #'
 #' @param x A list of congruent birth-death x
 #' @param ... other parameters
-#' @return nothing
+#' 
+#' @return a patchwork object object
+#' 
 #' @export
 #' @examples
 #' data(primates_ebd)
@@ -113,6 +115,8 @@ plot.CRABSset <- function( x, ... ) {
 #'
 #' @param x an object of class CRABSset
 #' @param ... other arguments
+#'
+#' @return nothing
 #'
 #' @export
 #' @examples

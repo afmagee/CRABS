@@ -2,6 +2,8 @@
 #'
 #' @param x An object of class "CRABS"
 #' @param ... other parameters
+#'
+#' @return a patchwork object
 #' 
 #' @export
 #' @examples
@@ -92,6 +94,8 @@ plot.CRABS <- function( x, ... ) {
 #'
 #' @param x and object of class CRABS
 #' @param ... other arguments
+#'
+#' @return nothing
 #'
 #' @export
 #' @examples
