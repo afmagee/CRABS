@@ -1,5 +1,7 @@
 # CRABS: Congruent Rate Analysis in Birth-death Scenarios
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7079514.svg)](https://doi.org/10.5281/zenodo.7079514)
+
 A package for investigating and visualizing the congruence class (Louca & Pennell 2020) of a phylogenetic birth-death model. Previously, this package went by the acronym `ACDC`.
 
 ## Installation:
