@@ -27,15 +27,15 @@ sample.congruence.class.posterior(
 \item{...}{
   Arguments passed on to \code{\link[=sample.basic.models]{sample.basic.models}}
   \describe{
-    \item{\code{times}}{the time knots}
-    \item{\code{model}}{"MRF" for pure MRF model, otherwise MRF has a trend of type "exponential","linear", or "episodic<n>"}
-    \item{\code{direction}}{"increase" or "decrease" (measured in past to present)}
-    \item{\code{noisy}}{If FALSE, no MRF noise is added to the trajectory}
+    \item{\code{times}}{the time knots.}
+    \item{\code{model}}{"MRF" for pure MRF model, otherwise MRF has a trend of type "exponential","linear", or "episodic<n>". Choice "episodic" optionally allows fixing some shift times with "episodic<n>(<comma separated indices>)", e.g. "episodic5(30,20)" for a 5-epoch model with jumps at times[20], times[30] and two random times.}
+    \item{\code{direction}}{"increase" or "decrease" (measured in past to present).}
+    \item{\code{noisy}}{If FALSE, no MRF noise is added to the trajectory.}
     \item{\code{MRF.type}}{"HSMRF" or "GMRF", type for stochastic noise.}
     \item{\code{monotonic}}{Whether the curve should be forced to always move in one direction.}
     \item{\code{fc.mean}}{Determines the average amount of change when drawing from the model.}
     \item{\code{rate0.median}}{When not specified, rate at present is drawn from a lognormal distribution with this median.}
-    \item{\code{rate0.logsd}}{When not specified, rate at present is drawn from a lognormal distribution with this sd}
+    \item{\code{rate0.logsd}}{When not specified, rate at present is drawn from a lognormal distribution with this sd.}
     \item{\code{mrf.sd.scale}}{scale the sd of the mrf process up or down. defaults to 1.0}
     \item{\code{min.rate}}{The minimum rate (rescaling fone after after drawing rates).}
     \item{\code{max.rate}}{The maximum rate (rescaling fone after after drawing rates).}

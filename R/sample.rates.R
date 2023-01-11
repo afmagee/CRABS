@@ -56,16 +56,16 @@ sample.rates <- function(times,
 
 #' Samples simple increase/decrease models through time with noise.
 #'
-#' @param times the time knots
+#' @param times the time knots.
 #' @param rate0 The rate at present, otherwise drawn randomly.
-#' @param model "MRF" for pure MRF model, otherwise MRF has a trend of type "exponential","linear", or "episodic<n>"
-#' @param direction "increase" or "decrease" (measured in past to present)
-#' @param noisy If FALSE, no MRF noise is added to the trajectory
+#' @param model "MRF" for pure MRF model, otherwise MRF has a trend of type "exponential","linear", or "episodic<n>". Choice "episodic" optionally allows fixing some shift times with "episodic<n>(<comma separated indices>)", e.g. "episodic5(30,20)" for a 5-epoch model with jumps at times[20], times[30] and two random times.
+#' @param direction "increase" or "decrease" (measured in past to present).
+#' @param noisy If FALSE, no MRF noise is added to the trajectory.
 #' @param MRF.type "HSMRF" or "GMRF", type for stochastic noise.
 #' @param monotonic Whether the curve should be forced to always move in one direction.
 #' @param fc.mean Determines the average amount of change when drawing from the model.
 #' @param rate0.median When not specified, rate at present is drawn from a lognormal distribution with this median.
-#' @param rate0.logsd When not specified, rate at present is drawn from a lognormal distribution with this sd
+#' @param rate0.logsd When not specified, rate at present is drawn from a lognormal distribution with this sd.
 #' @param mrf.sd.scale scale the sd of the mrf process up or down. defaults to 1.0
 #' @param min.rate The minimum rate (rescaling fone after after drawing rates).
 #' @param max.rate The maximum rate (rescaling fone after after drawing rates).
@@ -155,14 +155,44 @@ sample.basic.models <- function(times,
     x[2:(num.epochs)] <- x[1] + cumsum(delta_deterministic)
   } else if ( grepl("episodic",model) ) {
     delta_deterministic <- rep(0,num_deltas)
-    njumps <- as.numeric(gsub("episodic","",model)) - 1
+    njumps <- 0
+    fixed_locations <- NULL
+    if ( grepl("(",model,fixed=TRUE) || grepl(")",model,fixed=TRUE) ) {
+      if ( !(grepl("(",model,fixed=TRUE) && grepl(")",model,fixed=TRUE)) ) {
+        stop("Improperly formatted fixed jump locations.")
+      }
+      tmp <- strsplit(model,"(",fixed=TRUE)[[1]]
+      njumps <- as.numeric(gsub("episodic","",tmp[1])) - 1
+      fixed_locations <- as.numeric(strsplit(gsub(")","",tmp[2],fixed=TRUE),",")[[1]])
+      if ( any(is.na(fixed_locations)) || length(fixed_locations) < 1 ) {
+        stop("Could not parse fixed jump locations.")
+      }
+      if ( length(fixed_locations) > njumps ) {
+        stop("Too many fixed jump locations provided.")
+      }
+      if ( any(fixed_locations > num_deltas | fixed_locations < 1)) {
+        stop("Invalid locations for fixed jump times, must be integer between 1 and ",num_deltas)
+      }
+    } else {
+      njumps <- as.numeric(gsub("episodic","",model)) - 1
+    }
     if (njumps < 1) {
       stop("Too few episodes in episodic model")
     }
     if ( njumps == 1 ) {
-      delta_deterministic[sample.int(num_deltas,1)] <- (fc * x0) - x0
+      shift_location <- sample.int(num_deltas,1)
+      if ( !is.null(fixed_locations) ) {
+        shift_location <- fixed_locations
+      }
+      delta_deterministic[shift_location] <- (fc * x0) - x0
     } else {
-      delta_deterministic[sample.int(num_deltas,njumps)] <- ((fc * x0) - x0) * rdirichlet(njumps,1)
+      shift_locations <- sample.int(num_deltas,njumps)
+      if ( !is.null(fixed_locations) ) {
+        n_free <- njumps - length(fixed_locations)
+        sampleable <- (1:num_deltas)[-fixed_locations]
+        shift_locations <- c(fixed_locations,sample(sampleable,n_free))
+      }
+      delta_deterministic[shift_locations] <- ((fc * x0) - x0) * rdirichlet(njumps,1)
     }
     x[2:(num.epochs)] <- x[1] + cumsum(delta_deterministic)
   } else if ( grepl("MRF",model) ) {
