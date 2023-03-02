@@ -144,7 +144,6 @@ sample.basic.models <- function(times,
   }
   
   # Deterministic component of trajectory
-  delta_deterministic <- rep(0,num.epochs)
   num_deltas <- num.epochs -1
   x <- numeric(num.epochs)
   x[1] <- x0
@@ -155,6 +154,7 @@ sample.basic.models <- function(times,
     delta_deterministic <- rep(((x0*fc)-x0)/(num_deltas),num_deltas)
     x[2:(num.epochs)] <- x[1] + cumsum(delta_deterministic)
   } else if ( grepl("episodic",model) ) {
+    delta_deterministic <- rep(0,num_deltas)
     njumps <- as.numeric(gsub("episodic","",model)) - 1
     if (njumps < 1) {
       stop("Too few episodes in episodic model")
