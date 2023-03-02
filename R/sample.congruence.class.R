@@ -35,7 +35,8 @@ sample.congruence.class <- function(model,
                                     num.samples, 
                                     rate.type="both", 
                                     sample.speciation.rates=NULL, 
-                                    sample.extinction.rates=NULL) {
+                                    sample.extinction.rates=NULL, 
+                                    sample.joint.rates=NULL) {
 
     times <- model$times
     v_p_div <- model$p.delta(model$times)
@@ -47,16 +48,27 @@ sample.congruence.class <- function(model,
     idx_mu <- 1
     
     for (i in 1:num.samples) {
-      if (rate.type == "extinction" || (rate.type == "both" && (i <= num.samples/2))) {
+      if (rate.type == "joint"){
+        joint.rates = sample.joint.rates()
+        lambdas[[idx_lambda]] <- joint.rates$func_lambdas
+        idx_lambda <- idx_lambda + 1
+        mus[[idx_mu]] <- joint.rates$func_mus
+        idx_mu <- idx_mu +1
+      }
+      else if (rate.type == "extinction" || (rate.type == "both" && (i <= num.samples/2))) {
         mus[[idx_mu]] <- sample.extinction.rates()
         idx_mu <- idx_mu +1
-      } else {
+      } else{
         lambdas[[idx_lambda]] <- sample.speciation.rates()
         idx_lambda <- idx_lambda + 1
       }
-      
     }
-    models <- congruent.models(model, mus = mus, lambdas = lambdas)
+    
+    if (rate.type=="joint"){
+      models <- joint.congruent.models(model, mus=mus, lambdas=lambdas)
+    }else{
+      models <- congruent.models(model, mus=mus, lambdas=lambdas)
+    }
 
     return (models)
 }

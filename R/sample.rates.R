@@ -217,6 +217,136 @@ sample.basic.models <- function(times,
   }
   
   func_rates <- approxfun(times, rates)
-
+  
   return (func_rates)
+}
+
+
+#' Samples simple increase/decrease models through time with noise.
+#'
+#' @param times the time knots
+#' @param rate0 The rate at present, otherwise drawn randomly.
+#' @param model "MRF" for pure MRF model, otherwise MRF has a trend of type "exponential","linear", or "episodic<n>"
+#' @param direction "increase" or "decrease" (measured in past to present)
+#' @param noisy If FALSE, no MRF noise is added to the trajectory
+#' @param MRF.type "HSMRF" or "GMRF", type for stochastic noise.
+#' @param monotonic Whether the curve should be forced to always move in one direction.
+#' @param fc.mean Determines the average amount of change when drawing from the model.
+#' @param rate0.median When not specified, rate at present is drawn from a lognormal distribution with this median.
+#' @param rate0.logsd When not specified, rate at present is drawn from a lognormal distribution with this sd
+#' @param mrf.sd.scale scale the sd of the mrf process up or down. defaults to 1.0
+#' @param min.rate The minimum rate (rescaling fone after after drawing rates).
+#' @param max.rate The maximum rate (rescaling fone after after drawing rates).
+#' @return Speciation or extinction rate at a number of timepoints.
+#' @export
+#' @examples
+#' data("primates_ebd")
+#' 
+#' l <- approxfun(primates_ebd[["time"]], primates_ebd[["lambda"]])
+#' mu <- approxfun(primates_ebd[["time"]], primates_ebd[["mu"]])
+#' times <- primates_ebd[["time"]]
+#' 
+#' model <- create.model(l, mu, times)
+#' 
+#' mus <- sample.basic.models.joint(times = times, 
+#'                                 rate0 = 0.05, 
+#'                                 "MRF", 
+#'                                 MRF.type = "HSMRF", 
+#'                                 fc.mean = 2.0, 
+#'                                 min.rate = 0.0, 
+#'                                 max.rate = 1.0)
+#' 
+#' model_set <- congruent.models(model, mus = mus)
+#' 
+#' model_set
+sample.basic.models.joint <- function(times, 
+                                      lambda0,
+                                      p.delta,
+                                      mu0=NULL, 
+                                      MRF.type="GMRF", 
+                                      beta.param=c(0.3,0.3),
+                                      mu0.median=0.1, 
+                                      mu0.logsd=1.17481, 
+                                      mrf.sd.scale = 1.0,
+                                      min.lambda=0, 
+                                      min.mu=0, 
+                                      max.lambda=10, 
+                                      max.mu=10,
+                                      min.p=-0.05, 
+                                      max.p=1.05) {
+  num.epochs <- length(times)
+  Δt <- times[2]-times[1]
+  # recover()
+  
+  # rate at present
+  if ( lambda0 < min.lambda || lambda0 > max.lambda ) {
+    stop("User-defined lambda0 is outside [min.lambda,max.lambda].")
+  }
+  x0 <- lambda0
+  
+  y0 <- min.mu - 10
+  if ( !is.null(mu0) ) {
+    if ( mu0 < min.mu || mu0 > max.mu ) {
+      stop("User-defined mu0 is outside [min.mu,max.mu].")
+    }
+    y0 <- mu0
+  } else {
+    while ( y0 < min.mu || y0 > max.mu ) {
+      y0 <- rlnorm(1,log(mu0.median),mu0.logsd)
+    }
+  }
+  
+  lambdas <- rep(x0, num.epochs)
+  mus <- rep(y0, num.epochs)
+  
+  ### GMRF joint trajectories between lambda_i-1 and lambda* (lambda such as mu_i = mu_i-1) ###
+    
+  in_bounds = FALSE
+  while (!in_bounds){
+    in_bounds = TRUE
+    if (MRF.type == "HSMRF"  || MRF.type == "HSRF") {
+      zeta <- get.hsmrf.global.scale(num.epochs)
+      gamma <- min(abs(rcauchy(1,0,1)),1000) # avoid numerical instability
+      sigma <- abs(rcauchy(num.epochs-1,0,1))
+      delta_stochastic <- rnorm(num.epochs-1,0,sigma*gamma*zeta*mrf.sd.scale)
+      
+    } else if (MRF.type == "GMRF") {
+      zeta <- get.gmrf.global.scale(num.epochs)
+      gamma <- min(abs(rcauchy(1,0,1)),1000) # avoid numerical instability
+      delta_stochastic <- rnorm(num.epochs-1,0,gamma*zeta*mrf.sd.scale)
+    } else {
+      stop("Invalid \"MRF.type\"")
+    }
+    trajectory <- cumsum(delta_stochastic)
+    trajectory <- trajectory + rbeta(1,beta.param[1],beta.param[2]) - sample(trajectory, 1)
+    trajectory <- trajectory / max(max(trajectory)-min(trajectory), 1)
+    trajectory <- trajectory + min.p - min(min(trajectory), min.p)
+    trajectory <- trajectory + max.p - max(max(trajectory), max.p)
+    trajectory <- c(NA, trajectory)
+    
+    for (i in 2:num.epochs){
+      lambda_min <- (p.delta(times[i])-1/Δt + sqrt((1/Δt-p.delta(times[i]))**2+4*lambdas[i-1]/Δt))/2
+      b = p.delta(times[i]) + mus[i-1] - 1/Δt
+      lambda_star = (b + sqrt(b**2+4*lambdas[i-1]/Δt))/2
+      lambda_i <- lambdas[i-1] + trajectory[i]*(lambda_star-lambdas[i-1])
+      if (lambda_i<lambda_min){
+        lambda_i <- lambda_min
+        mu_i <- 0
+      }else{
+        mu_i <- lambda_i - p.delta(times[i]) + (lambda_i-lambdas[i-1])/(lambda_i*Δt)
+      }
+
+      if (mu_i > max.mu || lambda_i > max.lambda){
+        in_bounds = FALSE
+        break
+      }
+      lambdas[i] <- lambda_i
+      mus[i] <- mu_i
+    }
+  }
+
+  func_lambdas <- approxfun(times, lambdas)
+  func_mus <- approxfun(times, mus)
+  
+  return (list(func_lambdas=func_lambdas, func_mus=func_mus))
 }
