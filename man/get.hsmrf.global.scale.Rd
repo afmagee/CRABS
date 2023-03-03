@@ -4,7 +4,7 @@
 \alias{get.hsmrf.global.scale}
 \title{Global scale for HSMRF using linear interpolation of pre-computed values}
 \usage{
-get.hsmrf.global.scale(z)
+get.hsmrf.global.scale(v)
 }
 \arguments{
 \item{z}{The number of pieces in the approximation}
