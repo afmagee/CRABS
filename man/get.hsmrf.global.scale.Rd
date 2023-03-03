@@ -7,7 +7,7 @@
 get.hsmrf.global.scale(v)
 }
 \arguments{
-\item{z}{The number of pieces in the approximation}
+\item{v}{The number of pieces in the approximation}
 }
 \value{
 Global scale
