@@ -30,11 +30,11 @@
 #'                                          rate.type = "joint", 
 #'                                          sample.joint.rates = sample.joint.rates)
 #' 
-#' plot.CRABS.regularity.thresholds(joint.samples)
-plot.CRABS.regularity.thresholds <- function(samples, 
-                                             filtering_fractions=c(0.01, 0.05, 0.2, 0.9), 
-                                             penalty="L1", 
-                                             rates=c("lambda", "mu")){
+#' full.plot.regularity.thresholds(joint.samples)
+full.plot.regularity.thresholds <- function(samples, 
+                                            filtering_fractions=c(0.01, 0.05, 0.2, 0.9), 
+                                            penalty="L1", 
+                                            rates=c("lambda", "mu")){
   
   # Compute a regularity penalty
   if (penalty=="L1"){
