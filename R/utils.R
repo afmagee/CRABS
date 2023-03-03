@@ -5,7 +5,7 @@ rdirichlet <- function(dim,alpha) {
 
 #' Global scale for HSMRF using linear interpolation of pre-computed values
 #'
-#' @param v The number of pieces in the approximation
+#' @param z The number of pieces in the approximation
 #' @return Global scale
 #' @keywords internal
 get.hsmrf.global.scale <- function(z){
@@ -21,7 +21,7 @@ get.hsmrf.global.scale <- function(z){
 
 #' Global scale for GMRF using linear interpolation of pre-computed values
 #'
-#' @param v The number of pieces in the approximation
+#' @param z The number of pieces in the approximation
 #' @return Global scale
 #' @keywords internal
 get.gmrf.global.scale <- function(z){

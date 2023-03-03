@@ -4,10 +4,10 @@
 \alias{get.gmrf.global.scale}
 \title{Global scale for GMRF using linear interpolation of pre-computed values}
 \usage{
-get.gmrf.global.scale(v)
+get.gmrf.global.scale(z)
 }
 \arguments{
-\item{v}{The number of pieces in the approximation}
+\item{z}{The number of pieces in the approximation}
 }
 \value{
 Global scale

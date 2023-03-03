@@ -108,6 +108,11 @@ congruent.models <- function(model, mus = NULL, lambdas = NULL, keep_ref = TRUE,
 #'
 #' @return An object of class "CRABSset"
 #' @export
+#'
+#' @examples
+#' 
+#' # This function should not have to be used externally.
+#' # It is called in the CRABS function `sample.congruence.class` when `rate.type=="joint"`.
 
 joint.congruent.models <- function(model, mus, lambdas, keep_ref = TRUE){
   models <- list()
@@ -119,7 +124,7 @@ joint.congruent.models <- function(model, mus, lambdas, keep_ref = TRUE){
   
   for (i in seq_along(mus)){
     
-    ## create the parameter transformations as rate functions
+    # define the net diversification and turnover rates based on speciation and extinction
     func_div    <- function(t) lambdas[[i]](t) - mus[[i]](t)
     func_turn   <- function(t) mus[[i]](t) / lambdas[[i]](t)
     

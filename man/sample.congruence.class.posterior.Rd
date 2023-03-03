@@ -16,9 +16,9 @@ sample.congruence.class.posterior(
 \arguments{
 \item{posterior}{a list of CRABS model objects}
 
-\item{num.samples}{The pulled diversification rate function (measured in time before present).}
+\item{num.samples}{The number of samples to be drawn}
 
-\item{rate.type}{either "extinction", "speciation", or "both"}
+\item{rate.type}{either "extinction", "speciation", "both" or "joint"}
 
 \item{mu0.equal}{whether to propose alternative mu starting at mu0 equal to the posterior sample. default to FALSE}
 
