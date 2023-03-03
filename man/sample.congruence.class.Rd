@@ -9,19 +9,22 @@ sample.congruence.class(
   num.samples,
   rate.type = "both",
   sample.speciation.rates = NULL,
-  sample.extinction.rates = NULL
+  sample.extinction.rates = NULL,
+  sample.joint.rates = NULL
 )
 }
 \arguments{
 \item{model}{the reference model, an object of class "CRABS"}
 
-\item{num.samples}{The pulled diversification rate function (measured in time before present).}
+\item{num.samples}{The number of samples to be drawn}
 
-\item{rate.type}{either "extinction", "speciation", or "both"}
+\item{rate.type}{either "extinction", "speciation", "both" or "joint"}
 
 \item{sample.speciation.rates}{a function that when called returns a speciation rate function}
 
 \item{sample.extinction.rates}{a function that when called returns a extinction rate function}
+
+\item{sample.joint.rates}{a function that when called returns a list with a speciation rate function and an extinction rate function}
 }
 \value{
 A named list with congruent rates.
@@ -38,6 +41,8 @@ times <- primates_ebd[["time"]]
 
 model <- create.model(l, mu, primates_ebd[["time"]])
 
+# Sampling extinction rates
+
 extinction_rate_samples <- function(){
    res <- sample.basic.models(times = times, 
                               rate0 = 0.05, 
@@ -53,4 +58,23 @@ samples <- sample.congruence.class(model,
                                    num.samples = 8,
                                    rate.type = "extinction",
                                    sample.extinction.rates = extinction_rate_samples)
+
+samples
+
+# Jointly sampling speciation and extinction rates
+
+sample.joint.rates <- function(n) {
+  sample.basic.models.joint(times = times, 
+                            p.delta = model$p.delta,  
+                            beta.param = c(0.5,0.3),  
+                            lambda0 = l(0.0),  
+                            mu0.median = mu(0.0))
+}
+
+joint.samples <- sample.congruence.class(model = model, 
+                                         num.samples = 40, 
+                                         rate.type = "joint", 
+                                         sample.joint.rates = sample.joint.rates)
+
+joint.samples
 }

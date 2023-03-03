@@ -217,6 +217,147 @@ sample.basic.models <- function(times,
   }
   
   func_rates <- approxfun(times, rates)
-
+  
   return (func_rates)
+}
+
+
+#' Jointly samples speciation and extinction trajectories through time, with noise.
+#'
+#' @param times the time knots
+#' @param p.delta The The pulled diversification rate function (measured in time before present).
+#' @param lambda0 The speciation rate at present.
+#' @param mu0 The extinction rate at present, otherwise drawn randomly.
+#' @param MRF.type "HSMRF" or "GMRF", type for stochastic noise.
+#' @param beta.param Parameters of the Beta distribution used for 
+#' @param mu0.median When not specified, extinction rate at present is drawn from a lognormal distribution with this median.
+#' @param mu0.logsd When not specified, extinction rate at present is drawn from a lognormal distribution with this sd
+#' @param mrf.sd.scale scale the sd of the mrf process up or down. defaults to 1.0
+#' @param min.lambda The minimum speciation rate (rescaling done after after drawing rates).
+#' @param min.mu The minimum extinction rate (rescaling done after after drawing rates).
+#' @param max.lambda The maximum speciation rate (rescaling done after after drawing rates).
+#' @param max.mu The maximum extinction rate (rescaling done after after drawing rates).
+#' @param min.p The lower bound of parameter p's trajectory.
+#' @param max.p The upper bound of parameter p's trajectory.
+#' @return Speciation or extinction rate at a number of timepoints.
+#' @export
+#' @examples
+#' data("primates_ebd")
+#' 
+#' l <- approxfun(primates_ebd[["time"]], primates_ebd[["lambda"]])
+#' mu <- approxfun(primates_ebd[["time"]], primates_ebd[["mu"]])
+#' times <- primates_ebd[["time"]]
+#' 
+#' model <- create.model(l, mu, times)
+#' 
+#' sample.joint.rates <- function(n) {
+#'   sample.basic.models.joint(times = times, 
+#'                             p.delta = model$p.delta,  
+#'                             beta.param = c(0.5,0.3),  
+#'                             lambda0 = l(0.0),  
+#'                             mu0.median = mu(0.0))
+#' }
+#' 
+#' joint.samples <- sample.congruence.class(model = model, 
+#'                                          num.samples = 40, 
+#'                                          rate.type = "joint", 
+#'                                          sample.joint.rates = sample.joint.rates)
+#' 
+#' joint.samples
+sample.basic.models.joint <- function(times, 
+                                      p.delta,
+                                      lambda0,
+                                      mu0=NULL, 
+                                      MRF.type="GMRF", 
+                                      beta.param=c(0.3,0.3),
+                                      mu0.median=0.1, 
+                                      mu0.logsd=1.17481, 
+                                      mrf.sd.scale = 1.0,
+                                      min.lambda=0, 
+                                      min.mu=0, 
+                                      max.lambda=10, 
+                                      max.mu=10,
+                                      min.p=-0.05, 
+                                      max.p=1.05) {
+  num.epochs <- length(times)
+  Δt <- times[2]-times[1]
+
+  # rate at present
+  if ( lambda0 < min.lambda || lambda0 > max.lambda ) {
+    stop("User-defined lambda0 is outside [min.lambda,max.lambda].")
+  }
+  x0 <- lambda0
+  
+  y0 <- min.mu - 10
+  if ( !is.null(mu0) ) {
+    if ( mu0 < min.mu || mu0 > max.mu ) {
+      stop("User-defined mu0 is outside [min.mu,max.mu].")
+    }
+    y0 <- mu0
+  } else {
+    while ( y0 < min.mu || y0 > max.mu ) {
+      y0 <- rlnorm(1,log(mu0.median),mu0.logsd)
+    }
+  }
+  
+  lambdas <- rep(x0, num.epochs)
+  mus <- rep(y0, num.epochs)
+  
+  ### MRF joint trajectories between λ_{i-1} and λ* (:= λ such as μ_i=μ_{i-1}) ###
+    
+  in_bounds = FALSE
+  while (!in_bounds){
+    in_bounds = TRUE
+    
+    # Generate the MRF trajectory
+    if (MRF.type == "HSMRF"  || MRF.type == "HSRF") {
+      zeta <- get.hsmrf.global.scale(num.epochs)
+      gamma <- min(abs(rcauchy(1,0,1)),1000) # avoid numerical instability
+      sigma <- abs(rcauchy(num.epochs-1,0,1))
+      delta_stochastic <- rnorm(num.epochs-1,0,sigma*gamma*zeta*mrf.sd.scale)
+    } else if (MRF.type == "GMRF") {
+      zeta <- get.gmrf.global.scale(num.epochs)
+      gamma <- min(abs(rcauchy(1,0,1)),1000) # avoid numerical instability
+      delta_stochastic <- rnorm(num.epochs-1,0,gamma*zeta*mrf.sd.scale)
+    } else {
+      stop("Invalid \"MRF.type\"")
+    }
+    trajectory <- cumsum(delta_stochastic)
+    
+    # Fix a random point in the trajectory at a value drawn from a Beta distribution
+    trajectory <- trajectory + rbeta(1, beta.param[1], beta.param[2]) - sample(trajectory, 1)
+    # Rescale or slide the trajectory if it exceeds the allowed bounds
+    trajectory <- trajectory / max((max(trajectory)-min(trajectory))/(max.p-min.p), 1)
+    trajectory <- trajectory + min.p - min(min(trajectory), min.p)
+    trajectory <- trajectory + max.p - max(max(trajectory), max.p)
+    trajectory <- c(NA, trajectory)
+    
+    for (i in 2:num.epochs){
+      # compute the λ_min and λ* parameters
+      lambda_min <- (p.delta(times[i])-1/Δt + sqrt((1/Δt-p.delta(times[i]))**2+4*lambdas[i-1]/Δt))/2
+      b = p.delta(times[i]) + mus[i-1] - 1/Δt
+      lambda_star = (b + sqrt(b**2+4*lambdas[i-1]/Δt))/2
+      # get λ_i between  λ_{i-1} and λ* according to the trajectory
+      lambda_i <- lambdas[i-1] + trajectory[i]*(lambda_star-lambdas[i-1])
+      # force λ_i to be higher than  λ_min
+      if (lambda_i<lambda_min){
+        lambda_i <- lambda_min
+        mu_i <- 0
+      }else{
+        mu_i <- lambda_i - p.delta(times[i]) + (lambda_i-lambdas[i-1])/(lambda_i*Δt)
+      }
+      
+      if (mu_i > max.mu || lambda_i > max.lambda){
+        in_bounds = FALSE
+        break
+      }
+      lambdas[i] <- lambda_i
+      mus[i] <- mu_i
+    }
+  }
+
+  func_lambdas <- approxfun(times, lambdas)
+  func_mus <- approxfun(times, mus)
+  
+  return (list(func_lambdas=func_lambdas, func_mus=func_mus))
 }
