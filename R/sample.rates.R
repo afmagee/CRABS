@@ -280,7 +280,7 @@ sample.basic.models.joint <- function(times,
                                       min.p=-0.05, 
                                       max.p=1.05) {
   num.epochs <- length(times)
-  Δt <- times[2]-times[1]
+  delta_t <- times[2]-times[1]
 
   # rate at present
   if ( lambda0 < min.lambda || lambda0 > max.lambda ) {
@@ -334,9 +334,9 @@ sample.basic.models.joint <- function(times,
     
     for (i in 2:num.epochs){
       # compute the λ_min and λ* parameters
-      lambda_min <- (p.delta(times[i])-1/Δt + sqrt((1/Δt-p.delta(times[i]))**2+4*lambdas[i-1]/Δt))/2
-      b = p.delta(times[i]) + mus[i-1] - 1/Δt
-      lambda_star = (b + sqrt(b**2+4*lambdas[i-1]/Δt))/2
+      lambda_min <- (p.delta(times[i])-1/delta_t + sqrt((1/delta_t-p.delta(times[i]))**2+4*lambdas[i-1]/delta_t))/2
+      b = p.delta(times[i]) + mus[i-1] - 1/delta_t
+      lambda_star = (b + sqrt(b**2+4*lambdas[i-1]/delta_t))/2
       # get λ_i between  λ_{i-1} and λ* according to the trajectory
       lambda_i <- lambdas[i-1] + trajectory[i]*(lambda_star-lambdas[i-1])
       # force λ_i to be higher than  λ_min
@@ -344,7 +344,7 @@ sample.basic.models.joint <- function(times,
         lambda_i <- lambda_min
         mu_i <- 0
       }else{
-        mu_i <- lambda_i - p.delta(times[i]) + (lambda_i-lambdas[i-1])/(lambda_i*Δt)
+        mu_i <- lambda_i - p.delta(times[i]) + (lambda_i-lambdas[i-1])/(lambda_i*delta_t)
       }
       
       if (mu_i > max.mu || lambda_i > max.lambda){
