@@ -69,16 +69,30 @@ full.plot.regularity.thresholds <- function(samples,
     return(samples[[rate]](samples$times))
   }
   
-  plot_rate <- function(samples_list, i, rate, xlab="time before present", main="Congruent diversification histories"){
-    palettes = c("lambda"="grDevices::Blues", "mu"="grDevices::Oranges", "delta"="grDevices::Magenta", "epsilon"="ggthemes::Green-Gold")
-    ylabs = c("lambda"="Speciation rate", "mu"="Extinction rate", "delta"="Net-diversification rate", "epsilon"="Turnover rate")
+  plot_rate <- function(samples_list, i, rate, xlab="time before present", 
+                        main="Congruent diversification histories"){
+    
+    palettes = c("lambda" = "Blues", 
+                 "mu" = "orange", 
+                 "delta" = "purple", 
+                 "epsilon" = "Greens")
+    
+    ylabs = c("lambda" = "Speciation rate", 
+              "mu" = "Extinction rate", 
+              "delta" = "Net-diversification rate", 
+              "epsilon" = "Turnover rate")
+    
     sample_i <- samples_list[[i]]
     sample_i <- sample_i[sort(names(sample_i))]
-    rate_min <- min(min(sapply(samples_list, function(sample_i)sapply(sample_i, get_rates, rate=rate))), 0)
-    rate_max <- quantile(sapply(samples_list, function(sample_i)sapply(sample_i, get_rates, rate=rate)), 0.99)*1.1
+    rate_min <- min(min(sapply(samples_list, function(sample_i) sapply(sample_i, get_rates, rate=rate))), 0)
+    rate_max <- quantile(sapply(samples_list, function(sample_i) sapply(sample_i, get_rates, rate=rate)), 0.99)*1.1
     rates_matrix <- sapply(sample_i, get_rates, rate=rate)
-    matplot(sample_i$reference$times, rates_matrix, type="l", lty=c(rep(5,ncol(rates_matrix)-1),1), lwd=c(rep(1,ncol(rates_matrix)-1),1.5), 
-            col=c(paletteer_c(palette=palettes[rate], n=ncol(rates_matrix)-1), "black"), ylim=c(rate_min,rate_max), xlim=rev(range(sample_i$reference$times)),
+    
+    #cols <- c(paletteer_c(palette=palettes[rate], n=ncol(rates_matrix)-1), "black")
+    cols <- c(head(sequential_hcl(palette=palettes[rate], n=ncol(rates_matrix)),n=-1), "black")
+    matplot(sample_i$reference$times, rates_matrix, type="l", lty=c(rep(5,ncol(rates_matrix)-1),1), 
+            lwd=c(rep(1,ncol(rates_matrix)-1),1.5), 
+            col = cols, ylim=c(rate_min,rate_max), xlim=rev(range(sample_i$reference$times)),
             xlab=xlab, ylab=ylabs[rate], main=main)
   }
   
@@ -86,6 +100,9 @@ full.plot.regularity.thresholds <- function(samples,
   lf = length(filtering_fractions)
   par(mfrow=c(lr,lf), mar=c(2.6, 3.6, 2, 0.6), mgp=c(1.5, 0.5, 0))
   for (j in 1:lr){
-    for (i in 1:lf) plot_rate(filtered_samples_list, i, rates[j], xlab=ifelse(j==lr, "Time (Mya)", ""), main=ifelse(j==1, paste(filtering_fractions[i]*100, "% most regular trajectories"), ""))
+    for (i in 1:lf){
+      main <- ifelse(j==1, paste(filtering_fractions[i]*100, "% most regular trajectories"), "")
+      plot_rate(filtered_samples_list, i, rates[j], xlab=ifelse(j==lr, "Time (Mya)", ""), main=main)
+    } 
   }
 }
