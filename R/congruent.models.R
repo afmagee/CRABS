@@ -98,3 +98,57 @@ congruent.models <- function(model, mus = NULL, lambdas = NULL, keep_ref = TRUE,
   class(models) <- c("list", "CRABSset")
   return(models)
 }
+
+#' Create a set of congruent models
+#'
+#' @param model The reference model. An object of class "CRABS"
+#' @param mus A list of extinction-rate functions
+#' @param lambdas A list of speciation-rate functions
+#' @param keep_ref Whether or not to keep the reference model in the congruent set
+#'
+#' @return An object of class "CRABSset"
+#' @export
+#'
+#' @examples
+#' 
+#' # This function should not have to be used externally.
+#' # It is called in the CRABS function `sample.congruence.class` when `rate.type=="joint"`.
+
+joint.congruent.models <- function(model, mus, lambdas, keep_ref = TRUE){
+  models <- list()
+  model_idx <- 1
+  if(length(mus) == 1){
+    mus <- list(mus)
+    lambdas <- list(lambdas)
+  }
+  
+  for (i in seq_along(mus)){
+    
+    # define the net diversification and turnover rates based on speciation and extinction
+    func_div    <- function(t) lambdas[[i]](t) - mus[[i]](t)
+    func_turn   <- function(t) mus[[i]](t) / lambdas[[i]](t)
+    
+    models[[i]] <- list(lambda = lambdas[[i]],
+                        mu = mus[[i]],
+                        delta = func_div,
+                        epsilon = func_turn,
+                        p.delta = model$p.delta,
+                        times = model$times,
+                        max.t = model$max.t,
+                        delta_t = model$delta_t,
+                        num.intervals = model$num.intervals)
+    class(models[[i]]) <- c("CRABS")
+    
+    if (!is.null(names(mus)[[i]])){
+      names(models)[[i]] <- names(mus)[[i]]
+    }else{
+      names(models)[[i]] <- paste0("model", model_idx)
+      model_idx <- model_idx +1 
+    }
+  }
+  if (keep_ref){
+    models <- c(list(reference=model), models)
+  }
+  class(models) <- c("list", "CRABSset")
+  return(models)
+}
