@@ -1,6 +1,6 @@
 Package: CRABS
 Title: Congruent Rate Analyses in Birth-Death Scenarios
-Version: 1.1.0.9000
+Version: 1.1.0.9004
 Authors@R: c(person("Bj\u00F8rn Tore", "Kopperud", role = c("aut", "cre"), email = "kopperud@protonmail.com"),
              person("Sebastian", "H\u00F6hna", role =c("aut")),
              person("Andrew F.", "Magee", role = c("aut")))
