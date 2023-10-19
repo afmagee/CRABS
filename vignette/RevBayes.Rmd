@@ -14,9 +14,11 @@ max_t <- max(btimes)
 
 Then we read in the RevBayes log-file as a simple tab-delimited file.
 ```{r read-RevBayes-output, cache=TRUE}
-samples <- read.table(file="output/HSMRFBDP_primates.log",
-                      stringsAsFactors=FALSE,
-                      header=TRUE)
+#samples <- read.table(file="output/HSMRFBDP_primates.log",
+#                      stringsAsFactors=FALSE,
+#                      header=TRUE)
+data("primates_ebd_log")
+samples <- primates_ebd_log
 ```
 Then, from this log-file we want to automatically extract the speciation and extinction rates.
 Be careful that you used the same names as we did.
