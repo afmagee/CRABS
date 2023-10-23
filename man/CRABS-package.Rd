@@ -14,7 +14,8 @@ Features tools for exploring congruent phylogenetic birth-death models. It can c
 \itemize{
  \item Louca, S., & Pennell, M. W. (2020). Extant timetrees are consistent with a myriad of diversification histories. Nature, 580(7804), 502-505. https://doi.org/10.1038/s41586-020-2176-1
  \item Höhna, S., Kopperud, B. T., & Magee, A. F. (2022). CRABS: Congruent rate analyses in birth–death scenarios. Methods in Ecology and Evolution, 13, 2709– 2718. https://doi.org/10.1111/2041-210X.13997
- \item Kopperud, B. T., Magee, A. F., & Höhna, S. (2023). Rapidly Changing Speciation and Extinction Rates Can Be Inferred in Spite of Nonidentifiability. Proceedings of the National Academy of Sciences 120 (7): e2208851120. https://doi.org/10.1073/pnas.2208851120.
+ \item Kopperud, B. T., Magee, A. F., & Höhna, S. (2023). Rapidly Changing Speciation and Extinction Rates Can Be Inferred in Spite of Nonidentifiability. Proceedings of the National Academy of Sciences 120 (7): e2208851120. https://doi.org/10.1073/pnas.2208851120
+ \item Andréoletti, J. & Morlon, H. (2023). Exploring congruent diversification histories with flexibility and parsimony. Methods in Ecology and Evolution. https://doi.org/10.1111/2041-210X.14240
 }
 }
 
@@ -32,11 +33,7 @@ Authors:
 \itemize{
   \item Sebastian Höhna
   \item Andrew F. Magee
-}
-
-Other contributors:
-\itemize{
-  \item Jérémy Andréoletti [contributor]
+  \item Jérémy Andréoletti
 }
 
 }

@@ -27,6 +27,7 @@ Plots an array of rate trajectories for the chosen rates and thresholds.
 Plots the rate functions after filtering them according to a given penalty and predefined thresholds.
 }
 \examples{
+set.seed(123)
 data("primates_ebd")
 
 l <- approxfun(primates_ebd[["time"]], primates_ebd[["lambda"]])
@@ -44,7 +45,7 @@ sample.joint.rates <- function(n) {
 }
 
 joint.samples <- sample.congruence.class(model = model, 
-                                         num.samples = 5000, 
+                                         num.samples = 100, 
                                          rate.type = "joint", 
                                          sample.joint.rates = sample.joint.rates)
 
