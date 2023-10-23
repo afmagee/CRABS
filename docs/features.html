@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>3 Features | CRABS: Congruent Rate Analyses in Birth-death Scenarios</title>
   <meta name="description" content="3 Features | CRABS: Congruent Rate Analyses in Birth-death Scenarios" />
-  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.36 and GitBook 2.6.7" />
 
   <meta property="og:title" content="3 Features | CRABS: Congruent Rate Analyses in Birth-death Scenarios" />
   <meta property="og:type" content="book" />
@@ -23,9 +23,10 @@
 <meta name="author" content="Sebastian Höhna" />
 <meta name="author" content="Bjørn T. Kopperud" />
 <meta name="author" content="Andrew F. Magee" />
+<meta name="author" content="Jérémy Andréoletti" />
 
 
-<meta name="date" content="2022-06-15" />
+<meta name="date" content="2023-10-23" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -51,7 +52,6 @@
 
 
 
-<script src="lib/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <link href="lib/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="lib/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="lib/anchor-sections-1.1.0/anchor-sections.js"></script>
@@ -61,6 +61,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
@@ -121,6 +122,32 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 </head>
 
@@ -140,6 +167,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="3.1" data-path="features.html"><a href="features.html#overview-of-functions-in-crabs"><i class="fa fa-check"></i><b>3.1</b> Overview of functions in <code>CRABS</code></a></li>
 <li class="chapter" data-level="3.2" data-path="features.html"><a href="features.html#samplebasic"><i class="fa fa-check"></i><b>3.2</b> <code>sample.basic.models</code></a></li>
+<li class="chapter" data-level="3.3" data-path="features.html"><a href="features.html#samplejoint"><i class="fa fa-check"></i><b>3.3</b> <code>sample.basic.models.joint</code></a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="creating-the-congruence-class.html"><a href="creating-the-congruence-class.html"><i class="fa fa-check"></i><b>4</b> Creating the congruence class</a>
 <ul>
@@ -166,18 +194,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html"><i class="fa fa-check"></i><b>6</b> Exploring the congruence class</a>
 <ul>
 <li class="chapter" data-level="6.1" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#assumptions-on-rates"><i class="fa fa-check"></i><b>6.1</b> Assumptions on rates</a></li>
-<li class="chapter" data-level="6.2" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#sample-alternative-extinction-rates"><i class="fa fa-check"></i><b>6.2</b> Sample alternative extinction rates</a>
+<li class="chapter" data-level="6.2" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#independent-or-joint-rate-sampling"><i class="fa fa-check"></i><b>6.2</b> Independent or joint rate sampling</a></li>
+<li class="chapter" data-level="6.3" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#sample-alternative-extinction-rates"><i class="fa fa-check"></i><b>6.3</b> Sample alternative extinction rates</a>
 <ul>
-<li class="chapter" data-level="6.2.1" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#temporally-autocorrelated"><i class="fa fa-check"></i><b>6.2.1</b> Temporally autocorrelated</a></li>
-<li class="chapter" data-level="6.2.2" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#exponentially-decreasing"><i class="fa fa-check"></i><b>6.2.2</b> Exponentially decreasing</a></li>
-<li class="chapter" data-level="6.2.3" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#linearly-increasing"><i class="fa fa-check"></i><b>6.2.3</b> Linearly increasing</a></li>
-<li class="chapter" data-level="6.2.4" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#episodic"><i class="fa fa-check"></i><b>6.2.4</b> Episodic</a></li>
-<li class="chapter" data-level="6.2.5" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#uniform-independent"><i class="fa fa-check"></i><b>6.2.5</b> Uniform independent</a></li>
-<li class="chapter" data-level="6.2.6" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#brownian-motion-with-a-trend"><i class="fa fa-check"></i><b>6.2.6</b> Brownian motion with a trend</a></li>
+<li class="chapter" data-level="6.3.1" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#temporally-autocorrelated"><i class="fa fa-check"></i><b>6.3.1</b> Temporally autocorrelated</a></li>
+<li class="chapter" data-level="6.3.2" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#exponentially-decreasing"><i class="fa fa-check"></i><b>6.3.2</b> Exponentially decreasing</a></li>
+<li class="chapter" data-level="6.3.3" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#linearly-increasing"><i class="fa fa-check"></i><b>6.3.3</b> Linearly increasing</a></li>
+<li class="chapter" data-level="6.3.4" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#episodic"><i class="fa fa-check"></i><b>6.3.4</b> Episodic</a></li>
+<li class="chapter" data-level="6.3.5" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#uniform-independent"><i class="fa fa-check"></i><b>6.3.5</b> Uniform independent</a></li>
+<li class="chapter" data-level="6.3.6" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#brownian-motion-with-a-trend"><i class="fa fa-check"></i><b>6.3.6</b> Brownian motion with a trend</a></li>
 </ul></li>
-<li class="chapter" data-level="6.3" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#sample-alternative-speciation-rates"><i class="fa fa-check"></i><b>6.3</b> Sample alternative speciation rates</a>
+<li class="chapter" data-level="6.4" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#sample-alternative-speciation-rates"><i class="fa fa-check"></i><b>6.4</b> Sample alternative speciation rates</a>
 <ul>
-<li class="chapter" data-level="6.3.1" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#temporally-autocorrelated-1"><i class="fa fa-check"></i><b>6.3.1</b> Temporally autocorrelated</a></li>
+<li class="chapter" data-level="6.4.1" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#temporally-autocorrelated-1"><i class="fa fa-check"></i><b>6.4.1</b> Temporally autocorrelated</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#jointly-sample-alternative-speciation-and-extinction-rates"><i class="fa fa-check"></i><b>6.5</b> Jointly sample alternative speciation and extinction rates</a>
+<ul>
+<li class="chapter" data-level="6.5.1" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#constant-joint-trajectory"><i class="fa fa-check"></i><b>6.5.1</b> Constant joint trajectory</a></li>
+<li class="chapter" data-level="6.5.2" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#hsmrf-joint-trajectory"><i class="fa fa-check"></i><b>6.5.2</b> HSMRF joint trajectory</a></li>
+<li class="chapter" data-level="6.5.3" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#hsmrf-joint-trajectory-with-global-regularity-filter"><i class="fa fa-check"></i><b>6.5.3</b> HSMRF joint trajectory with global regularity filter</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="exploring-the-posterior.html"><a href="exploring-the-posterior.html"><i class="fa fa-check"></i><b>7</b> Exploring the posterior</a>
@@ -240,35 +275,43 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td align="left">Samples a rate function under specified assumptions. More information in section <a href="features.html#samplebasic">3.2</a></td>
 </tr>
 <tr class="even">
+<td align="left"><code>sample.basic.models.joint</code></td>
+<td align="left">Jointly samples speciation and extinction trajectories. More information in section <a href="features.html#samplejoint">3.3</a></td>
+</tr>
+<tr class="odd">
 <td align="left"><code>sample.rates</code></td>
 <td align="left">Helps you to randomly sample either a new speciation or extinction rate function given some constraints and/or expected behavior (e.g., autocorrelated vs independent rates)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left"><code>sample.congruence.class</code></td>
 <td align="left">Randomly draws a set of samples from the congruence class. The user provides a function that draws extinction rates, and/or a function that draws speciation rates.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left"><code>sample.congruence.class.posterior</code></td>
 <td align="left">Uses <code>sample.basic.models</code> to samples a set of congruent models for each sample in the posterior distribution</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left"><code>summarize.trends</code></td>
 <td align="left">Calculates the slope in the rate function, and plots a summary of whether the rate was increasing, decreasing or flat for each episode</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left"><code>summarize.posterior</code></td>
 <td align="left">Similar to <code>summarize.trends</code>, but instead iterating over all congruent samples for each posterior sample. This plot is sorted</td>
 </tr>
+<tr class="even">
+<td align="left"><code>full.plot.regularity.thresholds</code></td>
+<td align="left">Plots the rate functions after filtering them to only retain the most regular (smooth) trajectories.</td>
+</tr>
 </tbody>
 </table>
-<p>You can consult the R documentation for each of these by placing a question mark in front of the name. For example, try calling <code>?create.model</code> or <code>?sample.basic.model</code> in R.
+<p>You can consult the R documentation for each of these by placing a question mark in front of the name. For example, try calling <code>?create.model</code> or <code>?sample.basic.models</code> or <code>?sample.basic.models.joint</code> in R.
 We use these functions throughout the sections in the vignette.
-For <code>sample.basic.models</code>, we have a separate section explaining the most important flags and use cases because <code>sample.basic.models</code> might represent a more complex but important function of <code>CRABS</code>.</p>
+For <code>sample.basic.models</code> and <code>sample.basic.models.joint</code>, we have separate sections explaining the most important flags and use cases because they might represent more complex but important functions of <code>CRABS</code>.</p>
 </div>
 <div id="samplebasic" class="section level2 hasAnchor" number="3.2">
 <h2><span class="header-section-number">3.2</span> <code>sample.basic.models</code><a href="features.html#samplebasic" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>This function is designed to enable easy generation of commonly employed diversification-rate scenarios.
-The basic models are specified by the argument <code>model</code> exponentially increasing/decreasing rates, linearly decreasing rates, episodic (or piecewise constant rates), and Markov random field (MRF) models (constant rates are also possible).
+<p>This function is designed to enable easy generation of commonly employed diversification-rate scenarios, for either speciation or extinction rates. For sampling these rates jointly, see the following section <a href="features.html#samplejoint">3.3</a>.</p>
+<p>The basic models are specified by the argument <code>model</code>: exponentially increasing/decreasing rates, linearly decreasing rates, episodic (or piecewise constant rates), and Markov random field (MRF) models (constant rates are also possible).
 The direction of change (increase or decrease) is controlled by the argument <code>direction</code>.
 The function will fit a piecewise linear rate function, using the argument <code>times</code> to represent a vector for the discrete time steps.
 The number of episodes is equal to the length of the <code>times</code> vector.
@@ -296,6 +339,14 @@ Be aware, setting rejection limits that make it difficult to sample trajectories
 The default is rates with median 0.1 and a 95% range covering [0.01,1].
 Note that the argument <code>rate0</code> overrides drawing random starting values if it is set.
 This allows sampling speciation rates, as the initial speciation rate must be the same in all replicates.</p>
+</div>
+<div id="samplejoint" class="section level2 hasAnchor" number="3.3">
+<h2><span class="header-section-number">3.3</span> <code>sample.basic.models.joint</code><a href="features.html#samplejoint" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>This function is designed to jointly generate speciation and extinction rates that are congruent with the original diversification scenario, while inherently preventing negative extinction rates.</p>
+<p><code>sample.basic.models.joint</code> primarily relies on generating a trajectory for a parameter <span class="math inline">\(p\)</span>, which serves as a reference for balancing the speciation and extinction rates. When <span class="math inline">\(p=0\)</span>, the speciation rate is constant (barring negative extinction rates) and the time-varying pattern is wholly reflected in the extinction rate. Conversely, when <span class="math inline">\(p=1\)</span>, the extinction rate is constant, and the time-varying pattern is reflected in the speciation rate. Each unique <span class="math inline">\(p\)</span>-trajectory is tied to a distinct pair of speciation and extinction rate trajectories, given a starting extinction rate at present.</p>
+<p>Like in the <code>sample.basic.models</code> function, the <code>MRF.type</code> argument (“HSMRF” or “GMRF”) controls the type of Markov random field used for adding stochastic noise to the trajectories, although here it corresponds to the <span class="math inline">\(p\)</span>-trajectory rather than the speciation or extinction trajectories themselves. The scale of the stochastic noise can be adjusted using <code>mrf.sd.scale</code>, which defaults to 1.0 and can be set to 0.0 for constant <span class="math inline">\(p\)</span>-trajectories.</p>
+<p>The congruence class in which to sample is specified through the pulled diversification rate function (<code>p.delta</code>), together with the speciation rate at the present. The extinction rate at present can either be specified or drawn randomly from a lognormal distribution, similarly to <code>sample.basic.models</code>.</p>
+<p>Bounds for the rates can also be imposed using <code>min.lambda</code>, <code>max.lambda</code>, <code>min.mu</code>, and <code>max.mu</code> (which is usually unnecessary with this approach). Similarly, <code>min.p</code> and <code>max.p</code> can be used to set the lower and upper bounds of the p trajectory, allowing for finer control over the balance between speciation and extinction rates in the generated scenarios.</p>
 </div>
 </div>
             </section>
@@ -361,7 +412,7 @@ gitbook.start({
     var script = document.createElement("script");
     script.type = "text/javascript";
     var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))
         src = src.replace(/^https?:/, '');

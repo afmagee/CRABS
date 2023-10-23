@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>4 Creating the congruence class | CRABS: Congruent Rate Analyses in Birth-death Scenarios</title>
   <meta name="description" content="4 Creating the congruence class | CRABS: Congruent Rate Analyses in Birth-death Scenarios" />
-  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.36 and GitBook 2.6.7" />
 
   <meta property="og:title" content="4 Creating the congruence class | CRABS: Congruent Rate Analyses in Birth-death Scenarios" />
   <meta property="og:type" content="book" />
@@ -23,9 +23,10 @@
 <meta name="author" content="Sebastian Höhna" />
 <meta name="author" content="Bjørn T. Kopperud" />
 <meta name="author" content="Andrew F. Magee" />
+<meta name="author" content="Jérémy Andréoletti" />
 
 
-<meta name="date" content="2022-06-15" />
+<meta name="date" content="2023-10-23" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -51,7 +52,6 @@
 
 
 
-<script src="lib/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <link href="lib/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="lib/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="lib/anchor-sections-1.1.0/anchor-sections.js"></script>
@@ -61,6 +61,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
@@ -121,6 +122,32 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 </head>
 
@@ -140,6 +167,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="3.1" data-path="features.html"><a href="features.html#overview-of-functions-in-crabs"><i class="fa fa-check"></i><b>3.1</b> Overview of functions in <code>CRABS</code></a></li>
 <li class="chapter" data-level="3.2" data-path="features.html"><a href="features.html#samplebasic"><i class="fa fa-check"></i><b>3.2</b> <code>sample.basic.models</code></a></li>
+<li class="chapter" data-level="3.3" data-path="features.html"><a href="features.html#samplejoint"><i class="fa fa-check"></i><b>3.3</b> <code>sample.basic.models.joint</code></a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="creating-the-congruence-class.html"><a href="creating-the-congruence-class.html"><i class="fa fa-check"></i><b>4</b> Creating the congruence class</a>
 <ul>
@@ -166,18 +194,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html"><i class="fa fa-check"></i><b>6</b> Exploring the congruence class</a>
 <ul>
 <li class="chapter" data-level="6.1" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#assumptions-on-rates"><i class="fa fa-check"></i><b>6.1</b> Assumptions on rates</a></li>
-<li class="chapter" data-level="6.2" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#sample-alternative-extinction-rates"><i class="fa fa-check"></i><b>6.2</b> Sample alternative extinction rates</a>
+<li class="chapter" data-level="6.2" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#independent-or-joint-rate-sampling"><i class="fa fa-check"></i><b>6.2</b> Independent or joint rate sampling</a></li>
+<li class="chapter" data-level="6.3" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#sample-alternative-extinction-rates"><i class="fa fa-check"></i><b>6.3</b> Sample alternative extinction rates</a>
 <ul>
-<li class="chapter" data-level="6.2.1" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#temporally-autocorrelated"><i class="fa fa-check"></i><b>6.2.1</b> Temporally autocorrelated</a></li>
-<li class="chapter" data-level="6.2.2" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#exponentially-decreasing"><i class="fa fa-check"></i><b>6.2.2</b> Exponentially decreasing</a></li>
-<li class="chapter" data-level="6.2.3" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#linearly-increasing"><i class="fa fa-check"></i><b>6.2.3</b> Linearly increasing</a></li>
-<li class="chapter" data-level="6.2.4" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#episodic"><i class="fa fa-check"></i><b>6.2.4</b> Episodic</a></li>
-<li class="chapter" data-level="6.2.5" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#uniform-independent"><i class="fa fa-check"></i><b>6.2.5</b> Uniform independent</a></li>
-<li class="chapter" data-level="6.2.6" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#brownian-motion-with-a-trend"><i class="fa fa-check"></i><b>6.2.6</b> Brownian motion with a trend</a></li>
+<li class="chapter" data-level="6.3.1" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#temporally-autocorrelated"><i class="fa fa-check"></i><b>6.3.1</b> Temporally autocorrelated</a></li>
+<li class="chapter" data-level="6.3.2" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#exponentially-decreasing"><i class="fa fa-check"></i><b>6.3.2</b> Exponentially decreasing</a></li>
+<li class="chapter" data-level="6.3.3" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#linearly-increasing"><i class="fa fa-check"></i><b>6.3.3</b> Linearly increasing</a></li>
+<li class="chapter" data-level="6.3.4" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#episodic"><i class="fa fa-check"></i><b>6.3.4</b> Episodic</a></li>
+<li class="chapter" data-level="6.3.5" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#uniform-independent"><i class="fa fa-check"></i><b>6.3.5</b> Uniform independent</a></li>
+<li class="chapter" data-level="6.3.6" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#brownian-motion-with-a-trend"><i class="fa fa-check"></i><b>6.3.6</b> Brownian motion with a trend</a></li>
 </ul></li>
-<li class="chapter" data-level="6.3" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#sample-alternative-speciation-rates"><i class="fa fa-check"></i><b>6.3</b> Sample alternative speciation rates</a>
+<li class="chapter" data-level="6.4" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#sample-alternative-speciation-rates"><i class="fa fa-check"></i><b>6.4</b> Sample alternative speciation rates</a>
 <ul>
-<li class="chapter" data-level="6.3.1" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#temporally-autocorrelated-1"><i class="fa fa-check"></i><b>6.3.1</b> Temporally autocorrelated</a></li>
+<li class="chapter" data-level="6.4.1" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#temporally-autocorrelated-1"><i class="fa fa-check"></i><b>6.4.1</b> Temporally autocorrelated</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#jointly-sample-alternative-speciation-and-extinction-rates"><i class="fa fa-check"></i><b>6.5</b> Jointly sample alternative speciation and extinction rates</a>
+<ul>
+<li class="chapter" data-level="6.5.1" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#constant-joint-trajectory"><i class="fa fa-check"></i><b>6.5.1</b> Constant joint trajectory</a></li>
+<li class="chapter" data-level="6.5.2" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#hsmrf-joint-trajectory"><i class="fa fa-check"></i><b>6.5.2</b> HSMRF joint trajectory</a></li>
+<li class="chapter" data-level="6.5.3" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#hsmrf-joint-trajectory-with-global-regularity-filter"><i class="fa fa-check"></i><b>6.5.3</b> HSMRF joint trajectory with global regularity filter</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="exploring-the-posterior.html"><a href="exploring-the-posterior.html"><i class="fa fa-check"></i><b>7</b> Exploring the posterior</a>
@@ -268,10 +303,10 @@ The sign of the slope shows the direction of change, either increasing or decrea
 <div id="the-model-object" class="section level2 hasAnchor" number="4.3">
 <h2><span class="header-section-number">4.3</span> The model object<a href="creating-the-congruence-class.html#the-model-object" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>In order to create a congruence class, we require some information about the extinction and speciation rate functions in at least one of the models in the congruence class.
-In the following examples we will use the results from an episodic birth-death model fitted in RevBayes (see Section <a href="estimating-birth-death-models.html#revbayes">8.4</a>), but we note that CRABS can work with any rate estimates.
+In the following examples we will use the results from an episodic birth-death model fitted in RevBayes (see Section <a href="estimating-birth-death-models.html#revbayes">8.4</a>), but we note that <code>CRABS</code> can work with any rate estimates.
 To simplify this section, we provide the results in a convenient format:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="creating-the-congruence-class.html#cb5-1"></a><span class="kw">data</span>(<span class="st">&quot;primates_ebd&quot;</span>)</span>
-<span id="cb5-2"><a href="creating-the-congruence-class.html#cb5-2"></a><span class="kw">head</span>(primates_ebd)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="creating-the-congruence-class.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;primates_ebd&quot;</span>)</span>
+<span id="cb5-2"><a href="creating-the-congruence-class.html#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(primates_ebd)</span></code></pre></div>
 <pre><code>## # A tibble: 6 × 3
 ##   lambda     mu  time
 ##    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
@@ -284,18 +319,18 @@ To simplify this section, we provide the results in a convenient format:</p>
 <p>We also provide an example for fitting birth-death models in TESS (Section <a href="estimating-birth-death-models.html#tess">8.2</a>) and TreePar (Section <a href="estimating-birth-death-models.html#treepar">8.3</a>).
 If you wish to use these results instead, simply call <code>data("primates_ebd_treepar")</code> or <code>data("primates_ebd_tess")</code>.
 After we have estimated our birth-death rates, we transform the data into piecewise linear rate functions in R</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="creating-the-congruence-class.html#cb7-1"></a>times &lt;-<span class="st"> </span>primates_ebd[[<span class="st">&quot;time&quot;</span>]]</span>
-<span id="cb7-2"><a href="creating-the-congruence-class.html#cb7-2"></a></span>
-<span id="cb7-3"><a href="creating-the-congruence-class.html#cb7-3"></a>lambda &lt;-<span class="st"> </span><span class="kw">approxfun</span>(times, primates_ebd[[<span class="st">&quot;lambda&quot;</span>]])</span>
-<span id="cb7-4"><a href="creating-the-congruence-class.html#cb7-4"></a>mu &lt;-<span class="st"> </span><span class="kw">approxfun</span>(times, primates_ebd[[<span class="st">&quot;mu&quot;</span>]])</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="creating-the-congruence-class.html#cb7-1" aria-hidden="true" tabindex="-1"></a>times <span class="ot">&lt;-</span> primates_ebd[[<span class="st">&quot;time&quot;</span>]]</span>
+<span id="cb7-2"><a href="creating-the-congruence-class.html#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="creating-the-congruence-class.html#cb7-3" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">&lt;-</span> <span class="fu">approxfun</span>(times, primates_ebd[[<span class="st">&quot;lambda&quot;</span>]])</span>
+<span id="cb7-4"><a href="creating-the-congruence-class.html#cb7-4" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">approxfun</span>(times, primates_ebd[[<span class="st">&quot;mu&quot;</span>]])</span></code></pre></div>
 <p>Next, we create a congruence class object which contains all the transformed rate functions (i.e., the net-diversification rate and relative extinction rate) as well as the pulled rates (i.e., the pulled net-diversification and the pulled speciation rate).</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="creating-the-congruence-class.html#cb8-1"></a>max_t &lt;-<span class="st"> </span><span class="kw">max</span>(primates_ebd[[<span class="st">&quot;time&quot;</span>]])</span>
-<span id="cb8-2"><a href="creating-the-congruence-class.html#cb8-2"></a>times_fine &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, max_t, <span class="dt">length.out =</span> <span class="dv">1000</span>)</span>
-<span id="cb8-3"><a href="creating-the-congruence-class.html#cb8-3"></a></span>
-<span id="cb8-4"><a href="creating-the-congruence-class.html#cb8-4"></a>my_model &lt;-<span class="st"> </span><span class="kw">create.model</span>(lambda, </span>
-<span id="cb8-5"><a href="creating-the-congruence-class.html#cb8-5"></a>                         mu, </span>
-<span id="cb8-6"><a href="creating-the-congruence-class.html#cb8-6"></a>                         times_fine)</span>
-<span id="cb8-7"><a href="creating-the-congruence-class.html#cb8-7"></a><span class="kw">plot</span>(my_model)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="creating-the-congruence-class.html#cb8-1" aria-hidden="true" tabindex="-1"></a>max_t <span class="ot">&lt;-</span> <span class="fu">max</span>(primates_ebd[[<span class="st">&quot;time&quot;</span>]])</span>
+<span id="cb8-2"><a href="creating-the-congruence-class.html#cb8-2" aria-hidden="true" tabindex="-1"></a>times_fine <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, max_t, <span class="at">length.out =</span> <span class="dv">1000</span>)</span>
+<span id="cb8-3"><a href="creating-the-congruence-class.html#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="creating-the-congruence-class.html#cb8-4" aria-hidden="true" tabindex="-1"></a>my_model <span class="ot">&lt;-</span> <span class="fu">create.model</span>(lambda, </span>
+<span id="cb8-5"><a href="creating-the-congruence-class.html#cb8-5" aria-hidden="true" tabindex="-1"></a>                         mu, </span>
+<span id="cb8-6"><a href="creating-the-congruence-class.html#cb8-6" aria-hidden="true" tabindex="-1"></a>                         times_fine)</span>
+<span id="cb8-7"><a href="creating-the-congruence-class.html#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(my_model)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-1"></span>
 <img src="figures/unnamed-chunk-1-1.png" alt="The diversification rates in the reference model." width="576" />
 <p class="caption">
@@ -370,7 +405,7 @@ gitbook.start({
     var script = document.createElement("script");
     script.type = "text/javascript";
     var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))
         src = src.replace(/^https?:/, '');

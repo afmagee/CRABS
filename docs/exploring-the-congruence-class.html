@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>6 Exploring the congruence class | CRABS: Congruent Rate Analyses in Birth-death Scenarios</title>
   <meta name="description" content="6 Exploring the congruence class | CRABS: Congruent Rate Analyses in Birth-death Scenarios" />
-  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.36 and GitBook 2.6.7" />
 
   <meta property="og:title" content="6 Exploring the congruence class | CRABS: Congruent Rate Analyses in Birth-death Scenarios" />
   <meta property="og:type" content="book" />
@@ -23,9 +23,10 @@
 <meta name="author" content="Sebastian Höhna" />
 <meta name="author" content="Bjørn T. Kopperud" />
 <meta name="author" content="Andrew F. Magee" />
+<meta name="author" content="Jérémy Andréoletti" />
 
 
-<meta name="date" content="2022-06-15" />
+<meta name="date" content="2023-10-23" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -51,7 +52,6 @@
 
 
 
-<script src="lib/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <link href="lib/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="lib/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="lib/anchor-sections-1.1.0/anchor-sections.js"></script>
@@ -61,6 +61,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
@@ -121,6 +122,32 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 </head>
 
@@ -140,6 +167,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="3.1" data-path="features.html"><a href="features.html#overview-of-functions-in-crabs"><i class="fa fa-check"></i><b>3.1</b> Overview of functions in <code>CRABS</code></a></li>
 <li class="chapter" data-level="3.2" data-path="features.html"><a href="features.html#samplebasic"><i class="fa fa-check"></i><b>3.2</b> <code>sample.basic.models</code></a></li>
+<li class="chapter" data-level="3.3" data-path="features.html"><a href="features.html#samplejoint"><i class="fa fa-check"></i><b>3.3</b> <code>sample.basic.models.joint</code></a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="creating-the-congruence-class.html"><a href="creating-the-congruence-class.html"><i class="fa fa-check"></i><b>4</b> Creating the congruence class</a>
 <ul>
@@ -166,18 +194,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html"><i class="fa fa-check"></i><b>6</b> Exploring the congruence class</a>
 <ul>
 <li class="chapter" data-level="6.1" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#assumptions-on-rates"><i class="fa fa-check"></i><b>6.1</b> Assumptions on rates</a></li>
-<li class="chapter" data-level="6.2" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#sample-alternative-extinction-rates"><i class="fa fa-check"></i><b>6.2</b> Sample alternative extinction rates</a>
+<li class="chapter" data-level="6.2" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#independent-or-joint-rate-sampling"><i class="fa fa-check"></i><b>6.2</b> Independent or joint rate sampling</a></li>
+<li class="chapter" data-level="6.3" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#sample-alternative-extinction-rates"><i class="fa fa-check"></i><b>6.3</b> Sample alternative extinction rates</a>
 <ul>
-<li class="chapter" data-level="6.2.1" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#temporally-autocorrelated"><i class="fa fa-check"></i><b>6.2.1</b> Temporally autocorrelated</a></li>
-<li class="chapter" data-level="6.2.2" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#exponentially-decreasing"><i class="fa fa-check"></i><b>6.2.2</b> Exponentially decreasing</a></li>
-<li class="chapter" data-level="6.2.3" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#linearly-increasing"><i class="fa fa-check"></i><b>6.2.3</b> Linearly increasing</a></li>
-<li class="chapter" data-level="6.2.4" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#episodic"><i class="fa fa-check"></i><b>6.2.4</b> Episodic</a></li>
-<li class="chapter" data-level="6.2.5" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#uniform-independent"><i class="fa fa-check"></i><b>6.2.5</b> Uniform independent</a></li>
-<li class="chapter" data-level="6.2.6" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#brownian-motion-with-a-trend"><i class="fa fa-check"></i><b>6.2.6</b> Brownian motion with a trend</a></li>
+<li class="chapter" data-level="6.3.1" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#temporally-autocorrelated"><i class="fa fa-check"></i><b>6.3.1</b> Temporally autocorrelated</a></li>
+<li class="chapter" data-level="6.3.2" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#exponentially-decreasing"><i class="fa fa-check"></i><b>6.3.2</b> Exponentially decreasing</a></li>
+<li class="chapter" data-level="6.3.3" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#linearly-increasing"><i class="fa fa-check"></i><b>6.3.3</b> Linearly increasing</a></li>
+<li class="chapter" data-level="6.3.4" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#episodic"><i class="fa fa-check"></i><b>6.3.4</b> Episodic</a></li>
+<li class="chapter" data-level="6.3.5" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#uniform-independent"><i class="fa fa-check"></i><b>6.3.5</b> Uniform independent</a></li>
+<li class="chapter" data-level="6.3.6" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#brownian-motion-with-a-trend"><i class="fa fa-check"></i><b>6.3.6</b> Brownian motion with a trend</a></li>
 </ul></li>
-<li class="chapter" data-level="6.3" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#sample-alternative-speciation-rates"><i class="fa fa-check"></i><b>6.3</b> Sample alternative speciation rates</a>
+<li class="chapter" data-level="6.4" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#sample-alternative-speciation-rates"><i class="fa fa-check"></i><b>6.4</b> Sample alternative speciation rates</a>
 <ul>
-<li class="chapter" data-level="6.3.1" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#temporally-autocorrelated-1"><i class="fa fa-check"></i><b>6.3.1</b> Temporally autocorrelated</a></li>
+<li class="chapter" data-level="6.4.1" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#temporally-autocorrelated-1"><i class="fa fa-check"></i><b>6.4.1</b> Temporally autocorrelated</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#jointly-sample-alternative-speciation-and-extinction-rates"><i class="fa fa-check"></i><b>6.5</b> Jointly sample alternative speciation and extinction rates</a>
+<ul>
+<li class="chapter" data-level="6.5.1" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#constant-joint-trajectory"><i class="fa fa-check"></i><b>6.5.1</b> Constant joint trajectory</a></li>
+<li class="chapter" data-level="6.5.2" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#hsmrf-joint-trajectory"><i class="fa fa-check"></i><b>6.5.2</b> HSMRF joint trajectory</a></li>
+<li class="chapter" data-level="6.5.3" data-path="exploring-the-congruence-class.html"><a href="exploring-the-congruence-class.html#hsmrf-joint-trajectory-with-global-regularity-filter"><i class="fa fa-check"></i><b>6.5.3</b> HSMRF joint trajectory with global regularity filter</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="exploring-the-posterior.html"><a href="exploring-the-posterior.html"><i class="fa fa-check"></i><b>7</b> Exploring the posterior</a>
@@ -219,8 +254,8 @@ This idea is very similar to all sampling based methods.
 For example, a posterior distribution with a 95% credible interval between 0.01 and 0.02 contains infinitely many values, but we are we comfortable today with simply sampling values proportional to their posterior probability and looking/plotting the distribution.</p>
 <div id="assumptions-on-rates" class="section level2 hasAnchor" number="6.1">
 <h2><span class="header-section-number">6.1</span> Assumptions on rates<a href="exploring-the-congruence-class.html#assumptions-on-rates" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>There are several plausible assumptions that can be made about diversification rates and how these rates vary.
-First, you could make assumptions about the magnitude of rate variation, and specifically what are plausible minimum and maximum rates.
+<p>There are several plausible assumptions that can be made about diversification rates and how these rates vary.</p>
+<p>First, you could make assumptions about the <strong>magnitude of rate variation</strong>, and specifically what are plausible minimum and maximum rates.
 Clearly, speciation and extinction rates should not have been smaller than 0, so that could be a safe assumption.</p>
 <p>Depending on your study system, you could also assume that rates were never larger than, say, 10 events per lineage per million years.
 For example, if you would have a speciation rate of 10 per lineage per million years, then you would expect every lineage to speciate on average every 0.1 million years.
@@ -228,7 +263,7 @@ If there would be no extinction, then this would leave the group with just above
 So perhaps a rate of 10 could really be seen as an upper bound in systems such as vertebrates and plants.
 However, you could argue that there is extinction, and we should better restrict the net-diversification rates to be at most 10.
 We get into some more of these restrictions in another section.</p>
-<p>The second assumption is about how rates vary over time.
+<p>The second assumption is about <strong>how rates vary over time</strong>.
 One could argue that if diversification rates were low, say 42 million years ago, then you would assume that the diversification rates were also low 43 million years ago.
 This would mean that diversification rates are autocorrelated and do not vary completely arbitrarily over time.</p>
 <p>In the next subsections, we explore a few different options of rate variation over time in the next sections, which include:</p>
@@ -242,37 +277,49 @@ This would mean that diversification rates are autocorrelated and do not vary co
 <p>With the built-in functions <code>sample.basic.models</code> and <code>sample.rates</code>, users have freedom to explore these, and many other forms of rate variation.
 If these functions are not sufficient, as shown in previous sections, it is easy to customize the sampling to your liking.</p>
 </div>
-<div id="sample-alternative-extinction-rates" class="section level2 hasAnchor" number="6.2">
-<h2><span class="header-section-number">6.2</span> Sample alternative extinction rates<a href="exploring-the-congruence-class.html#sample-alternative-extinction-rates" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="temporally-autocorrelated" class="section level3 hasAnchor" number="6.2.1">
-<h3><span class="header-section-number">6.2.1</span> Temporally autocorrelated<a href="exploring-the-congruence-class.html#temporally-autocorrelated" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="independent-or-joint-rate-sampling" class="section level2 hasAnchor" number="6.2">
+<h2><span class="header-section-number">6.2</span> Independent or joint rate sampling<a href="exploring-the-congruence-class.html#independent-or-joint-rate-sampling" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>CRABS offers 3 approaches to sample rates:</p>
+<ol style="list-style-type: decimal">
+<li>generate speciation rates, then construct congruent extinction rates;</li>
+<li>generate extinction rates, then construct congruent speciation rates;</li>
+<li>generate a <span class="math inline">\(p\)</span>-trajectory, which corresponds to a unique pair of congruent speciation and extinction rates.
+Independent rate sampling (1 and 2) can be done using <code>sample.basic.models</code> or <code>sample.rates</code>, while joint sampling (3) can be done using <code>sample.basic.models.joint</code>.</li>
+</ol>
+<p>The choice between independent and joint rate sampling depends on the assumptions you’re willing to make. Independent sampling allows you to explore specific classes of scenarios for either speciation and extinction rates, while the joint sampling approach offers more flexibility by imposing less constraints on the rates. <span class="citation">Andréoletti &amp; Morlon (2023)</span> showed that the joint sampling approach is better able to recover trajectories where the congruence class contains signal for temporal variations both in speciation and extinction rates (which by construction cannot be captured with independent sampling of either rates).</p>
+<p>The 3 approaches are presented in more details bellow.</p>
+</div>
+<div id="sample-alternative-extinction-rates" class="section level2 hasAnchor" number="6.3">
+<h2><span class="header-section-number">6.3</span> Sample alternative extinction rates<a href="exploring-the-congruence-class.html#sample-alternative-extinction-rates" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="temporally-autocorrelated" class="section level3 hasAnchor" number="6.3.1">
+<h3><span class="header-section-number">6.3.1</span> Temporally autocorrelated<a href="exploring-the-congruence-class.html#temporally-autocorrelated" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Here, we generate a variety of alternative extinction rates using HSMRF models <span class="citation">(Magee et al., 2020)</span>.
 When sampling from models, we get random walks, or temporally autocorrelated, extinction rates, and the HSMRF tends to produce random walks that look like piecewise constant functions.
 The rates produced here have no overall trend, the median change from past to present is 0.
 We use the function <code>sample.basic.models</code> to construct these rates, which by default assumes that rates are between 0 and 10, though here we change these boundaries slightly to bound the rates to be between 0 and 1.
 Our motivation for these values was, that (i) having a maximal expected extinction time per lineage of 1.0 million years seems reasonable from the fossil record, and (ii) we estimated a maximal speciation rate of 0.4, which is clearly smaller than 1.0.</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="exploring-the-congruence-class.html#cb38-1"></a>times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="kw">max</span>(my_model<span class="op">$</span>time), <span class="dt">length.out =</span> <span class="dv">100</span>)</span>
-<span id="cb38-2"><a href="exploring-the-congruence-class.html#cb38-2"></a>extinction_rate_samples &lt;-<span class="st"> </span><span class="cf">function</span>() {</span>
-<span id="cb38-3"><a href="exploring-the-congruence-class.html#cb38-3"></a>   <span class="kw">sample.basic.models</span>( <span class="dt">times =</span> times,</span>
-<span id="cb38-4"><a href="exploring-the-congruence-class.html#cb38-4"></a>                        <span class="dt">model=</span><span class="st">&quot;MRF&quot;</span>,</span>
-<span id="cb38-5"><a href="exploring-the-congruence-class.html#cb38-5"></a>                        <span class="dt">max.rate=</span><span class="dv">1</span>)</span>
-<span id="cb38-6"><a href="exploring-the-congruence-class.html#cb38-6"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="exploring-the-congruence-class.html#cb39-1"></a>samples &lt;-<span class="st"> </span><span class="kw">sample.congruence.class</span>(</span>
-<span id="cb39-2"><a href="exploring-the-congruence-class.html#cb39-2"></a>  my_model,</span>
-<span id="cb39-3"><a href="exploring-the-congruence-class.html#cb39-3"></a>  <span class="dt">num.samples=</span><span class="dv">10</span>,</span>
-<span id="cb39-4"><a href="exploring-the-congruence-class.html#cb39-4"></a>  <span class="dt">rate.type=</span><span class="st">&quot;extinction&quot;</span>,</span>
-<span id="cb39-5"><a href="exploring-the-congruence-class.html#cb39-5"></a>  <span class="dt">sample.extinction.rates=</span>extinction_rate_samples)</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="exploring-the-congruence-class.html#cb38-1" aria-hidden="true" tabindex="-1"></a>times <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(my_model<span class="sc">$</span>time), <span class="at">length.out =</span> <span class="dv">100</span>)</span>
+<span id="cb38-2"><a href="exploring-the-congruence-class.html#cb38-2" aria-hidden="true" tabindex="-1"></a>extinction_rate_samples <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb38-3"><a href="exploring-the-congruence-class.html#cb38-3" aria-hidden="true" tabindex="-1"></a>   <span class="fu">sample.basic.models</span>( <span class="at">times =</span> times,</span>
+<span id="cb38-4"><a href="exploring-the-congruence-class.html#cb38-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">model=</span><span class="st">&quot;MRF&quot;</span>,</span>
+<span id="cb38-5"><a href="exploring-the-congruence-class.html#cb38-5" aria-hidden="true" tabindex="-1"></a>                        <span class="at">max.rate=</span><span class="dv">1</span>)</span>
+<span id="cb38-6"><a href="exploring-the-congruence-class.html#cb38-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="exploring-the-congruence-class.html#cb39-1" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">sample.congruence.class</span>(</span>
+<span id="cb39-2"><a href="exploring-the-congruence-class.html#cb39-2" aria-hidden="true" tabindex="-1"></a>  my_model,</span>
+<span id="cb39-3"><a href="exploring-the-congruence-class.html#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">num.samples=</span><span class="dv">10</span>,</span>
+<span id="cb39-4"><a href="exploring-the-congruence-class.html#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rate.type=</span><span class="st">&quot;extinction&quot;</span>,</span>
+<span id="cb39-5"><a href="exploring-the-congruence-class.html#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">sample.extinction.rates=</span>extinction_rate_samples)</span></code></pre></div>
 <p>We can plot the samples using</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="exploring-the-congruence-class.html#cb40-1"></a><span class="kw">plot</span>(samples)</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="exploring-the-congruence-class.html#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(samples)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:cg-extinction-HSMRF-plot"></span>
 <img src="figures/cg-extinction-HSMRF-plot-1.png" alt="Rate functions assuming HSMRF-distributed extinction rates" width="384" />
 <p class="caption">
 Figure 6.1: Rate functions assuming HSMRF-distributed extinction rates
 </p>
 </div>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="exploring-the-congruence-class.html#cb41-1"></a>p &lt;-<span class="st"> </span><span class="kw">summarize.trends</span>(samples,</span>
-<span id="cb41-2"><a href="exploring-the-congruence-class.html#cb41-2"></a>                      <span class="dt">threshold =</span> <span class="fl">0.02</span>)</span>
-<span id="cb41-3"><a href="exploring-the-congruence-class.html#cb41-3"></a><span class="kw">plot</span>(p)</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="exploring-the-congruence-class.html#cb41-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">summarize.trends</span>(samples,</span>
+<span id="cb41-2"><a href="exploring-the-congruence-class.html#cb41-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">threshold =</span> <span class="fl">0.02</span>)</span>
+<span id="cb41-3"><a href="exploring-the-congruence-class.html#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(p)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-18"></span>
 <img src="figures/unnamed-chunk-18-1.png" alt="Congruence class assuming linearly changing extinction rates." width="576" />
 <p class="caption">
@@ -282,33 +329,33 @@ Figure 6.2: Congruence class assuming linearly changing extinction rates.
 <p>As we can see, the alternative models are not in perfect agreement about the entire history of the rates.
 Nonetheless, the increases and decrease near the present are preserved, indicating robustness to this form of extinction-rate variation.</p>
 </div>
-<div id="exponentially-decreasing" class="section level3 hasAnchor" number="6.2.2">
-<h3><span class="header-section-number">6.2.2</span> Exponentially decreasing<a href="exploring-the-congruence-class.html#exponentially-decreasing" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="exponentially-decreasing" class="section level3 hasAnchor" number="6.3.2">
+<h3><span class="header-section-number">6.3.2</span> Exponentially decreasing<a href="exploring-the-congruence-class.html#exponentially-decreasing" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Here, we generate a variety of alternative extinction rates using HSMRF models <span class="citation">(Magee et al., 2020)</span> with an exponential trend.
 We otherwise make the same assumptions as above.
 To help the rates we simulate fit within 0 and 1, we set the fold change average to be 2 instead of the default 3.</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="exploring-the-congruence-class.html#cb42-1"></a>times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="kw">max</span>(my_model<span class="op">$</span>time), <span class="dt">length.out =</span> <span class="dv">100</span>)</span>
-<span id="cb42-2"><a href="exploring-the-congruence-class.html#cb42-2"></a>extinction_rate_samples &lt;-<span class="st"> </span><span class="cf">function</span>() {</span>
-<span id="cb42-3"><a href="exploring-the-congruence-class.html#cb42-3"></a>   <span class="kw">sample.basic.models</span>( <span class="dt">times =</span> times,</span>
-<span id="cb42-4"><a href="exploring-the-congruence-class.html#cb42-4"></a>                        <span class="dt">model=</span><span class="st">&quot;exponential&quot;</span>,</span>
-<span id="cb42-5"><a href="exploring-the-congruence-class.html#cb42-5"></a>                        <span class="dt">max.rate=</span><span class="dv">1</span>,</span>
-<span id="cb42-6"><a href="exploring-the-congruence-class.html#cb42-6"></a>                        <span class="dt">fc.mean=</span><span class="dv">2</span>)</span>
-<span id="cb42-7"><a href="exploring-the-congruence-class.html#cb42-7"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="exploring-the-congruence-class.html#cb43-1"></a>samples &lt;-<span class="st"> </span><span class="kw">sample.congruence.class</span>(</span>
-<span id="cb43-2"><a href="exploring-the-congruence-class.html#cb43-2"></a>  my_model,</span>
-<span id="cb43-3"><a href="exploring-the-congruence-class.html#cb43-3"></a>  <span class="dt">num.samples=</span><span class="dv">10</span>,</span>
-<span id="cb43-4"><a href="exploring-the-congruence-class.html#cb43-4"></a>  <span class="dt">rate.type=</span><span class="st">&quot;extinction&quot;</span>,</span>
-<span id="cb43-5"><a href="exploring-the-congruence-class.html#cb43-5"></a>  <span class="dt">sample.extinction.rates=</span>extinction_rate_samples)</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="exploring-the-congruence-class.html#cb42-1" aria-hidden="true" tabindex="-1"></a>times <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(my_model<span class="sc">$</span>time), <span class="at">length.out =</span> <span class="dv">100</span>)</span>
+<span id="cb42-2"><a href="exploring-the-congruence-class.html#cb42-2" aria-hidden="true" tabindex="-1"></a>extinction_rate_samples <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb42-3"><a href="exploring-the-congruence-class.html#cb42-3" aria-hidden="true" tabindex="-1"></a>   <span class="fu">sample.basic.models</span>( <span class="at">times =</span> times,</span>
+<span id="cb42-4"><a href="exploring-the-congruence-class.html#cb42-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">model=</span><span class="st">&quot;exponential&quot;</span>,</span>
+<span id="cb42-5"><a href="exploring-the-congruence-class.html#cb42-5" aria-hidden="true" tabindex="-1"></a>                        <span class="at">max.rate=</span><span class="dv">1</span>,</span>
+<span id="cb42-6"><a href="exploring-the-congruence-class.html#cb42-6" aria-hidden="true" tabindex="-1"></a>                        <span class="at">fc.mean=</span><span class="dv">2</span>)</span>
+<span id="cb42-7"><a href="exploring-the-congruence-class.html#cb42-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="exploring-the-congruence-class.html#cb43-1" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">sample.congruence.class</span>(</span>
+<span id="cb43-2"><a href="exploring-the-congruence-class.html#cb43-2" aria-hidden="true" tabindex="-1"></a>  my_model,</span>
+<span id="cb43-3"><a href="exploring-the-congruence-class.html#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">num.samples=</span><span class="dv">10</span>,</span>
+<span id="cb43-4"><a href="exploring-the-congruence-class.html#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rate.type=</span><span class="st">&quot;extinction&quot;</span>,</span>
+<span id="cb43-5"><a href="exploring-the-congruence-class.html#cb43-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">sample.extinction.rates=</span>extinction_rate_samples)</span></code></pre></div>
 <p>We can plot the samples using</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="exploring-the-congruence-class.html#cb44-1"></a><span class="kw">plot</span>(samples)</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="exploring-the-congruence-class.html#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(samples)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:cg-extinction-exponential-plot"></span>
 <img src="figures/cg-extinction-exponential-plot-1.png" alt="Rate functions assuming exponential trends in the extinction rate" width="384" />
 <p class="caption">
 Figure 6.3: Rate functions assuming exponential trends in the extinction rate
 </p>
 </div>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="exploring-the-congruence-class.html#cb45-1"></a>p &lt;-<span class="st"> </span><span class="kw">summarize.trends</span>(samples, <span class="dt">threshold =</span> <span class="fl">0.02</span>)</span>
-<span id="cb45-2"><a href="exploring-the-congruence-class.html#cb45-2"></a><span class="kw">plot</span>(p)</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="exploring-the-congruence-class.html#cb45-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">summarize.trends</span>(samples, <span class="at">threshold =</span> <span class="fl">0.02</span>)</span>
+<span id="cb45-2"><a href="exploring-the-congruence-class.html#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(p)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:cg-extinction-exponential"></span>
 <img src="figures/cg-extinction-exponential-1.png" alt="Congruence class assuming exponentially changing extinction rates" width="576" />
 <p class="caption">
@@ -318,36 +365,36 @@ Figure 6.4: Congruence class assuming exponentially changing extinction rates
 <p>As we can see, the alternative models are not in perfect agreement about the entire history of the rates.
 Nonetheless, the increases and decrease near the present are preserved, indicating robustness to this form of extinction-rate variation.</p>
 </div>
-<div id="linearly-increasing" class="section level3 hasAnchor" number="6.2.3">
-<h3><span class="header-section-number">6.2.3</span> Linearly increasing<a href="exploring-the-congruence-class.html#linearly-increasing" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="linearly-increasing" class="section level3 hasAnchor" number="6.3.3">
+<h3><span class="header-section-number">6.3.3</span> Linearly increasing<a href="exploring-the-congruence-class.html#linearly-increasing" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Here, we generate a variety of alternative extinction rates using GMRF models <span class="citation">(Magee et al., 2020)</span> with a linear trend.
 Unlike the exponential section, we here assume that rates have increased, that the increase has been monotonic (there were no decreases, where in the exponential decreases above there were occasional increases), and that the stochastic variability comes from a GMRF.
 We otherwise make the same assumptions as above.</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="exploring-the-congruence-class.html#cb46-1"></a>times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="kw">max</span>(my_model<span class="op">$</span>time), <span class="dt">length.out =</span> <span class="dv">100</span>)</span>
-<span id="cb46-2"><a href="exploring-the-congruence-class.html#cb46-2"></a>extinction_rate_samples &lt;-<span class="st"> </span><span class="cf">function</span>() {</span>
-<span id="cb46-3"><a href="exploring-the-congruence-class.html#cb46-3"></a>   <span class="kw">sample.basic.models</span>( <span class="dt">times =</span> times,</span>
-<span id="cb46-4"><a href="exploring-the-congruence-class.html#cb46-4"></a>                        <span class="dt">direction=</span><span class="st">&quot;increase&quot;</span>,</span>
-<span id="cb46-5"><a href="exploring-the-congruence-class.html#cb46-5"></a>                        <span class="dt">model=</span><span class="st">&quot;linear&quot;</span>,</span>
-<span id="cb46-6"><a href="exploring-the-congruence-class.html#cb46-6"></a>                        <span class="dt">monotonic=</span><span class="ot">TRUE</span>,</span>
-<span id="cb46-7"><a href="exploring-the-congruence-class.html#cb46-7"></a>                        <span class="dt">MRF.type=</span><span class="st">&quot;GMRF&quot;</span>,</span>
-<span id="cb46-8"><a href="exploring-the-congruence-class.html#cb46-8"></a>                        <span class="dt">max.rate=</span><span class="dv">1</span>,</span>
-<span id="cb46-9"><a href="exploring-the-congruence-class.html#cb46-9"></a>                        <span class="dt">fc.mean=</span><span class="dv">2</span>)</span>
-<span id="cb46-10"><a href="exploring-the-congruence-class.html#cb46-10"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="exploring-the-congruence-class.html#cb47-1"></a>samples &lt;-<span class="st"> </span><span class="kw">sample.congruence.class</span>(</span>
-<span id="cb47-2"><a href="exploring-the-congruence-class.html#cb47-2"></a>  my_model,</span>
-<span id="cb47-3"><a href="exploring-the-congruence-class.html#cb47-3"></a>  <span class="dt">num.samples=</span><span class="dv">10</span>,</span>
-<span id="cb47-4"><a href="exploring-the-congruence-class.html#cb47-4"></a>  <span class="dt">rate.type=</span><span class="st">&quot;extinction&quot;</span>,</span>
-<span id="cb47-5"><a href="exploring-the-congruence-class.html#cb47-5"></a>  <span class="dt">sample.extinction.rates=</span>extinction_rate_samples)</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="exploring-the-congruence-class.html#cb46-1" aria-hidden="true" tabindex="-1"></a>times <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(my_model<span class="sc">$</span>time), <span class="at">length.out =</span> <span class="dv">100</span>)</span>
+<span id="cb46-2"><a href="exploring-the-congruence-class.html#cb46-2" aria-hidden="true" tabindex="-1"></a>extinction_rate_samples <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb46-3"><a href="exploring-the-congruence-class.html#cb46-3" aria-hidden="true" tabindex="-1"></a>   <span class="fu">sample.basic.models</span>( <span class="at">times =</span> times,</span>
+<span id="cb46-4"><a href="exploring-the-congruence-class.html#cb46-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">direction=</span><span class="st">&quot;increase&quot;</span>,</span>
+<span id="cb46-5"><a href="exploring-the-congruence-class.html#cb46-5" aria-hidden="true" tabindex="-1"></a>                        <span class="at">model=</span><span class="st">&quot;linear&quot;</span>,</span>
+<span id="cb46-6"><a href="exploring-the-congruence-class.html#cb46-6" aria-hidden="true" tabindex="-1"></a>                        <span class="at">monotonic=</span><span class="cn">TRUE</span>,</span>
+<span id="cb46-7"><a href="exploring-the-congruence-class.html#cb46-7" aria-hidden="true" tabindex="-1"></a>                        <span class="at">MRF.type=</span><span class="st">&quot;GMRF&quot;</span>,</span>
+<span id="cb46-8"><a href="exploring-the-congruence-class.html#cb46-8" aria-hidden="true" tabindex="-1"></a>                        <span class="at">max.rate=</span><span class="dv">1</span>,</span>
+<span id="cb46-9"><a href="exploring-the-congruence-class.html#cb46-9" aria-hidden="true" tabindex="-1"></a>                        <span class="at">fc.mean=</span><span class="dv">2</span>)</span>
+<span id="cb46-10"><a href="exploring-the-congruence-class.html#cb46-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="exploring-the-congruence-class.html#cb47-1" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">sample.congruence.class</span>(</span>
+<span id="cb47-2"><a href="exploring-the-congruence-class.html#cb47-2" aria-hidden="true" tabindex="-1"></a>  my_model,</span>
+<span id="cb47-3"><a href="exploring-the-congruence-class.html#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">num.samples=</span><span class="dv">10</span>,</span>
+<span id="cb47-4"><a href="exploring-the-congruence-class.html#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rate.type=</span><span class="st">&quot;extinction&quot;</span>,</span>
+<span id="cb47-5"><a href="exploring-the-congruence-class.html#cb47-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">sample.extinction.rates=</span>extinction_rate_samples)</span></code></pre></div>
 <p>We can plot the samples using</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="exploring-the-congruence-class.html#cb48-1"></a><span class="kw">plot</span>(samples)</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="exploring-the-congruence-class.html#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(samples)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:congruence-class-extinction-linear"></span>
 <img src="figures/congruence-class-extinction-linear-1.png" alt="Congruence class assuming linearly changing extinction rates." width="384" />
 <p class="caption">
 Figure 6.5: Congruence class assuming linearly changing extinction rates.
 </p>
 </div>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="exploring-the-congruence-class.html#cb49-1"></a>p &lt;-<span class="st"> </span><span class="kw">summarize.trends</span>(samples, <span class="dt">threshold =</span> <span class="fl">0.02</span>)</span>
-<span id="cb49-2"><a href="exploring-the-congruence-class.html#cb49-2"></a><span class="kw">plot</span>(p)</span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="exploring-the-congruence-class.html#cb49-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">summarize.trends</span>(samples, <span class="at">threshold =</span> <span class="fl">0.02</span>)</span>
+<span id="cb49-2"><a href="exploring-the-congruence-class.html#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(p)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:cg-extinction-linear"></span>
 <img src="figures/cg-extinction-linear-1.png" alt="Congruence class assuming linearly changing extinction rates." width="576" />
 <p class="caption">
@@ -357,33 +404,33 @@ Figure 6.6: Congruence class assuming linearly changing extinction rates.
 <p>As we can see, the increases and decrease near the present are preserved, indicating robustness to this form of extinction-rate variation.
 Compared to the exponential and HSMRF models above, there is even better agreement between the alternative models.</p>
 </div>
-<div id="episodic" class="section level3 hasAnchor" number="6.2.4">
-<h3><span class="header-section-number">6.2.4</span> Episodic<a href="exploring-the-congruence-class.html#episodic" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="episodic" class="section level3 hasAnchor" number="6.3.4">
+<h3><span class="header-section-number">6.3.4</span> Episodic<a href="exploring-the-congruence-class.html#episodic" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Here, we generate a variety of alternative extinction rates without stochastic noise.
 Without noise (<code>noisy=FALSE</code>), all changes will be in the same direction, here decreases.
 The model we generate is an episodic model with 5 rates.
 Here, we consider decreasing rates with larger changes from past to present than the previous section.
 To help rates stay within the [0,1] bounds we have chosen, we set the rate median at present to be slightly smaller than the default 0.1.</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="exploring-the-congruence-class.html#cb50-1"></a>times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="kw">max</span>(my_model<span class="op">$</span>time), <span class="dt">length.out =</span> <span class="dv">100</span>)</span>
-<span id="cb50-2"><a href="exploring-the-congruence-class.html#cb50-2"></a>extinction_rate_samples &lt;-<span class="st"> </span><span class="cf">function</span>() {</span>
-<span id="cb50-3"><a href="exploring-the-congruence-class.html#cb50-3"></a>   <span class="kw">sample.basic.models</span>( <span class="dt">times =</span> times,</span>
-<span id="cb50-4"><a href="exploring-the-congruence-class.html#cb50-4"></a>                        <span class="dt">direction=</span><span class="st">&quot;decrease&quot;</span>,</span>
-<span id="cb50-5"><a href="exploring-the-congruence-class.html#cb50-5"></a>                        <span class="dt">model=</span><span class="st">&quot;episodic5&quot;</span>,</span>
-<span id="cb50-6"><a href="exploring-the-congruence-class.html#cb50-6"></a>                        <span class="dt">noisy=</span><span class="ot">FALSE</span>,</span>
-<span id="cb50-7"><a href="exploring-the-congruence-class.html#cb50-7"></a>                        <span class="dt">max.rate=</span><span class="dv">1</span>,</span>
-<span id="cb50-8"><a href="exploring-the-congruence-class.html#cb50-8"></a>                        <span class="dt">fc.mean=</span><span class="dv">4</span>,</span>
-<span id="cb50-9"><a href="exploring-the-congruence-class.html#cb50-9"></a>                        <span class="dt">rate0.median=</span><span class="fl">0.05</span>)</span>
-<span id="cb50-10"><a href="exploring-the-congruence-class.html#cb50-10"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="exploring-the-congruence-class.html#cb51-1"></a>samples &lt;-<span class="st"> </span><span class="kw">sample.congruence.class</span>(</span>
-<span id="cb51-2"><a href="exploring-the-congruence-class.html#cb51-2"></a>  my_model,</span>
-<span id="cb51-3"><a href="exploring-the-congruence-class.html#cb51-3"></a>  <span class="dt">num.samples=</span><span class="dv">10</span>,</span>
-<span id="cb51-4"><a href="exploring-the-congruence-class.html#cb51-4"></a>  <span class="dt">rate.type=</span><span class="st">&quot;extinction&quot;</span>,</span>
-<span id="cb51-5"><a href="exploring-the-congruence-class.html#cb51-5"></a>  <span class="dt">sample.extinction.rates=</span>extinction_rate_samples)</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="exploring-the-congruence-class.html#cb50-1" aria-hidden="true" tabindex="-1"></a>times <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(my_model<span class="sc">$</span>time), <span class="at">length.out =</span> <span class="dv">100</span>)</span>
+<span id="cb50-2"><a href="exploring-the-congruence-class.html#cb50-2" aria-hidden="true" tabindex="-1"></a>extinction_rate_samples <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb50-3"><a href="exploring-the-congruence-class.html#cb50-3" aria-hidden="true" tabindex="-1"></a>   <span class="fu">sample.basic.models</span>( <span class="at">times =</span> times,</span>
+<span id="cb50-4"><a href="exploring-the-congruence-class.html#cb50-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">direction=</span><span class="st">&quot;decrease&quot;</span>,</span>
+<span id="cb50-5"><a href="exploring-the-congruence-class.html#cb50-5" aria-hidden="true" tabindex="-1"></a>                        <span class="at">model=</span><span class="st">&quot;episodic5&quot;</span>,</span>
+<span id="cb50-6"><a href="exploring-the-congruence-class.html#cb50-6" aria-hidden="true" tabindex="-1"></a>                        <span class="at">noisy=</span><span class="cn">FALSE</span>,</span>
+<span id="cb50-7"><a href="exploring-the-congruence-class.html#cb50-7" aria-hidden="true" tabindex="-1"></a>                        <span class="at">max.rate=</span><span class="dv">1</span>,</span>
+<span id="cb50-8"><a href="exploring-the-congruence-class.html#cb50-8" aria-hidden="true" tabindex="-1"></a>                        <span class="at">fc.mean=</span><span class="dv">4</span>,</span>
+<span id="cb50-9"><a href="exploring-the-congruence-class.html#cb50-9" aria-hidden="true" tabindex="-1"></a>                        <span class="at">rate0.median=</span><span class="fl">0.05</span>)</span>
+<span id="cb50-10"><a href="exploring-the-congruence-class.html#cb50-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="exploring-the-congruence-class.html#cb51-1" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">sample.congruence.class</span>(</span>
+<span id="cb51-2"><a href="exploring-the-congruence-class.html#cb51-2" aria-hidden="true" tabindex="-1"></a>  my_model,</span>
+<span id="cb51-3"><a href="exploring-the-congruence-class.html#cb51-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">num.samples=</span><span class="dv">10</span>,</span>
+<span id="cb51-4"><a href="exploring-the-congruence-class.html#cb51-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rate.type=</span><span class="st">&quot;extinction&quot;</span>,</span>
+<span id="cb51-5"><a href="exploring-the-congruence-class.html#cb51-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">sample.extinction.rates=</span>extinction_rate_samples)</span></code></pre></div>
 <p>We can plot the samples using</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="exploring-the-congruence-class.html#cb52-1"></a><span class="kw">plot</span>(samples)</span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="exploring-the-congruence-class.html#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(samples)</span></code></pre></div>
 <p><img src="figures/cg-extinction-episodic-plot-1.png" width="384" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="exploring-the-congruence-class.html#cb53-1"></a>p &lt;-<span class="st"> </span><span class="kw">summarize.trends</span>(samples, <span class="dt">threshold =</span> <span class="fl">0.02</span>)</span>
-<span id="cb53-2"><a href="exploring-the-congruence-class.html#cb53-2"></a><span class="kw">plot</span>(p)</span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="exploring-the-congruence-class.html#cb53-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">summarize.trends</span>(samples, <span class="at">threshold =</span> <span class="fl">0.02</span>)</span>
+<span id="cb53-2"><a href="exploring-the-congruence-class.html#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(p)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:extinction-episodic"></span>
 <img src="figures/extinction-episodic-1.png" alt="Congruence class assuming episodically changing extinction rates." width="576" />
 <p class="caption">
@@ -393,8 +440,8 @@ Figure 6.7: Congruence class assuming episodically changing extinction rates.
 <p>As we can see, the increases and decrease near the present are preserved, indicating robustness to this form of extinction-rate variation.
 The agreement between the alternative models is comparable to the linear scenarios above, and higher than for the exponential and HSMRF models.</p>
 </div>
-<div id="uniform-independent" class="section level3 hasAnchor" number="6.2.5">
-<h3><span class="header-section-number">6.2.5</span> Uniform independent<a href="exploring-the-congruence-class.html#uniform-independent" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="uniform-independent" class="section level3 hasAnchor" number="6.3.5">
+<h3><span class="header-section-number">6.3.5</span> Uniform independent<a href="exploring-the-congruence-class.html#uniform-independent" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The previous functions used <code>sample.basic.models</code> to construct a variety of pre-defined hypotheses.
 <code>CRABS</code> also implements <code>sample.rates</code> to allow more flexibility in user-defined rate functions (and of course the user is free to define their own functions as well).
 Here we show this with IID rates.
@@ -402,21 +449,21 @@ We assume that the extinction rates could have had any value between 0 and 1 (yo
 Our motivation for these values was, that (i) having a maximal expected extinction time per lineage of 1.0 million years seems reasonable from the fossil record, and (ii) we estimated a maximal speciation rate of 0.4, which is clearly smaller than 1.0.</p>
 <p>We furthermore assume that each extinction rate is independent of the previous time interval.
 That means that we can model any rate function, even completely crazy zig-zagging functions.</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="exploring-the-congruence-class.html#cb54-1"></a>coarse_times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="kw">max</span>(my_model<span class="op">$</span>time), <span class="dt">length.out =</span> <span class="dv">10</span>)</span>
-<span id="cb54-2"><a href="exploring-the-congruence-class.html#cb54-2"></a>rsample_extinction &lt;-<span class="st"> </span><span class="cf">function</span>(n) <span class="kw">runif</span>(n,<span class="dv">0</span>,<span class="dv">1</span>)</span>
-<span id="cb54-3"><a href="exploring-the-congruence-class.html#cb54-3"></a>extinction_rate_samples &lt;-<span class="st"> </span><span class="cf">function</span>() {</span>
-<span id="cb54-4"><a href="exploring-the-congruence-class.html#cb54-4"></a>   <span class="kw">sample.rates</span>( <span class="dt">times =</span> coarse_times,</span>
-<span id="cb54-5"><a href="exploring-the-congruence-class.html#cb54-5"></a>                 <span class="dt">rsample=</span>rsample_extinction,</span>
-<span id="cb54-6"><a href="exploring-the-congruence-class.html#cb54-6"></a>                 <span class="dt">rsample0=</span><span class="ot">NULL</span>,</span>
-<span id="cb54-7"><a href="exploring-the-congruence-class.html#cb54-7"></a>                 <span class="dt">autocorrelated=</span><span class="ot">FALSE</span>)</span>
-<span id="cb54-8"><a href="exploring-the-congruence-class.html#cb54-8"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="exploring-the-congruence-class.html#cb55-1"></a>samples &lt;-<span class="st"> </span><span class="kw">sample.congruence.class</span>(</span>
-<span id="cb55-2"><a href="exploring-the-congruence-class.html#cb55-2"></a>  my_model,</span>
-<span id="cb55-3"><a href="exploring-the-congruence-class.html#cb55-3"></a>  <span class="dt">num.samples=</span><span class="dv">10</span>,</span>
-<span id="cb55-4"><a href="exploring-the-congruence-class.html#cb55-4"></a>  <span class="dt">rate.type=</span><span class="st">&quot;extinction&quot;</span>,</span>
-<span id="cb55-5"><a href="exploring-the-congruence-class.html#cb55-5"></a>  <span class="dt">sample.extinction.rates=</span>extinction_rate_samples)</span></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="exploring-the-congruence-class.html#cb54-1" aria-hidden="true" tabindex="-1"></a>coarse_times <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(my_model<span class="sc">$</span>time), <span class="at">length.out =</span> <span class="dv">10</span>)</span>
+<span id="cb54-2"><a href="exploring-the-congruence-class.html#cb54-2" aria-hidden="true" tabindex="-1"></a>rsample_extinction <span class="ot">&lt;-</span> <span class="cf">function</span>(n) <span class="fu">runif</span>(n,<span class="dv">0</span>,<span class="dv">1</span>)</span>
+<span id="cb54-3"><a href="exploring-the-congruence-class.html#cb54-3" aria-hidden="true" tabindex="-1"></a>extinction_rate_samples <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb54-4"><a href="exploring-the-congruence-class.html#cb54-4" aria-hidden="true" tabindex="-1"></a>   <span class="fu">sample.rates</span>( <span class="at">times =</span> coarse_times,</span>
+<span id="cb54-5"><a href="exploring-the-congruence-class.html#cb54-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">rsample=</span>rsample_extinction,</span>
+<span id="cb54-6"><a href="exploring-the-congruence-class.html#cb54-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">rsample0=</span><span class="cn">NULL</span>,</span>
+<span id="cb54-7"><a href="exploring-the-congruence-class.html#cb54-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">autocorrelated=</span><span class="cn">FALSE</span>)</span>
+<span id="cb54-8"><a href="exploring-the-congruence-class.html#cb54-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="exploring-the-congruence-class.html#cb55-1" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">sample.congruence.class</span>(</span>
+<span id="cb55-2"><a href="exploring-the-congruence-class.html#cb55-2" aria-hidden="true" tabindex="-1"></a>  my_model,</span>
+<span id="cb55-3"><a href="exploring-the-congruence-class.html#cb55-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">num.samples=</span><span class="dv">10</span>,</span>
+<span id="cb55-4"><a href="exploring-the-congruence-class.html#cb55-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rate.type=</span><span class="st">&quot;extinction&quot;</span>,</span>
+<span id="cb55-5"><a href="exploring-the-congruence-class.html#cb55-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">sample.extinction.rates=</span>extinction_rate_samples)</span></code></pre></div>
 <p>We can plot the samples to inspect them visually</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="exploring-the-congruence-class.html#cb56-1"></a><span class="kw">plot</span>(samples)</span></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="exploring-the-congruence-class.html#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(samples)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:uniform-mu-sample"></span>
 <img src="figures/uniform-mu-sample-1.png" alt="Rate functions for the congruence class with proposed alternative extinction rates whose values are drawn from an independent uniform distribution for each episode." width="384" />
 <p class="caption">
@@ -424,8 +471,8 @@ Figure 6.8: Rate functions for the congruence class with proposed alternative ex
 </p>
 </div>
 <p>Next we can plot the directional trends</p>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="exploring-the-congruence-class.html#cb57-1"></a>p &lt;-<span class="st"> </span><span class="kw">summarize.trends</span>(samples, <span class="dt">threshold =</span> <span class="fl">0.02</span>)</span>
-<span id="cb57-2"><a href="exploring-the-congruence-class.html#cb57-2"></a><span class="kw">plot</span>(p)</span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="exploring-the-congruence-class.html#cb57-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">summarize.trends</span>(samples, <span class="at">threshold =</span> <span class="fl">0.02</span>)</span>
+<span id="cb57-2"><a href="exploring-the-congruence-class.html#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(p)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:extinction-uniform-spaghetti"></span>
 <img src="figures/extinction-uniform-spaghetti-1.png" alt="Congruence class assuming independent and uniformly distributed extinction rates." width="576" />
 <p class="caption">
@@ -435,24 +482,24 @@ Figure 6.9: Congruence class assuming independent and uniformly distributed exti
 <p>As we can see, the alternative models present many distinct histories of the rates through time.
 Nonetheless, even in this extreme scenario, the increases and decrease near the present are preserved.</p>
 </div>
-<div id="brownian-motion-with-a-trend" class="section level3 hasAnchor" number="6.2.6">
-<h3><span class="header-section-number">6.2.6</span> Brownian motion with a trend<a href="exploring-the-congruence-class.html#brownian-motion-with-a-trend" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="brownian-motion-with-a-trend" class="section level3 hasAnchor" number="6.3.6">
+<h3><span class="header-section-number">6.3.6</span> Brownian motion with a trend<a href="exploring-the-congruence-class.html#brownian-motion-with-a-trend" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>It is also possible to specify fully customized rate sampling functions, and use these to sample the congruence class in <code>CRABS</code>. Suppose we thought that the extinction rate was tiny when the clade emerged, but steadily rose in a linear fashion towards the present. Additionally, suppose we allow for some random variation around this linear increase. This can be implemented as a Brownian motion with a trend, as follows.</p>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="exploring-the-congruence-class.html#cb58-1"></a>med_times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="kw">max</span>(my_model<span class="op">$</span>time), <span class="dt">length.out =</span> <span class="dv">30</span>)</span>
-<span id="cb58-2"><a href="exploring-the-congruence-class.html#cb58-2"></a></span>
-<span id="cb58-3"><a href="exploring-the-congruence-class.html#cb58-3"></a>extinction_rate_samples &lt;-<span class="st"> </span><span class="cf">function</span>(){</span>
-<span id="cb58-4"><a href="exploring-the-congruence-class.html#cb58-4"></a>  noise &lt;-<span class="st"> </span><span class="kw">cumsum</span>(<span class="kw">rnorm</span>(<span class="dv">30</span>, <span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sd =</span> <span class="fl">0.03</span>))</span>
-<span id="cb58-5"><a href="exploring-the-congruence-class.html#cb58-5"></a>  y &lt;-<span class="st"> </span><span class="fl">-0.008</span><span class="op">*</span>med_times <span class="op">+</span><span class="st"> </span>noise <span class="op">+</span><span class="st"> </span><span class="fl">0.6</span></span>
-<span id="cb58-6"><a href="exploring-the-congruence-class.html#cb58-6"></a>  y &lt;-<span class="st"> </span><span class="kw">ifelse</span>(y <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.001</span>, <span class="fl">0.001</span>, y)</span>
-<span id="cb58-7"><a href="exploring-the-congruence-class.html#cb58-7"></a>  f &lt;-<span class="st"> </span><span class="kw">approxfun</span>(med_times, y)</span>
-<span id="cb58-8"><a href="exploring-the-congruence-class.html#cb58-8"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="exploring-the-congruence-class.html#cb58-1" aria-hidden="true" tabindex="-1"></a>med_times <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(my_model<span class="sc">$</span>time), <span class="at">length.out =</span> <span class="dv">30</span>)</span>
+<span id="cb58-2"><a href="exploring-the-congruence-class.html#cb58-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-3"><a href="exploring-the-congruence-class.html#cb58-3" aria-hidden="true" tabindex="-1"></a>extinction_rate_samples <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb58-4"><a href="exploring-the-congruence-class.html#cb58-4" aria-hidden="true" tabindex="-1"></a>  noise <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="fu">rnorm</span>(<span class="dv">30</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fl">0.03</span>))</span>
+<span id="cb58-5"><a href="exploring-the-congruence-class.html#cb58-5" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.008</span><span class="sc">*</span>med_times <span class="sc">+</span> noise <span class="sc">+</span> <span class="fl">0.6</span></span>
+<span id="cb58-6"><a href="exploring-the-congruence-class.html#cb58-6" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(y <span class="sc">&lt;</span> <span class="fl">0.001</span>, <span class="fl">0.001</span>, y)</span>
+<span id="cb58-7"><a href="exploring-the-congruence-class.html#cb58-7" aria-hidden="true" tabindex="-1"></a>  f <span class="ot">&lt;-</span> <span class="fu">approxfun</span>(med_times, y)</span>
+<span id="cb58-8"><a href="exploring-the-congruence-class.html#cb58-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>For simplicity, we restrict rates that are very small or negative to be a minimum of 0.001 units. As before, we can use <code>CRABS</code> to sample from the congruence class using this form of proposed extinction rates, and plot the rates:</p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="exploring-the-congruence-class.html#cb59-1"></a>samples &lt;-<span class="st"> </span><span class="kw">sample.congruence.class</span>(</span>
-<span id="cb59-2"><a href="exploring-the-congruence-class.html#cb59-2"></a>  my_model,</span>
-<span id="cb59-3"><a href="exploring-the-congruence-class.html#cb59-3"></a>  <span class="dt">num.samples=</span><span class="dv">15</span>,</span>
-<span id="cb59-4"><a href="exploring-the-congruence-class.html#cb59-4"></a>  <span class="dt">rate.type=</span><span class="st">&quot;extinction&quot;</span>,</span>
-<span id="cb59-5"><a href="exploring-the-congruence-class.html#cb59-5"></a>  <span class="dt">sample.extinction.rates=</span>extinction_rate_samples)</span>
-<span id="cb59-6"><a href="exploring-the-congruence-class.html#cb59-6"></a><span class="kw">plot</span>(samples)</span></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="exploring-the-congruence-class.html#cb59-1" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">sample.congruence.class</span>(</span>
+<span id="cb59-2"><a href="exploring-the-congruence-class.html#cb59-2" aria-hidden="true" tabindex="-1"></a>  my_model,</span>
+<span id="cb59-3"><a href="exploring-the-congruence-class.html#cb59-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">num.samples=</span><span class="dv">15</span>,</span>
+<span id="cb59-4"><a href="exploring-the-congruence-class.html#cb59-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rate.type=</span><span class="st">&quot;extinction&quot;</span>,</span>
+<span id="cb59-5"><a href="exploring-the-congruence-class.html#cb59-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">sample.extinction.rates=</span>extinction_rate_samples)</span>
+<span id="cb59-6"><a href="exploring-the-congruence-class.html#cb59-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(samples)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:bm-trend-spaghetti"></span>
 <img src="figures/bm-trend-spaghetti-1.png" alt="Rate plots for the congruent models that were sampled assuming an extinction rate modeled as a Brownian motion with a linearly increasing trend" width="384" />
 <p class="caption">
@@ -460,8 +507,8 @@ Figure 6.10: Rate plots for the congruent models that were sampled assuming an e
 </p>
 </div>
 <p>The summary of trends across these models contain quite a bit of variation. However, the three main signals in the primate reference model are all recovered: two increases and one decrease in the recent part of the phylogeny <a href="exploring-the-congruence-class.html#fig:bm-trend-summary">6.11</a>.</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="exploring-the-congruence-class.html#cb60-1"></a>p &lt;-<span class="st"> </span><span class="kw">summarize.trends</span>(samples, <span class="dt">threshold =</span> <span class="fl">0.02</span>)</span>
-<span id="cb60-2"><a href="exploring-the-congruence-class.html#cb60-2"></a><span class="kw">plot</span>(p)</span></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="exploring-the-congruence-class.html#cb60-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">summarize.trends</span>(samples, <span class="at">threshold =</span> <span class="fl">0.02</span>)</span>
+<span id="cb60-2"><a href="exploring-the-congruence-class.html#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(p)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:bm-trend-summary"></span>
 <img src="figures/bm-trend-summary-1.png" alt="A summary of directional trends through time across the congruent models. The proposed extinction rate is modeled as a Brownian motion with a trend that increases linearly towards the present." width="576" />
 <p class="caption">
@@ -470,28 +517,28 @@ Figure 6.11: A summary of directional trends through time across the congruent m
 </div>
 </div>
 </div>
-<div id="sample-alternative-speciation-rates" class="section level2 hasAnchor" number="6.3">
-<h2><span class="header-section-number">6.3</span> Sample alternative speciation rates<a href="exploring-the-congruence-class.html#sample-alternative-speciation-rates" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="sample-alternative-speciation-rates" class="section level2 hasAnchor" number="6.4">
+<h2><span class="header-section-number">6.4</span> Sample alternative speciation rates<a href="exploring-the-congruence-class.html#sample-alternative-speciation-rates" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>It is also possible to sample alternative speciation rates. Since the congruence class requires a shared <span class="math inline">\(\lambda_0\)</span> for all models in the congruence class, we must constrain our sampler to always start on the same speciation rate at the present.</p>
-<div id="temporally-autocorrelated-1" class="section level3 hasAnchor" number="6.3.1">
-<h3><span class="header-section-number">6.3.1</span> Temporally autocorrelated<a href="exploring-the-congruence-class.html#temporally-autocorrelated-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="temporally-autocorrelated-1" class="section level3 hasAnchor" number="6.4.1">
+<h3><span class="header-section-number">6.4.1</span> Temporally autocorrelated<a href="exploring-the-congruence-class.html#temporally-autocorrelated-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Here we choose to sample speciation rates according to a horseshoe Markov random field distribution.</p>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="exploring-the-congruence-class.html#cb61-1"></a>times &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="kw">max</span>(my_model<span class="op">$</span>time), <span class="dt">length.out =</span> <span class="dv">100</span>)</span>
-<span id="cb61-2"><a href="exploring-the-congruence-class.html#cb61-2"></a>speciation_rate_samples &lt;-<span class="st"> </span><span class="cf">function</span>() {</span>
-<span id="cb61-3"><a href="exploring-the-congruence-class.html#cb61-3"></a>   <span class="kw">sample.basic.models</span>( <span class="dt">times =</span> times,</span>
-<span id="cb61-4"><a href="exploring-the-congruence-class.html#cb61-4"></a>                        <span class="dt">rate0 =</span> my_model<span class="op">$</span><span class="kw">lambda</span>(<span class="fl">0.0</span>),</span>
-<span id="cb61-5"><a href="exploring-the-congruence-class.html#cb61-5"></a>                        <span class="dt">model =</span> <span class="st">&quot;MRF&quot;</span>,</span>
-<span id="cb61-6"><a href="exploring-the-congruence-class.html#cb61-6"></a>                        <span class="dt">MRF.type =</span> <span class="st">&quot;HSMRF&quot;</span>,</span>
-<span id="cb61-7"><a href="exploring-the-congruence-class.html#cb61-7"></a>                        <span class="dt">max.rate =</span> <span class="fl">1.0</span>)</span>
-<span id="cb61-8"><a href="exploring-the-congruence-class.html#cb61-8"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="exploring-the-congruence-class.html#cb61-1" aria-hidden="true" tabindex="-1"></a>times <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(my_model<span class="sc">$</span>time), <span class="at">length.out =</span> <span class="dv">100</span>)</span>
+<span id="cb61-2"><a href="exploring-the-congruence-class.html#cb61-2" aria-hidden="true" tabindex="-1"></a>speciation_rate_samples <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb61-3"><a href="exploring-the-congruence-class.html#cb61-3" aria-hidden="true" tabindex="-1"></a>   <span class="fu">sample.basic.models</span>( <span class="at">times =</span> times,</span>
+<span id="cb61-4"><a href="exploring-the-congruence-class.html#cb61-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">rate0 =</span> my_model<span class="sc">$</span><span class="fu">lambda</span>(<span class="fl">0.0</span>),</span>
+<span id="cb61-5"><a href="exploring-the-congruence-class.html#cb61-5" aria-hidden="true" tabindex="-1"></a>                        <span class="at">model =</span> <span class="st">&quot;MRF&quot;</span>,</span>
+<span id="cb61-6"><a href="exploring-the-congruence-class.html#cb61-6" aria-hidden="true" tabindex="-1"></a>                        <span class="at">MRF.type =</span> <span class="st">&quot;HSMRF&quot;</span>,</span>
+<span id="cb61-7"><a href="exploring-the-congruence-class.html#cb61-7" aria-hidden="true" tabindex="-1"></a>                        <span class="at">max.rate =</span> <span class="fl">1.0</span>)</span>
+<span id="cb61-8"><a href="exploring-the-congruence-class.html#cb61-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>Next, we can sample ten models from the congruence class.</p>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="exploring-the-congruence-class.html#cb62-1"></a>samples &lt;-<span class="st"> </span><span class="kw">sample.congruence.class</span>(</span>
-<span id="cb62-2"><a href="exploring-the-congruence-class.html#cb62-2"></a>  my_model,</span>
-<span id="cb62-3"><a href="exploring-the-congruence-class.html#cb62-3"></a>  <span class="dt">num.samples=</span><span class="dv">10</span>,</span>
-<span id="cb62-4"><a href="exploring-the-congruence-class.html#cb62-4"></a>  <span class="dt">rate.type=</span><span class="st">&quot;speciation&quot;</span>,</span>
-<span id="cb62-5"><a href="exploring-the-congruence-class.html#cb62-5"></a>  <span class="dt">sample.speciation.rates =</span> speciation_rate_samples)</span></code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="exploring-the-congruence-class.html#cb62-1" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">sample.congruence.class</span>(</span>
+<span id="cb62-2"><a href="exploring-the-congruence-class.html#cb62-2" aria-hidden="true" tabindex="-1"></a>  my_model,</span>
+<span id="cb62-3"><a href="exploring-the-congruence-class.html#cb62-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">num.samples=</span><span class="dv">10</span>,</span>
+<span id="cb62-4"><a href="exploring-the-congruence-class.html#cb62-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">rate.type=</span><span class="st">&quot;speciation&quot;</span>,</span>
+<span id="cb62-5"><a href="exploring-the-congruence-class.html#cb62-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">sample.speciation.rates =</span> speciation_rate_samples)</span></code></pre></div>
 <p>We can plot the samples using</p>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="exploring-the-congruence-class.html#cb63-1"></a><span class="kw">plot</span>(samples)</span></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="exploring-the-congruence-class.html#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(samples)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:sample-extinction-rateplot"></span>
 <img src="figures/sample-extinction-rateplot-1.png" alt="Rate functions for the congruence class. The reference model is given in black. The alternative speciation rates are proposed by sampling from a temporally autocorrelated (HSMRF) model." width="384" />
 <p class="caption">
@@ -499,11 +546,11 @@ Figure 6.12: Rate functions for the congruence class. The reference model is giv
 </p>
 </div>
 <p>Notice that all of our congruent models have a negative extinction rate near the present. This becomes more evident if we plot the extinction rates on its own panel and adjust the axis limits.</p>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="exploring-the-congruence-class.html#cb64-1"></a>p &lt;-<span class="st"> </span><span class="kw">plot</span>(samples)[[<span class="dv">2</span>]] <span class="op">+</span><span class="st"> </span></span>
-<span id="cb64-2"><a href="exploring-the-congruence-class.html#cb64-2"></a><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">ylim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)) <span class="op">+</span></span>
-<span id="cb64-3"><a href="exploring-the-congruence-class.html#cb64-3"></a><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;time before present&quot;</span>) <span class="op">+</span></span>
-<span id="cb64-4"><a href="exploring-the-congruence-class.html#cb64-4"></a><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;rate&quot;</span>)</span>
-<span id="cb64-5"><a href="exploring-the-congruence-class.html#cb64-5"></a><span class="kw">plot</span>(p)</span></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="exploring-the-congruence-class.html#cb64-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">plot</span>(samples)[[<span class="dv">2</span>]] <span class="sc">+</span> </span>
+<span id="cb64-2"><a href="exploring-the-congruence-class.html#cb64-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb64-3"><a href="exploring-the-congruence-class.html#cb64-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;time before present&quot;</span>) <span class="sc">+</span></span>
+<span id="cb64-4"><a href="exploring-the-congruence-class.html#cb64-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;rate&quot;</span>)</span>
+<span id="cb64-5"><a href="exploring-the-congruence-class.html#cb64-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(p)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:sample-speciation-mus"></span>
 <img src="figures/sample-speciation-mus-1.png" alt="Inferred congruent extinction rates, zoomed in for clarity." width="480" />
 <p class="caption">
@@ -511,8 +558,8 @@ Figure 6.13: Inferred congruent extinction rates, zoomed in for clarity.
 </p>
 </div>
 <p>The models depicted in <a href="exploring-the-congruence-class.html#fig:sample-speciation-mus">6.13</a> do not make sense, since rates are only defined on the positive numbers. Similarly to before, we can evaluate the directional changes in the extinction rate</p>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="exploring-the-congruence-class.html#cb65-1"></a>p &lt;-<span class="st"> </span><span class="kw">summarize.trends</span>(samples, <span class="dt">threshold =</span> <span class="fl">0.02</span>, <span class="dt">rate_name =</span> <span class="st">&quot;mu&quot;</span>)</span>
-<span id="cb65-2"><a href="exploring-the-congruence-class.html#cb65-2"></a><span class="kw">plot</span>(p)</span></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="exploring-the-congruence-class.html#cb65-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">summarize.trends</span>(samples, <span class="at">threshold =</span> <span class="fl">0.02</span>, <span class="at">rate_name =</span> <span class="st">&quot;mu&quot;</span>)</span>
+<span id="cb65-2"><a href="exploring-the-congruence-class.html#cb65-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(p)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:sample-extinction-trendplot"></span>
 <img src="figures/sample-extinction-trendplot-1.png" alt="A summary of directional trends through time across the congruent models." width="576" />
 <p class="caption">
@@ -520,14 +567,109 @@ Figure 6.14: A summary of directional trends through time across the congruent m
 </p>
 </div>
 <p>Notice how the reference model (top row) is flat throughout the entire time span. Yet, when we propose alternative speciation rates, the inferred (extinction) rates depict a pattern of two decreases and one increase in the near present. We can also inspect the directional trends for the net-diversification rate (<span class="math inline">\(\delta(t) = \lambda(t) - \mu(t)\)</span>)</p>
-<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="exploring-the-congruence-class.html#cb66-1"></a>p &lt;-<span class="st"> </span><span class="kw">summarize.trends</span>(samples, <span class="dt">threshold =</span> <span class="fl">0.02</span>, <span class="dt">rate_name =</span> <span class="st">&quot;delta&quot;</span>)</span>
-<span id="cb66-2"><a href="exploring-the-congruence-class.html#cb66-2"></a><span class="kw">plot</span>(p)</span></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="exploring-the-congruence-class.html#cb66-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">summarize.trends</span>(samples, <span class="at">threshold =</span> <span class="fl">0.02</span>, <span class="at">rate_name =</span> <span class="st">&quot;delta&quot;</span>)</span>
+<span id="cb66-2"><a href="exploring-the-congruence-class.html#cb66-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(p)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:netdiv-trends"></span>
 <img src="figures/netdiv-trends-1.png" alt="Directional trends in the net-diversification rate. The congruence class was constructed using alternative speciation rates, and all congruent models have negative extinction rates." width="480" />
 <p class="caption">
 Figure 6.15: Directional trends in the net-diversification rate. The congruence class was constructed using alternative speciation rates, and all congruent models have negative extinction rates.
 </p>
 </div>
+</div>
+</div>
+<div id="jointly-sample-alternative-speciation-and-extinction-rates" class="section level2 hasAnchor" number="6.5">
+<h2><span class="header-section-number">6.5</span> Jointly sample alternative speciation and extinction rates<a href="exploring-the-congruence-class.html#jointly-sample-alternative-speciation-and-extinction-rates" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Here, we simultaneously generate a variety of congruent speciation and extinction rates <span class="citation">(Andréoletti &amp; Morlon, 2023)</span>.
+We use the function <code>sample.basic.models.joint</code> to construct these rates. As explained in section <a href="features.html#samplejoint">3.3</a>, this function first samples <span class="math inline">\(p\)</span>-trajectories – controlling the degree to which the signal in the congruence class is driven more by speciation rate variations (<span class="math inline">\(p=1\)</span>) or extinction rate variations (<span class="math inline">\(p=0\)</span>) – and then constructs the corresponding speciation and extinction rates.</p>
+<p>The procedure for drawing, centering and rescaling a <span class="math inline">\(p\)</span>-trajectory is explained in <span class="citation">Andréoletti &amp; Morlon (2023)</span>.</p>
+<p>The initial value <span class="math inline">\(p_0\)</span> is sampled from a Beta distribution. By default, we use <span class="math inline">\(\beta_1=0.3\)</span> and <span class="math inline">\(\beta_2=0.3\)</span> to favor starting points near <span class="math inline">\(p=0\)</span> or <span class="math inline">\(p=1\)</span>. Below we set <span class="math inline">\(\beta_1=0.5\)</span> and <span class="math inline">\(\beta_2=0.2\)</span> to place more emphasis on values close to <span class="math inline">\(p=1\)</span> (constant extinction), ensuring that we properly explore these scenarios. The speciation rate at present is fixed to the reference scenario, while the extinction rate at present is drawn from a log-normal distribution.</p>
+<div id="constant-joint-trajectory" class="section level3 hasAnchor" number="6.5.1">
+<h3><span class="header-section-number">6.5.1</span> Constant joint trajectory<a href="exploring-the-congruence-class.html#constant-joint-trajectory" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>First, we set the scaling factor of the Markov Random Field (<code>mrf.sd.scale</code>) to <span class="math inline">\(0\)</span>, such that we obtain constant <span class="math inline">\(p\)</span>-trajectories.</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="exploring-the-congruence-class.html#cb67-1" aria-hidden="true" tabindex="-1"></a>joint_rate_samples <span class="ot">&lt;-</span> <span class="cf">function</span>(){<span class="fu">sample.basic.models.joint</span>(</span>
+<span id="cb67-2"><a href="exploring-the-congruence-class.html#cb67-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">times =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(primates_ebd<span class="sc">$</span>time), <span class="at">length.out=</span><span class="dv">300</span>),</span>
+<span id="cb67-3"><a href="exploring-the-congruence-class.html#cb67-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">p.delta =</span> my_model<span class="sc">$</span>p.delta,</span>
+<span id="cb67-4"><a href="exploring-the-congruence-class.html#cb67-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">mrf.sd.scale =</span> <span class="dv">0</span>,</span>
+<span id="cb67-5"><a href="exploring-the-congruence-class.html#cb67-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">beta.param =</span> <span class="fu">c</span>(<span class="fl">0.5</span>,<span class="fl">0.2</span>),</span>
+<span id="cb67-6"><a href="exploring-the-congruence-class.html#cb67-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">lambda0 =</span> my_model<span class="sc">$</span><span class="fu">lambda</span>(<span class="dv">0</span>),</span>
+<span id="cb67-7"><a href="exploring-the-congruence-class.html#cb67-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">mu0.median =</span> my_model<span class="sc">$</span><span class="fu">mu</span>(<span class="dv">0</span>))}</span>
+<span id="cb67-8"><a href="exploring-the-congruence-class.html#cb67-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-9"><a href="exploring-the-congruence-class.html#cb67-9" aria-hidden="true" tabindex="-1"></a>samples_primates_CT <span class="ot">&lt;-</span> <span class="fu">sample.congruence.class</span>(</span>
+<span id="cb67-10"><a href="exploring-the-congruence-class.html#cb67-10" aria-hidden="true" tabindex="-1"></a>  my_model,</span>
+<span id="cb67-11"><a href="exploring-the-congruence-class.html#cb67-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">num.samples=</span><span class="dv">20</span>,</span>
+<span id="cb67-12"><a href="exploring-the-congruence-class.html#cb67-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">rate.type=</span><span class="st">&quot;joint&quot;</span>,</span>
+<span id="cb67-13"><a href="exploring-the-congruence-class.html#cb67-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">sample.joint.rates=</span>joint_rate_samples)</span>
+<span id="cb67-14"><a href="exploring-the-congruence-class.html#cb67-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-15"><a href="exploring-the-congruence-class.html#cb67-15" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(samples_primates_CT)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-19"></span>
+<img src="figures/unnamed-chunk-19-1.png" alt="Congruent diversification scenarios, jointly sampled with constant p-trajectories." width="576" />
+<p class="caption">
+Figure 6.16: Congruent diversification scenarios, jointly sampled with constant p-trajectories.
+</p>
+</div>
+</div>
+<div id="hsmrf-joint-trajectory" class="section level3 hasAnchor" number="6.5.2">
+<h3><span class="header-section-number">6.5.2</span> HSMRF joint trajectory<a href="exploring-the-congruence-class.html#hsmrf-joint-trajectory" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Then, we revert to the default scaling factor (<span class="math inline">\(\sigma_{\text{MRF}}=1\)</span>) and use the HSMRF sampler for <span class="math inline">\(p\)</span>-trajectories.</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="exploring-the-congruence-class.html#cb68-1" aria-hidden="true" tabindex="-1"></a>joint_rate_samples <span class="ot">&lt;-</span> <span class="cf">function</span>(){<span class="fu">sample.basic.models.joint</span>(</span>
+<span id="cb68-2"><a href="exploring-the-congruence-class.html#cb68-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">times =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(primates_ebd<span class="sc">$</span>time), <span class="at">length.out=</span><span class="dv">500</span>),</span>
+<span id="cb68-3"><a href="exploring-the-congruence-class.html#cb68-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#times = my_model$times,</span></span>
+<span id="cb68-4"><a href="exploring-the-congruence-class.html#cb68-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">p.delta =</span> my_model<span class="sc">$</span>p.delta,</span>
+<span id="cb68-5"><a href="exploring-the-congruence-class.html#cb68-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">MRF.type =</span> <span class="st">&quot;HSMRF&quot;</span>,</span>
+<span id="cb68-6"><a href="exploring-the-congruence-class.html#cb68-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">beta.param =</span> <span class="fu">c</span>(<span class="fl">0.5</span>,<span class="fl">0.2</span>),</span>
+<span id="cb68-7"><a href="exploring-the-congruence-class.html#cb68-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">lambda0 =</span> my_model<span class="sc">$</span><span class="fu">lambda</span>(<span class="dv">0</span>),</span>
+<span id="cb68-8"><a href="exploring-the-congruence-class.html#cb68-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">mu0.median =</span> my_model<span class="sc">$</span><span class="fu">mu</span>(<span class="dv">0</span>))}</span>
+<span id="cb68-9"><a href="exploring-the-congruence-class.html#cb68-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-10"><a href="exploring-the-congruence-class.html#cb68-10" aria-hidden="true" tabindex="-1"></a>samples_primates_HST <span class="ot">&lt;-</span> <span class="fu">sample.congruence.class</span>(</span>
+<span id="cb68-11"><a href="exploring-the-congruence-class.html#cb68-11" aria-hidden="true" tabindex="-1"></a>  my_model,</span>
+<span id="cb68-12"><a href="exploring-the-congruence-class.html#cb68-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">num.samples=</span><span class="dv">20</span>,</span>
+<span id="cb68-13"><a href="exploring-the-congruence-class.html#cb68-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">rate.type=</span><span class="st">&quot;joint&quot;</span>,</span>
+<span id="cb68-14"><a href="exploring-the-congruence-class.html#cb68-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">sample.joint.rates=</span>joint_rate_samples)</span>
+<span id="cb68-15"><a href="exploring-the-congruence-class.html#cb68-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-16"><a href="exploring-the-congruence-class.html#cb68-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(samples_primates_HST)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-20"></span>
+<img src="figures/unnamed-chunk-20-1.png" alt="Congruent diversification scenarios, jointly sampled with HSMRF p-trajectories." width="576" />
+<p class="caption">
+Figure 6.17: Congruent diversification scenarios, jointly sampled with HSMRF p-trajectories.
+</p>
+</div>
+</div>
+<div id="hsmrf-joint-trajectory-with-global-regularity-filter" class="section level3 hasAnchor" number="6.5.3">
+<h3><span class="header-section-number">6.5.3</span> HSMRF joint trajectory with global regularity filter<a href="exploring-the-congruence-class.html#hsmrf-joint-trajectory-with-global-regularity-filter" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Finally, we sample 1000 HSMRF trajectories, with the aim of selecting the smoothest ones (as a proxy for simplicity or parsimony).</p>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="exploring-the-congruence-class.html#cb69-1" aria-hidden="true" tabindex="-1"></a>joint_rate_samples <span class="ot">&lt;-</span> <span class="cf">function</span>(){<span class="fu">sample.basic.models.joint</span>(</span>
+<span id="cb69-2"><a href="exploring-the-congruence-class.html#cb69-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">times =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(primates_ebd<span class="sc">$</span>time), <span class="at">length.out=</span><span class="dv">500</span>),</span>
+<span id="cb69-3"><a href="exploring-the-congruence-class.html#cb69-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">p.delta =</span> my_model<span class="sc">$</span>p.delta,</span>
+<span id="cb69-4"><a href="exploring-the-congruence-class.html#cb69-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">MRF.type =</span> <span class="st">&quot;HSMRF&quot;</span>,</span>
+<span id="cb69-5"><a href="exploring-the-congruence-class.html#cb69-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">beta.param =</span> <span class="fu">c</span>(<span class="fl">0.5</span>,<span class="fl">0.2</span>),</span>
+<span id="cb69-6"><a href="exploring-the-congruence-class.html#cb69-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">lambda0 =</span> my_model<span class="sc">$</span><span class="fu">lambda</span>(<span class="dv">0</span>),</span>
+<span id="cb69-7"><a href="exploring-the-congruence-class.html#cb69-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">mu0.median =</span> my_model<span class="sc">$</span><span class="fu">mu</span>(<span class="dv">0</span>))}</span>
+<span id="cb69-8"><a href="exploring-the-congruence-class.html#cb69-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-9"><a href="exploring-the-congruence-class.html#cb69-9" aria-hidden="true" tabindex="-1"></a>samples_FHST <span class="ot">&lt;-</span> <span class="fu">sample.congruence.class</span>(</span>
+<span id="cb69-10"><a href="exploring-the-congruence-class.html#cb69-10" aria-hidden="true" tabindex="-1"></a>  my_model,</span>
+<span id="cb69-11"><a href="exploring-the-congruence-class.html#cb69-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">num.samples=</span><span class="dv">1000</span>,</span>
+<span id="cb69-12"><a href="exploring-the-congruence-class.html#cb69-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">rate.type=</span><span class="st">&quot;joint&quot;</span>,</span>
+<span id="cb69-13"><a href="exploring-the-congruence-class.html#cb69-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">sample.joint.rates=</span>joint_rate_samples)</span></code></pre></div>
+<p>The resulting trajectories are filtered according to a given regularity penalty (by default a <span class="math inline">\(\mathcal{L}_1\)</span> norm) and several thresholds.</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="exploring-the-congruence-class.html#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">full.plot.regularity.thresholds</span>(samples_FHST, <span class="at">filtering_fractions =</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.2</span>, <span class="fl">0.9</span>))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-22"></span>
+<img src="figures/unnamed-chunk-22-1.png" alt="Congruent diversification scenarios, jointly sampled with HSMRF p-trajectories and selected based on their regularity, for decreasingly stringent thersholds." width="672" />
+<p class="caption">
+Figure 6.18: Congruent diversification scenarios, jointly sampled with HSMRF p-trajectories and selected based on their regularity, for decreasingly stringent thersholds.
+</p>
+</div>
+<p>Other penalties can be specified, among the following (“L1”, “L2” and “L1_derivative”):</p>
+<ul>
+<li><p>The <span class="math inline">\(\mathcal{L}_1\)</span> norm on all the step-wise variations in both speciation <span class="math inline">\((\lambda_i)\)</span> and extinction rates <span class="math inline">\((\mu_i)\)</span>, for <span class="math inline">\(i \in [\![0;N]\!]\)</span>, where <span class="math inline">\(N\)</span> is the number of time steps :
+<span class="math display">\[\mathcal{L}_1 = \sum_{i=1}^N \left[abs(\lambda_i-\lambda_{i-1})+abs(\mu_i-\mu_{i-1})\right]\]</span>
+The <span class="math inline">\(\mathcal{L}_1\)</span> norm sums the absolute differences between consecutive speciation and extinction rates. Rate trajectories with low <span class="math inline">\(\mathcal{L}_1\)</span> norms tend to have few and small rate variations.</p></li>
+<li><p>The <span class="math inline">\(\mathcal{L}_2\)</span> norm on step-wise variations:
+<span class="math display">\[\mathcal{L}_2 = \sqrt{\sum_{i=1}^N \left[(\lambda_i-\lambda_{i-1})^2+(\mu_i-\mu_{i-1})^2\right]}\]</span>
+The <span class="math inline">\(\mathcal{L}_2\)</span> norm, also known as the Euclidean norm, squares step-wise differences before summing and taking the square root. This has the effect of penalizing larger jumps more severely than smaller ones.</p></li>
+<li><p>The second-order <span class="math inline">\(\mathcal{L}_1\)</span> norm on derivative shifts in both speciation and extinction rates:
+<span class="math display">\[\mathcal{L}_1&#39; = \sum_{i=2}^N \left[abs(\lambda_i-2\lambda_{i-1}+\lambda_{i-2})+abs(\mu_i-2\mu_{i-1}+\mu_{i-2})\right]\]</span>
+The second-order <span class="math inline">\(\mathcal{L}_1\)</span> norm (<span class="math inline">\(\mathcal{L}_1&#39;\)</span>) focuses on the change in the rate of change, effectively measuring the volatility in the trajectory. This offers an additional layer of smoothness by considering how rate changes are themselves changing.</p></li>
+</ul>
 </div>
 </div>
 </div>
@@ -594,7 +736,7 @@ gitbook.start({
     var script = document.createElement("script");
     script.type = "text/javascript";
     var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))
         src = src.replace(/^https?:/, '');
