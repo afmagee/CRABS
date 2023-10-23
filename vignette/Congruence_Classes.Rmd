@@ -5,11 +5,10 @@ author:
   - Sebastian Höhna
   - Bjørn T. Kopperud
   - Andrew F. Magee
+  - Jérémy Andréoletti
 output:
-  bookdown::gitbook:
-    lib_dir: lib
-    fig_caption: yes
-    toc_depth: 3
+  rmarkdown::html_vignette: 
+    toc_depth: 1
   bookdown::html_document2: 
     fig_caption: yes
     toc_depth: 2
@@ -21,8 +20,10 @@ output:
     toc_depth: 2
     includes:
       in_header: preamble.tex
-  rmarkdown::html_vignette: 
-    toc_depth: 1
+  bookdown::gitbook:
+    lib_dir: lib
+    fig_caption: yes
+    toc_depth: 3
 fontsize: 12pt
 documentclass: article
 classoption:
@@ -75,7 +76,7 @@ set.seed(53079239)
 
 This is a vignette, or long-form documentation, accompanying the R-package CRABS: Congruent Rate Analyses in Birth-death Scenarios.
 
-The main purpose of CRABS is to explore congruence classes of macroevolutionary diversification rates.
+The main purpose of `CRABS` is to explore congruence classes of macroevolutionary diversification rates.
 Specifically, this tutorial has two main aims/applications:
 
 * For a given speciation and extinction rate, you can compute the alternative speciation and extinction rates via the pulled net-diversification rate 
@@ -132,20 +133,23 @@ Here we give you an overview of the main functions available in `CRABS`.
 | `create.model`      | Creates a diversification model object, which consists of the so-called reference speciation and extinction rates.        |
 | `congruent.models` | Generates alternative models that are congruent with a provided reference model(s). The user needs to explicitly supply a list of alternative extinction and/or speciation rate functions. |
 | `sample.basic.model`   |  Samples a rate function under specified assumptions. More information in section \@ref(samplebasic)   |
+| `sample.basic.models.joint` | Jointly samples speciation and extinction trajectories. More information in section \@ref(samplejoint) |
 | `sample.rates`  | Helps you to randomly sample either a new speciation or extinction rate function given some constraints and/or expected behavior (e.g., autocorrelated vs independent rates) |
 | `sample.congruence.class` | Randomly draws a set of samples from the congruence class. The user provides a function that draws extinction rates, and/or a function that draws speciation rates.  | 
 | `sample.congruence.class.posterior` | Uses `sample.basic.models` to samples a set of congruent models for each sample in the posterior distribution | 
 | `summarize.trends` |  Calculates the slope in the rate function, and plots a summary of whether the rate was increasing, decreasing or flat for each episode |
 | `summarize.posterior` | Similar to `summarize.trends`, but instead iterating over all congruent samples for each posterior sample. This plot is sorted |
+| `full.plot.regularity.thresholds` | Plots the rate functions after filtering them to only retain the most regular (smooth) trajectories. |
 
 
-You can consult the R documentation for each of these by placing a question mark in front of the name. For example, try calling `?create.model` or `?sample.basic.model` in R. 
+You can consult the R documentation for each of these by placing a question mark in front of the name. For example, try calling `?create.model` or `?sample.basic.models` or `?sample.basic.models.joint` in R. 
 We use these functions throughout the sections in the vignette.
-For `sample.basic.models`, we have a separate section explaining the most important flags and use cases because `sample.basic.models` might represent a more complex but important function of `CRABS`.
+For `sample.basic.models` and `sample.basic.models.joint`, we have separate sections explaining the most important flags and use cases because they might represent more complex but important functions of `CRABS`.
 
 ## `sample.basic.models` {#samplebasic}
-This function is designed to enable easy generation of commonly employed diversification-rate scenarios.
-The basic models are specified by the argument `model` exponentially increasing/decreasing rates, linearly decreasing rates, episodic (or piecewise constant rates), and Markov random field (MRF) models (constant rates are also possible).
+This function is designed to enable easy generation of commonly employed diversification-rate scenarios, for either speciation or extinction rates. For sampling these rates jointly, see the following section \@ref(samplejoint).
+
+The basic models are specified by the argument `model`: exponentially increasing/decreasing rates, linearly decreasing rates, episodic (or piecewise constant rates), and Markov random field (MRF) models (constant rates are also possible).
 The direction of change (increase or decrease) is controlled by the argument `direction`.
 The function will fit a piecewise linear rate function, using the argument `times` to represent a vector for the discrete time steps. 
 The number of episodes is equal to the length of the `times` vector.
@@ -179,6 +183,17 @@ The default is rates with median 0.1 and a 95% range covering [0.01,1].
 Note that the argument `rate0` overrides drawing random starting values if it is set.
 This allows sampling speciation rates, as the initial speciation rate must be the same in all replicates.
 
+
+## `sample.basic.models.joint` {#samplejoint}
+This function is designed to jointly generate speciation and extinction rates that are congruent with the original diversification scenario, while inherently preventing negative extinction rates.
+
+`sample.basic.models.joint` primarily relies on generating a trajectory for a parameter $p$, which serves as a reference for balancing the speciation and extinction rates. When $p=0$, the speciation rate is constant (barring negative extinction rates) and the time-varying pattern is wholly reflected in the extinction rate. Conversely, when $p=1$, the extinction rate is constant, and the time-varying pattern is reflected in the speciation rate. Each unique $p$-trajectory is tied to a distinct pair of speciation and extinction rate trajectories, given a starting extinction rate at present.
+
+Like in the `sample.basic.models` function, the `MRF.type` argument ("HSMRF" or "GMRF") controls the type of Markov random field used for adding stochastic noise to the trajectories, although here it corresponds to the $p$-trajectory rather than the speciation or extinction trajectories themselves. The scale of the stochastic noise can be adjusted using `mrf.sd.scale`, which defaults to 1.0 and can be set to 0.0 for constant $p$-trajectories.
+
+The congruence class in which to sample is specified through the pulled diversification rate function (`p.delta`), together with the speciation rate at the present. The extinction rate at present can either be specified or drawn randomly from a lognormal distribution, similarly to `sample.basic.models`.
+
+Bounds for the rates can also be imposed using `min.lambda`, `max.lambda`, `min.mu`, and `max.mu` (which is usually unnecessary with this approach). Similarly, `min.p` and `max.p` can be used to set the lower and upper bounds of the p trajectory, allowing for finer control over the balance between speciation and extinction rates in the generated scenarios.
 
 
 # Creating the congruence class
@@ -251,7 +266,7 @@ We will come back to the summaries later when we created samples from the congru
 ## The model object
 
 In order to create a congruence class, we require some information about the extinction and speciation rate functions in at least one of the models in the congruence class. 
-In the following examples we will use the results from an episodic birth-death model fitted in RevBayes (see Section \@ref(revbayes)), but we note that CRABS can work with any rate estimates. 
+In the following examples we will use the results from an episodic birth-death model fitted in RevBayes (see Section \@ref(revbayes)), but we note that `CRABS` can work with any rate estimates. 
 To simplify this section, we provide the results in a convenient format:
 ```{r load-revbayes}
 data("primates_ebd")
@@ -566,7 +581,8 @@ For example, a posterior distribution with a 95\% credible interval between 0.01
 ## Assumptions on rates
 
 There are several plausible assumptions that can be made about diversification rates and how these rates vary.
-First, you could make assumptions about the magnitude of rate variation, and specifically what are plausible minimum and maximum rates.
+
+First, you could make assumptions about the **magnitude of rate variation**, and specifically what are plausible minimum and maximum rates.
 Clearly, speciation and extinction rates should not have been smaller than 0, so that could be a safe assumption.
 
 Depending on your study system, you could also assume that rates were never larger than, say, 10 events per lineage per million years.
@@ -576,7 +592,7 @@ So perhaps a rate of 10 could really be seen as an upper bound in systems such a
 However, you could argue that there is extinction, and we should better restrict the net-diversification rates to be at most 10.
 We get into some more of these restrictions in another section.
 
-The second assumption is about how rates vary over time.
+The second assumption is about **how rates vary over time**.
 One could argue that if diversification rates were low, say 42 million years ago, then you would assume that the diversification rates were also low 43 million years ago.
 This would mean that diversification rates are autocorrelated and do not vary completely arbitrarily over time.
 
@@ -590,6 +606,19 @@ In the next subsections, we explore a few different options of rate variation ov
 
 With the built-in functions `sample.basic.models` and `sample.rates`, users have freedom to explore these, and many other forms of rate variation.
 If these functions are not sufficient, as shown in previous sections, it is easy to customize the sampling to your liking.
+
+## Independent or joint rate sampling
+
+CRABS offers 3 approaches to sample rates:
+
+1. generate speciation rates, then construct congruent extinction rates;
+2. generate extinction rates, then construct congruent speciation rates;
+3. generate a $p$-trajectory, which corresponds to a unique pair of congruent speciation and extinction rates.
+Independent rate sampling (1 and 2) can be done using `sample.basic.models` or `sample.rates`, while joint sampling (3) can be done using `sample.basic.models.joint`.
+
+The choice between independent and joint rate sampling depends on the assumptions you're willing to make. Independent sampling allows you to explore specific classes of scenarios for either speciation and extinction rates, while the joint sampling approach offers more flexibility by imposing less constraints on the rates. @Andreoletti2023 showed that the joint sampling approach is better able to recover trajectories where the congruence class contains signal for temporal variations both in speciation and extinction rates (which by construction cannot be captured with independent sampling of either rates).
+
+The 3 approaches are presented in more details bellow.
 
 ## Sample alternative extinction rates
 
@@ -875,13 +904,107 @@ p <- summarize.trends(samples, threshold = 0.02, rate_name = "delta")
 plot(p)
 ```
 
+## Jointly sample alternative speciation and extinction rates
+
+Here, we simultaneously generate a variety of congruent speciation and extinction rates [@Andreoletti2023].
+We use the function `sample.basic.models.joint` to construct these rates. As explained in section \@ref(samplejoint), this function first samples $p$-trajectories -- controlling the degree to which the signal in the congruence class is driven more by speciation rate variations ($p=1$) or extinction rate variations ($p=0$) -- and then constructs the corresponding speciation and extinction rates.
+
+The procedure for drawing, centering and rescaling a $p$-trajectory is explained in @Andreoletti2023.
+
+The initial value $p_0$ is sampled from a Beta distribution. By default, we use $\beta_1=0.3$ and $\beta_2=0.3$ to favor starting points near $p=0$ or $p=1$. Below we set $\beta_1=0.5$ and $\beta_2=0.2$ to place more emphasis on values close to $p=1$ (constant extinction), ensuring that we properly explore these scenarios. The speciation rate at present is fixed to the reference scenario, while the extinction rate at present is drawn from a log-normal distribution.
+
+### Constant joint trajectory
+
+First, we set the scaling factor of the Markov Random Field (`mrf.sd.scale`) to $0$, such that we obtain constant $p$-trajectories.
+
+```{r, fig.cap = "Congruent diversification scenarios, jointly sampled with constant p-trajectories.", fig.width=6, fig.height=4}
+joint_rate_samples <- function(){sample.basic.models.joint(
+  times = seq(0, max(primates_ebd$time), length.out=300),
+  p.delta = my_model$p.delta,
+  mrf.sd.scale = 0,
+  beta.param = c(0.5,0.2),
+  lambda0 = my_model$lambda(0),
+  mu0.median = my_model$mu(0))}
+
+samples_primates_CT <- sample.congruence.class(
+  my_model,
+  num.samples=20,
+  rate.type="joint",
+  sample.joint.rates=joint_rate_samples)
+
+plot(samples_primates_CT)
+```
+
+### HSMRF joint trajectory
+
+Then, we revert to the default scaling factor ($\sigma_{\text{MRF}}=1$) and use the HSMRF sampler for $p$-trajectories.
+
+```{r, fig.cap = "Congruent diversification scenarios, jointly sampled with HSMRF p-trajectories.", fig.width=6, fig.height=4}
+joint_rate_samples <- function(){sample.basic.models.joint(
+  times = seq(0, max(primates_ebd$time), length.out=500),
+  #times = my_model$times,
+  p.delta = my_model$p.delta,
+  MRF.type = "HSMRF",
+  beta.param = c(0.5,0.2),
+  lambda0 = my_model$lambda(0),
+  mu0.median = my_model$mu(0))}
+
+samples_primates_HST <- sample.congruence.class(
+  my_model,
+  num.samples=20,
+  rate.type="joint",
+  sample.joint.rates=joint_rate_samples)
+
+plot(samples_primates_HST)
+```
+
+### HSMRF joint trajectory with global regularity filter
+
+Finally, we sample 1000 HSMRF trajectories, with the aim of selecting the smoothest ones (as a proxy for simplicity or parsimony).
+
+```{r}
+joint_rate_samples <- function(){sample.basic.models.joint(
+  times = seq(0, max(primates_ebd$time), length.out=500),
+  p.delta = my_model$p.delta,
+  MRF.type = "HSMRF",
+  beta.param = c(0.5,0.2),
+  lambda0 = my_model$lambda(0),
+  mu0.median = my_model$mu(0))}
+
+samples_FHST <- sample.congruence.class(
+  my_model,
+  num.samples=1000,
+  rate.type="joint",
+  sample.joint.rates=joint_rate_samples)
+```
+
+The resulting trajectories are filtered according to a given regularity penalty (by default a $\mathcal{L}_1$ norm) and several thresholds.
+
+```{r, fig.cap = "Congruent diversification scenarios, jointly sampled with HSMRF p-trajectories and selected based on their regularity, for decreasingly stringent thersholds.", fig.width=7, fig.asp=0.5}
+full.plot.regularity.thresholds(samples_FHST, filtering_fractions = c(0.05, 0.2, 0.9))
+```
+
+Other penalties can be specified, among the following ("L1", "L2" and "L1_derivative"):
+
+- The $\mathcal{L}_1$ norm on all the step-wise variations in both speciation $(\lambda_i)$ and extinction rates $(\mu_i)$, for $i \in [\![0;N]\!]$, where $N$ is the number of time steps :
+$$\mathcal{L}_1 = \sum_{i=1}^N \left[abs(\lambda_i-\lambda_{i-1})+abs(\mu_i-\mu_{i-1})\right]$$
+The $\mathcal{L}_1$ norm sums the absolute differences between consecutive speciation and extinction rates. Rate trajectories with low $\mathcal{L}_1$  norms tend to have few and small rate variations.
+
+- The $\mathcal{L}_2$ norm on step-wise variations:
+$$\mathcal{L}_2 = \sqrt{\sum_{i=1}^N \left[(\lambda_i-\lambda_{i-1})^2+(\mu_i-\mu_{i-1})^2\right]}$$
+The $\mathcal{L}_2$ norm, also known as the Euclidean norm, squares step-wise differences before summing and taking the square root. This has the effect of penalizing larger jumps more severely than smaller ones.
+
+- The second-order $\mathcal{L}_1$ norm on derivative shifts in both speciation and extinction rates:
+$$\mathcal{L}_1' = \sum_{i=2}^N \left[abs(\lambda_i-2\lambda_{i-1}+\lambda_{i-2})+abs(\mu_i-2\mu_{i-1}+\mu_{i-2})\right]$$
+The second-order $\mathcal{L}_1$ norm ($\mathcal{L}_1'$) focuses on the change in the rate of change, effectively measuring the volatility in the trajectory. This offers an additional layer of smoothness by considering how rate changes are themselves changing.
+
 # Exploring the posterior
 
 Until this point, we have only considered point estimates for the fitted birth-death models. If we only consider the maximum-likelihood estimates, or the posterior median rates, it is easy to forget that there is often substantial variability in the estimated speciation and extinction rates. Previously we asked the question, if patterns in the posterior median rates are robust to the congruence class. What happens if we want to take into account the estimation error? Inspecting a series of samples in the posterior distribution is one way to assess this question.
 
 ## Reading the posterior
 
-In CRABS, we have included functionality to read RevBayes log outputs.
+In `CRABS`, we have included functionality to read RevBayes log outputs.
 
 ```{r read-posterior, results = "hide"}
 data(primates_ebd_log)

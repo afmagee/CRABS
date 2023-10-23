@@ -9,7 +9,7 @@ sample.basic.models.joint(
   p.delta,
   lambda0,
   mu0 = NULL,
-  MRF.type = "GMRF",
+  MRF.type = "HSMRF",
   beta.param = c(0.3, 0.3),
   mu0.median = 0.1,
   mu0.logsd = 1.17481,
