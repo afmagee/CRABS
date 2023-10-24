@@ -27,8 +27,8 @@ Plots an array of rate trajectories for the chosen rates and thresholds.
 Plots the rate functions after filtering them according to a given penalty and predefined thresholds.
 }
 \examples{
-set.seed(123)
 data("primates_ebd")
+set.seed(123)
 
 l <- approxfun(primates_ebd[["time"]], primates_ebd[["lambda"]])
 mu <- approxfun(primates_ebd[["time"]], primates_ebd[["mu"]])
