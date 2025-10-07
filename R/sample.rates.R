@@ -347,7 +347,7 @@ sample.basic.models.joint <- function(times,
         mu_i <- lambda_i - p.delta(times[i]) + (lambda_i-lambdas[i-1])/(lambda_i*delta_t)
       }
       
-      if (mu_i > max.mu || lambda_i > max.lambda){
+      if (mu_i < min.mu || mu_i > max.mu || lambda_i < min.lambda || lambda_i > max.lambda){
         in_bounds = FALSE
         break
       }
